@@ -128,6 +128,11 @@
   #son:focus-visible { outline: 3px solid var(--encre); outline-offset: 3px; }
   #son[aria-pressed="false"] .barre { display: block; }
   #son .barre { display: none; }
+  #radio { position: fixed; left: 12px; bottom: 12px; z-index: 85; background: var(--creme); padding: 10px; border-radius: 12px;
+           box-shadow: 4px 4px 0 var(--encre); transform: translateY(calc(100% + 40px)); transition: transform .6s cubic-bezier(.3,1.4,.5,1); }
+  #radio.visible { transform: none; }
+  #radio p { font: 700 20px Caveat, cursive; margin: 0 0 6px 2px; }
+  #radio iframe { display: block; border-radius: 6px; }
   #confettis { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; }
   #confettis i { position: absolute; top: 0; width: 10px; height: 14px; border-radius: 2px; }
 
@@ -394,6 +399,9 @@
 </section>
 </main>
 <div id="confettis" aria-hidden="true"></div>
+<!-- lecteur caché hors écran ; ne glisse dans le coin que si le navigateur bloque le son -->
+<div id="radio"><p>Radio Venezia · appuie sur ▶</p><div id="yt-lecteur"></div></div>
+<script src="https://www.youtube.com/iframe_api"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -403,58 +411,28 @@ gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 const $ = s => document.querySelector(s);
 const calme = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ================= MUSIQUE : sérénade à la mandoline, composée ici et jouée en direct ================= */
-let ac, sortie, prochaineBoucle = 0;
-const NOIRE = 0.42; // secondes par temps (valse 3/4)
-const ACCORDS = { C: [48, [64, 67, 72]], G7: [43, [62, 65, 71]], C7: [48, [64, 67, 70]], F: [41, [65, 69, 72]] };
-const GRILLE = ['C','C','G7','G7','G7','G7','C','C','C','C7','F','F','C','G7','C','C'];
-const MELODIE = [ // [note MIDI, durée en temps], 3 temps par mesure
-  [67,1],[72,1],[76,1], [76,2],[74,1], [74,1],[77,1],[74,1], [71,3],
-  [71,1],[74,1],[77,1], [77,2],[76,1], [76,1],[79,1],[76,1], [72,3],
-  [72,1],[76,1],[79,1], [79,2],[76,1], [77,1],[81,1],[77,1], [72,3],
-  [76,1],[79,1],[76,1], [74,1],[77,1],[71,1], [72,3], [72,2],[67,1] ];
-const hz = m => 440 * 2 ** ((m - 69) / 12);
-
-function pince(m, t, duree, vol, type, detune = 0) {
-  const o = ac.createOscillator(), f = ac.createBiquadFilter(), g = ac.createGain();
-  o.type = type; o.frequency.value = hz(m); o.detune.value = detune;
-  f.type = 'lowpass'; f.frequency.setValueAtTime(3800, t); f.frequency.exponentialRampToValueAtTime(700, t + duree);
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .004); g.gain.exponentialRampToValueAtTime(.0008, t + duree);
-  o.connect(f).connect(g).connect(sortie); o.start(t); o.stop(t + duree + .05);
+/* ================= MUSIQUE : « Sarà perché ti amo » via le lecteur YouTube officiel ================= */
+const VIDEO = 'Ji-2oQHJ5f4';
+let lecteur, pret = false, voulu = false, joue = false, ac;
+window.onYouTubeIframeAPIReady = () => {
+  lecteur = new YT.Player('yt-lecteur', { videoId: VIDEO, width: 220, height: 124, host: 'https://www.youtube-nocookie.com',
+    playerVars: { playsinline: 1, rel: 0, loop: 1, playlist: VIDEO },
+    events: { onReady: () => { pret = true; jouer(); },
+              onStateChange: e => { joue = e.data === YT.PlayerState.PLAYING; if (joue) $('#radio').classList.remove('visible'); } } });
+};
+function jouer() {
+  if (ac && ac.state === 'suspended') ac.resume();
+  if (!pret || !voulu || joue) return;
+  lecteur.unMute(); lecteur.setVolume(85); lecteur.playVideo();
 }
-function boucle(t0) {
-  // guitare : basse + accord (oum-pa-pa)
-  GRILLE.forEach((nom, i) => {
-    const [basse, acc] = ACCORDS[nom], t = t0 + i * 3 * NOIRE;
-    pince(basse, t, .55, .22, 'triangle');
-    [1, 2].forEach(b => acc.forEach(n => pince(n - 12, t + b * NOIRE, .3, .05, 'triangle')));
-  });
-  // mandoline : trémolo sur chaque note de la mélodie
-  let t = t0;
-  for (const [n, d] of MELODIE) {
-    const fin = t + d * NOIRE;
-    for (let p = t, k = 0; p < fin - .02; p += .072, k++) {
-      const v = (k % 2 ? .05 : .065) * (1 - (p - t) / (d * NOIRE) * .35);
-      pince(n, p, .13, v, 'sawtooth'); pince(n, p + .004, .13, v * .7, 'sawtooth', 7);
-    }
-    t = fin;
-  }
-  return GRILLE.length * 3 * NOIRE;
-}
+// sur mobile le son n'est autorisé qu'au moment où le doigt se relève : on retente à chaque geste
+['pointerup', 'touchend', 'keyup', 'click'].forEach(ev => document.addEventListener(ev, jouer, true));
 function demarrerMusique() {
-  try {
-    ac = new (window.AudioContext || window.webkitAudioContext)();
-    sortie = ac.createGain(); sortie.gain.value = .7;
-    const rev = ac.createConvolver(), long = ac.sampleRate * 2.2, buf = ac.createBuffer(2, long, ac.sampleRate);
-    for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); for (let i = 0; i < long; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / long) ** 3; }
-    rev.buffer = buf; const humide = ac.createGain(); humide.gain.value = .28;
-    sortie.connect(ac.destination); sortie.connect(rev).connect(humide).connect(ac.destination);
-    prochaineBoucle = ac.currentTime + .15;
-    // n'avance que si le son tourne : quand on coupe, currentTime se fige et rien ne s'empile
-    const planifier = () => { if (prochaineBoucle - ac.currentTime < 3) prochaineBoucle += boucle(prochaineBoucle); };
-    planifier(); setInterval(planifier, 1000);
-    $('#son').hidden = false;
-  } catch (e) { /* pas de son possible : le site marche quand même */ }
+  voulu = true; $('#son').hidden = false;
+  try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { /* pas de clac, tant pis */ }
+  jouer();
+  // si le navigateur bloque quand même, on montre le petit lecteur pour qu'elle appuie sur ▶ elle-même
+  setTimeout(() => { if (!joue && voulu) $('#radio').classList.add('visible'); }, 3000);
 }
 let bruit;
 function clac() {
@@ -465,10 +443,10 @@ function clac() {
   s.connect(f).connect(g).connect(ac.destination); s.start();
 }
 $('#son').onclick = () => {
-  const on = ac.state === 'running';
-  on ? ac.suspend() : ac.resume();
-  $('#son').setAttribute('aria-pressed', String(!on));
-  $('#son').setAttribute('aria-label', on ? 'Remettre la musique' : 'Couper la musique');
+  voulu = !voulu;
+  voulu ? jouer() : lecteur && lecteur.pauseVideo();
+  $('#son').setAttribute('aria-pressed', String(voulu));
+  $('#son').setAttribute('aria-label', voulu ? 'Couper la musique' : 'Remettre la musique');
 };
 
 /* ================= SCEAU : rester appuyée pour l'ouvrir ================= */
