@@ -137,6 +137,22 @@
   #fin .tic { font: 700 clamp(18px, 6vw, 26px) "Space Mono", monospace; color: var(--creme); background: var(--encre);
               display: inline-block; padding: 6px 14px; border-radius: 10px; margin-top: 10px; }
 
+  #lit [role="button"] { cursor: pointer; outline: none; }
+  #lit [role="button"]:focus-visible { filter: drop-shadow(0 0 5px #fff); }
+
+  /* ---------- repas ---------- */
+  #repas { background: var(--olive); color: var(--creme); }
+  #repas h2 { color: var(--creme); }
+  .nappe { margin-top: 24px; border-radius: 10px; padding: 18px 10px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px 8px;
+           background-color: #fbf1df; background-size: 32px 32px;
+           background-image: linear-gradient(90deg, #c42f3a55 50%, transparent 50%), linear-gradient(#c42f3a55 50%, transparent 50%); }
+  .plat { background: none; border: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: var(--encre); }
+  .plat svg { width: 100%; max-width: 150px; overflow: visible; }
+  .plat:focus-visible { outline: 3px dashed var(--encre); outline-offset: 3px; border-radius: 10px; }
+  .plat .nom { display: inline-block; background: var(--creme); font: italic 750 17px/1.2 Fraunces, serif; padding: 2px 12px; border-radius: 99px; box-shadow: 2px 2px 0 var(--encre); }
+  .plat .desc { font: 700 16px/1.1 Caveat, cursive; background: #fbf1dff0; padding: 3px 8px; border-radius: 8px; min-height: 2.3em; text-align: center; }
+  .compte-repas { text-align: center; font: 700 14px "Space Mono", monospace; letter-spacing: .1em; margin-top: 18px; }
+
   /* ---------- valise ---------- */
   #valise { background: var(--lilas); color: var(--creme); }
   #valise h2 { color: var(--creme); }
@@ -480,9 +496,9 @@
     <div class="hotel-info">
       <h3>B&amp;B HOTEL Venezia Laguna</h3>
       <p>Une chambre avec vue sur la mer,<br>un lit ultra confort, trois nuits à nous.</p>
-      <button class="lit" id="lit" aria-label="Tester le lit">
-        <svg viewBox="0 0 300 175" aria-hidden="true">
-          <g filter="url(#pinceau-fin)">
+      <div class="lit" id="lit">
+        <svg viewBox="0 0 300 175">
+          <g id="zone-lit" filter="url(#pinceau-fin)">
             <rect x="34" y="18" width="232" height="96" rx="22" fill="#1f8f8a"/><path d="M58 40h184" stroke="#fbf1df" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
             <rect x="22" y="98" width="256" height="40" rx="10" fill="#fbf1df"/>
             <g id="oreillers"><rect x="50" y="64" width="92" height="42" rx="18" fill="#fff"/><rect x="158" y="64" width="92" height="42" rx="18" fill="#fff"/>
@@ -490,18 +506,45 @@
             <path d="M14 108H286V152Q150 166 14 152Z" fill="url(#pois)"/><path d="M14 110H286" stroke="#fbf1df" stroke-width="7"/>
             <rect x="34" y="152" width="12" height="18" rx="2" fill="#5a3324"/><rect x="254" y="152" width="12" height="18" rx="2" fill="#5a3324"/>
           </g>
+          <!-- plateau du petit-déjeuner, sous une cloche -->
+          <g id="plateau" filter="url(#pinceau-fin)" transform="translate(150 132) scale(1.35) translate(-150 -132)">
+            <rect x="100" y="84" width="100" height="56" fill="transparent"/>
+            <path d="M104 130 q-7 0 -7 -7" stroke="#c98f2e" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M196 130 q7 0 7 -7" stroke="#c98f2e" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M104 126h92l-6 10h-80z" fill="#c98f2e"/><rect x="102" y="122" width="96" height="7" rx="3.5" fill="#e8b85a"/>
+            <g id="petit-dej">
+              <ellipse cx="128" cy="122" rx="15" ry="3" fill="#fff"/>
+              <path d="M114 121 Q122 102 142 117 Q134 112 128 115 Q121 114 114 121Z" fill="#e0a43c"/><path d="M121 113 l3 5 M128 109 l1 6 M135 110 l-1 5" stroke="#b5762a" stroke-width="1.6" stroke-linecap="round"/>
+              <ellipse cx="160" cy="122" rx="12" ry="3" fill="#fff"/><path d="M151 106h18l-2 14h-14z" fill="#fff"/><ellipse cx="160" cy="106" rx="9" ry="2.6" fill="#a0673e"/>
+              <path d="M157.5 106 c-2-1.6-1.6-3 0-3 c.8 0 1.2.6 1.2.8 c0-.2.4-.8 1.2-.8 c1.6 0 2 1.4-.2 3 l-1 .7z" fill="#fbf1df"/><path d="M169 109 q6 0 5 5 q-1 3 -6 3" stroke="#fff" stroke-width="2.4" fill="none"/>
+              <rect x="179" y="100" width="11" height="21" rx="2" fill="#fff" opacity=".85"/><rect x="180.5" y="105" width="8" height="15" rx="1.5" fill="#f6a33c"/>
+              <g id="vapeur" fill="none" stroke="#fbf1df" stroke-width="2" stroke-linecap="round" opacity="0"><path d="M156 100 q-3 -5 0 -9 q3 -4 0 -8"/><path d="M163 100 q-3 -5 0 -9 q3 -4 0 -8"/></g>
+            </g>
+            <g id="cloche-pd"><path d="M110 122 Q110 86 150 86 Q190 86 190 122Z" fill="#dfe3ea"/><circle cx="150" cy="83" r="4.5" fill="#b8bfcc"/>
+              <path d="M122 113 Q124 97 140 92" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>
+          </g>
           <g id="zzz" font-family="Caveat" font-weight="700" fill="#fbf1df" opacity="0"><text x="236" y="52" font-size="22">z</text><text x="252" y="34" font-size="28">z</text><text x="270" y="14" font-size="34">z</text></g>
         </svg>
-      </button>
-      <p class="lit-msg" id="lit-msg">touche le lit pour le tester</p>
+      </div>
+      <p class="lit-msg" id="lit-msg">touche le lit… puis la cloche sur le plateau</p>
     </div>
+  </div>
+</section>
+
+<!-- ===================== REPAS ===================== -->
+<section id="repas">
+  <div class="col">
+    <span class="annot">4 · a tavola</span>
+    <h2>On va se <em>régaler</em></h2>
+    <p class="txt">Le petit-déjeuner est à l'hôtel. Le reste du temps, on goûte à tout. Soulève les cloches.</p>
+    <div class="nappe ombre" id="nappe"></div>
+    <p class="compte-repas" id="compte-repas" aria-live="polite">0 / 6 plats découverts</p>
   </div>
 </section>
 
 <!-- ===================== VALISE ===================== -->
 <section id="valise">
   <div class="col">
-    <span class="annot">4 · la valigia</span>
+    <span class="annot">5 · la valigia</span>
     <h2>Fais ta <em>valise</em></h2>
     <p class="txt">Glisse dans la valise ce qu'il faut pour Venise en février. Attention, elle a ses exigences.</p>
     <p class="bulle" id="valise-msg" aria-live="polite">Fais glisser un objet (ou touche-le).</p>
@@ -517,7 +560,7 @@
 <!-- ===================== BILLET ===================== -->
 <section id="billet">
   <div class="col">
-    <span class="annot">5 · il biglietto</span>
+    <span class="annot">6 · il biglietto</span>
     <h2>Ton <em>billet</em></h2>
     <div class="billet ombre" id="carte-billet">
       <div class="billet-haut"><b>Carta d'imbarco</b><span>N° AMORE</span></div>
@@ -729,14 +772,67 @@ $('#fenetre').onclick = () => {
   $('#moment').textContent = m.nom;
 };
 
-$('#lit').onclick = () => {
+// petit bouton dessiné dans un SVG : tap, Entrée ou Espace
+function bouton(el, label, action) {
+  el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0'); el.setAttribute('aria-label', label);
+  el.addEventListener('click', e => { e.stopPropagation(); action(); });
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); } });
+}
+bouton($('#zone-lit'), 'Tester le lit', () => {
   if (gsap.isTweening('#oreillers')) return;
   gsap.timeline()
     .to('#oreillers', { y: -16, duration: .18, ease: 'power1.out', yoyo: true, repeat: 3 })
     .fromTo('#zzz', { opacity: 0, y: 12 }, { opacity: 1, y: -8, duration: 1 }, 0)
     .to('#zzz', { opacity: 0, duration: .5, delay: .8 });
   $('#lit-msg').textContent = 'testé et approuvé : ultra confort ✓';
-};
+});
+let vapeur;
+bouton($('#plateau'), 'Soulever la cloche du petit-déjeuner', () => {
+  if (gsap.isTweening('#cloche-pd')) return;
+  const p = $('#plateau'), ouvre = !p.dataset.ouvert;
+  p.dataset.ouvert = ouvre ? '1' : '';
+  if (ouvre) {
+    gsap.to('#cloche-pd', { y: -46, x: 26, rotation: 22, opacity: 0, transformOrigin: '50% 100%', duration: .6, ease: 'power2.out' });
+    gsap.from('#petit-dej', { scale: .8, transformOrigin: '50% 100%', duration: .5, ease: 'back.out(3)', delay: .15 });
+    vapeur = gsap.fromTo('#vapeur', { opacity: 0, y: 4 }, { opacity: .9, y: -4, duration: 1.1, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    $('#lit-msg').textContent = 'colazione inclusa : le petit-déjeuner tous les matins !';
+  } else {
+    vapeur && vapeur.kill(); gsap.set('#vapeur', { opacity: 0 });
+    gsap.to('#cloche-pd', { y: 0, x: 0, rotation: 0, opacity: 1, duration: .5, ease: 'back.out(1.5)' });
+  }
+});
+
+/* ================= REPAS : soulever les cloches ================= */
+const ASSIETTE = '<ellipse cx="50" cy="64" rx="44" ry="15" fill="#fff"/><ellipse cx="50" cy="63" rx="33" ry="10" fill="#f3ead8"/>';
+const CLOCHE = '<g class="cloche"><path d="M12 62Q12 18 50 18Q88 18 88 62Z" fill="#dfe3ea"/><path d="M8 62h84" stroke="#b8bfcc" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="15" r="5" fill="#b8bfcc"/><path d="M24 50Q26 30 42 25" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></g>';
+const PLATS = [ // [nom, petite phrase, dessin]
+  ['Spritz', 'l\'apéro vénitien, au coucher du soleil', '<path d="M38 24h24q0 22-12 25q-12-3-12-25z" fill="#f28c38"/><path d="M38 24h24" stroke="#fff" stroke-width="2"/><rect x="48.5" y="48" width="3" height="12" fill="#fff"/><ellipse cx="50" cy="61" rx="9" ry="2.5" fill="#fff"/><circle cx="61" cy="25" r="6.5" fill="#f6c945"/><circle cx="61" cy="25" r="4.5" fill="#f28c38"/><path d="M61 20v10M56 25h10" stroke="#fbf1df" stroke-width="1"/><circle cx="44" cy="35" r="3" fill="#5f8a3a"/>'],
+  ['Cicchetti', 'des petites bouchées dans les bacari', '<rect x="16" y="52" width="22" height="9" rx="3" fill="#e0a43c"/><ellipse cx="27" cy="52" rx="10" ry="4" fill="#fbf1df"/><circle cx="27" cy="49" r="2" fill="#5f8a3a"/><rect x="39" y="47" width="22" height="9" rx="3" fill="#e0a43c"/><ellipse cx="50" cy="47" rx="10" ry="4" fill="#f4a3a8"/><circle cx="47" cy="44.5" r="1.6" fill="#1f2a44"/><rect x="62" y="52" width="22" height="9" rx="3" fill="#e0a43c"/><ellipse cx="73" cy="52" rx="10" ry="4" fill="#c42f3a"/><circle cx="73" cy="49" r="2" fill="#7f9c46"/>'],
+  ['Spaghetti al nero', 'à l\'encre de seiche, LA spécialité', '<g fill="none" stroke="#1f2a44" stroke-width="2.2" stroke-linecap="round"><path d="M30 60q8-14 20-6t20-4"/><path d="M28 56q12-12 22-4t22-2"/><path d="M34 52q10-10 18-2t16-6"/><path d="M36 63q12-6 26-2"/></g><circle cx="44" cy="50" r="2.4" fill="#c42f3a"/><circle cx="60" cy="56" r="2.4" fill="#c42f3a"/><circle cx="52" cy="47" r="1.6" fill="#7f9c46"/><circle cx="38" cy="58" r="1.6" fill="#7f9c46"/>'],
+  ['Pizza', 'parce qu\'on est en Italie, voilà', '<ellipse cx="50" cy="58" rx="30" ry="11" fill="#e9b48a"/><ellipse cx="50" cy="57" rx="25" ry="8.5" fill="#c42f3a"/><g fill="#fbf1df"><ellipse cx="42" cy="55" rx="5" ry="2.5"/><ellipse cx="58" cy="58" rx="5" ry="2.5"/><ellipse cx="51" cy="54" rx="4" ry="2"/></g><g fill="#5f8a3a"><ellipse cx="46" cy="59" rx="3" ry="1.5"/><ellipse cx="57" cy="54" rx="3" ry="1.5"/></g>'],
+  ['Tiramisù', 'né juste à côté, à Trévise', '<rect x="34" y="36" width="32" height="24" rx="2" fill="#fbf1df"/><rect x="34" y="43" width="32" height="5" fill="#d9a441"/><rect x="34" y="52" width="32" height="5" fill="#d9a441"/><rect x="33" y="33" width="34" height="6" rx="2.5" fill="#6b3a2a"/><path d="M60 30q4-6 8-2q-4 4-8 2z" fill="#5f8a3a"/>'],
+  ['Gelato', 'même en février, oui', '<path d="M42 40l8 22 8-22z" fill="#e0a43c"/><path d="M44 45h12M45.5 50h9" stroke="#b5762a" stroke-width="1.2"/><circle cx="45" cy="37" r="8" fill="#a7d48a"/><circle cx="55" cy="36" r="8" fill="#f4a3a8"/><circle cx="50" cy="28" r="7.5" fill="#fbf1df"/><circle cx="50" cy="21" r="2.2" fill="#c42f3a"/>']
+];
+let goutes = 0;
+$('#nappe').innerHTML = PLATS.map(([, , dessin], i) =>
+  `<button class="plat" data-i="${i}" aria-label="Soulever la cloche n° ${i + 1}"><svg viewBox="0 0 100 86" aria-hidden="true">
+     <g filter="url(#pinceau-fin)">${ASSIETTE}${dessin}</g><g filter="url(#pinceau-fin)">${CLOCHE}</g></svg>
+     <span class="nom">?</span><span class="desc">touche pour soulever</span></button>`).join('');
+document.querySelectorAll('.plat').forEach(b => b.addEventListener('click', () => {
+  const cloche = b.querySelector('.cloche');
+  if (gsap.isTweening(cloche)) return;
+  const [nom, desc] = PLATS[b.dataset.i], ouvre = !b.dataset.ouvert;
+  b.dataset.ouvert = ouvre ? '1' : '';
+  if (!ouvre) { gsap.to(cloche, { y: 0, x: 0, rotation: 0, opacity: 1, duration: .45, ease: 'back.out(1.5)' }); return; }
+  gsap.to(cloche, { y: -40, x: 18, rotation: 20, opacity: 0, transformOrigin: '50% 100%', duration: .55, ease: 'power2.out' });
+  if (b.dataset.vu) return;
+  b.dataset.vu = '1';
+  b.querySelector('.nom').textContent = nom; b.querySelector('.desc').textContent = desc;
+  b.setAttribute('aria-label', `${nom} : ${desc}`);
+  gsap.from(b.querySelector('.nom'), { scale: 0, duration: .5, ease: 'back.out(3)' });
+  $('#compte-repas').textContent = ++goutes < PLATS.length ? `${goutes} / ${PLATS.length} plats découverts` : 'Buon appetito, amore !';
+  if (goutes === PLATS.length) confettis();
+}));
 
 /* ================= BILLET À DÉCHIRER ================= */
 const talon = $('#talon'); let y0 = null, dechire = false;
