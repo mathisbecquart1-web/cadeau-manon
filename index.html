@@ -354,7 +354,7 @@
           <symbol id="arche-sombre" viewBox="0 0 30 50"><path d="M1 49V17A14 14 0 0 1 29 17V49Z" fill="#fbf1df"/><path d="M5 46V18A10 10 0 0 1 25 18V46Z" fill="#6b2b3a"/></symbol>
           <symbol id="volets" viewBox="0 0 30 46"><rect x="0" y="0" width="30" height="46" fill="#fbf1df"/><rect x="3" y="3" width="11" height="40" fill="#c9a23a"/><rect x="16" y="3" width="11" height="40" fill="#c9a23a"/><path d="M3 10h24M3 18h24M3 26h24M3 34h24" stroke="#a8842a" stroke-width="1.5"/></symbol>
           <pattern id="raye-chemise" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="#6b7a8f"/><rect x="3.6" width="1.3" height="6" fill="#e8eef4"/></pattern>
-          <clipPath id="clip-couple"><rect x="50" y="-60" width="80" height="72"/></clipPath>
+          <clipPath id="clip-couple"><rect x="40" y="-80" width="100" height="92"/></clipPath>
           <clipPath id="clip-chat"><path d="M361 426V398A10 10 0 0 1 381 398V426Z"/></clipPath>
           <symbol id="fen-vague" viewBox="0 0 30 46"><rect x="0" y="0" width="30" height="46" rx="2" fill="#fbf1df"/><rect x="4" y="4" width="22" height="38" fill="url(#vagues)"/></symbol>
         </defs>
@@ -445,7 +445,7 @@
           <path d="M0 14 Q85 40 168 10 Q182 2 184 -20 Q190 6 172 22 Q92 56 -4 30Z" fill="#1f2a44"/>
           <path d="M178 -20 l10 -4 -2 6 6 0 -8 6z" fill="#e9b48a"/>
           <g id="amoureux"><rect x="62" y="-50" width="56" height="70" fill="transparent"/>
-          <g clip-path="url(#clip-couple)"><g id="gondole-manon" transform="translate(80 7) scale(.55)"></g><g id="gondole-mathis" transform="translate(103 7) scale(.55)"></g></g>
+          <g clip-path="url(#clip-couple)"><g id="gondole-manon" transform="translate(77 10) scale(.82)"></g><g id="gondole-mathis" transform="translate(106 10) scale(.82)"></g></g>
           <rect x="58" y="10" width="64" height="10" rx="4" fill="#3d5aa8"/>
           <path id="coeur" d="M91 -34 C83 -41 84 -48 89 -48 C91.5 -48 91 -45 91 -44 C91 -45 91.5 -48 94 -48 C99 -48 99 -41 91 -34Z" fill="#e8559a" transform-origin="91 -40"/>
           </g>
@@ -817,33 +817,44 @@ const calme = matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* ================= PERSONNAGES : Manon (longs cheveux blond doré, manteau taupe) et Mathis (brun, chemise rayée) =================
    Dessinés une fois ici, réutilisés partout : gondole, train, avion, lit, cinéma, cloches, valise. */
 const C = { peau: '#f2c9a8', peauT: '#ebbd96', manon: '#b9824a', pointes: '#dcae66', mathis: '#3b2a20', manteau: '#9c8f86', collant: '#3a3340', jean: '#8fb0cf', chemise: '#6b7a8f' };
-function visage(x, y, s = 1, { dort = false, sourire = 'doux' } = {}) {
-  const e = 6 * s;
+const OMBRE = '#d9a07e', LEVRES = '#c4675e';
+// traits discrets façon illustration : petits yeux, nez à peine marqué, bouche fine (pas de joues rondes ni de grand sourire)
+function visage(x, y, s = 1, { dort = false } = {}) {
   const yeux = dort
-    ? `<path d="M${x - e - 3 * s} ${y} q${3 * s} ${2.6 * s} ${6 * s} 0 M${x + e - 3 * s} ${y} q${3 * s} ${2.6 * s} ${6 * s} 0" stroke="#1f2a44" stroke-width="${1.5 * s}" fill="none" stroke-linecap="round"/>`
-    : `<circle cx="${x - e}" cy="${y}" r="${1.9 * s}" fill="#1f2a44"/><circle cx="${x + e}" cy="${y}" r="${1.9 * s}" fill="#1f2a44"/>`;
-  const joues = `<circle cx="${x - 10 * s}" cy="${y + 5 * s}" r="${3 * s}" fill="#f4a3a8" opacity=".75"/><circle cx="${x + 10 * s}" cy="${y + 5 * s}" r="${3 * s}" fill="#f4a3a8" opacity=".75"/>`;
-  const bouche = sourire === 'grand'
-    ? `<path d="M${x - 5 * s} ${y + 7 * s} q${5 * s} ${5.5 * s} ${10 * s} 0z" fill="#8e1f28"/>`
-    : `<path d="M${x - 4 * s} ${y + 7 * s} q${4 * s} ${3.4 * s} ${8 * s} 0" stroke="#1f2a44" stroke-width="${1.4 * s}" fill="none" stroke-linecap="round"/>`;
-  return yeux + joues + bouche;
+    ? `<path d="M${x - 5.8 * s} ${y} q${1.7 * s} ${1.3 * s} ${3.4 * s} 0 M${x + 2.4 * s} ${y} q${1.7 * s} ${1.3 * s} ${3.4 * s} 0" stroke="#1f2a44" stroke-width="${.95 * s}" fill="none" stroke-linecap="round"/>`
+    : `<ellipse cx="${x - 4.2 * s}" cy="${y}" rx="${1 * s}" ry="${1.3 * s}" fill="#1f2a44"/><ellipse cx="${x + 4.2 * s}" cy="${y}" rx="${1 * s}" ry="${1.3 * s}" fill="#1f2a44"/>`;
+  return yeux
+    + `<path d="M${x + .4 * s} ${y + 2 * s} q${1.3 * s} ${2.5 * s} ${-.8 * s} ${3.3 * s}" stroke="${OMBRE}" stroke-width="${.95 * s}" fill="none" stroke-linecap="round"/>`
+    + `<path d="M${x - 2.2 * s} ${y + 8.3 * s} q${2.2 * s} ${1.3 * s} ${4.4 * s} 0" stroke="${LEVRES}" stroke-width="${1.2 * s}" fill="none" stroke-linecap="round"/>`;
 }
-// buste vu de face, origine = base du cou ; o.tete = inclinaison de la tête (degrés)
+// têtes (centre du visage en 0,-19 ; base du cou en 0,0)
+function teteManon(o = {}) { return `
+  <rect x="-3.6" y="-8" width="7.2" height="10" fill="${OMBRE}"/>
+  <ellipse cx="0" cy="-19" rx="11" ry="13.5" fill="${C.peau}"/>
+  <path d="M-11.6 -17 Q-13 -35 -1 -34.5 Q12 -35 12.2 -19 Q8 -29 -3 -28 Q-8 -26 -11.6 -17Z" fill="${C.manon}"/>
+  <path d="M-11.4 -19 Q-15 -4 -12.6 16 L-8.4 17 Q-11 -2 -9.4 -17Z M11.8 -21 Q15.5 -3 13.4 18 L9.2 18 Q11.4 -3 9.8 -19Z" fill="${C.manon}"/>
+  <path d="M-4 -32 Q-9.5 -27 -10.5 -17 M7 -31.5 Q11 -26 11.2 -18 M-10.4 0 Q-11.4 8 -10.6 14 M12.2 0 Q13 8 11.8 14" stroke="${C.pointes}" stroke-width="1.1" fill="none" opacity=".85" stroke-linecap="round"/>
+  ${visage(0, -18, 1, o)}`; }
+function teteMathis(o = {}) { return `
+  <rect x="-4" y="-8" width="8" height="10" fill="${OMBRE}"/>
+  <ellipse cx="0" cy="-19" rx="11.2" ry="13.5" fill="${C.peauT}"/>
+  <path d="M-11.8 -19 Q-14.5 -31 -6 -35 Q2 -39 9 -35.5 Q14 -32 12.6 -21 Q11 -27 6.5 -27.5 Q8 -24.5 3.5 -25 Q0 -29.5 -4.5 -26.5 Q-8.5 -25 -11.8 -19Z" fill="${C.mathis}"/>
+  <path d="M-6 -35 Q-9.5 -38.5 -12.5 -36 Q-9 -34 -8 -33Z M4 -38 Q7.5 -41.5 10.5 -39 Q7 -37.5 6 -36.5Z" fill="${C.mathis}"/>
+  <path d="M-3 -33 Q1 -35.5 6 -33 M-8 -29 Q-10 -26 -10.6 -22" stroke="#5a4232" stroke-width="1" fill="none" stroke-linecap="round"/>
+  ${visage(0, -18, 1, o)}`; }
+// buste vu de face, origine = base du cou ; o.tete = inclinaison de la tête (degrés), o.dort = yeux fermés
 function buste(qui, o = {}) {
   const tete = o.tete ? `transform="rotate(${o.tete} 0 -4)"` : '';
   if (qui === 'manon') return `
-    <path d="M-14 -18 Q-15 -36 0 -37 Q15 -36 14 -18 L17 22 Q0 27 -17 22Z" fill="${C.manon}"/>
-    <path d="M-16.6 12 L-17 22 Q0 27 17 22 L16.6 12 Q0 16 -16.6 12Z" fill="${C.pointes}"/>
-    <path d="M-17 4 Q0 -2 17 4 L21 44 L-21 44Z" fill="${C.manteau}"/>
-    <g ${tete}><circle cx="0" cy="-18" r="14" fill="${C.peau}"/>
-      <path d="M-14 -19 Q-14 -34 0 -34 Q14 -34 14 -19 Q9 -28 .6 -28 L0 -31 L-.6 -28 Q-9 -28 -14 -19Z" fill="${C.manon}"/>
-      <path d="M-14 -19 Q-16 -6 -13 6 L-9.5 6 Q-12 -6 -11 -18Z M14 -19 Q16 -6 13 6 L9.5 6 Q12 -6 11 -18Z" fill="${C.manon}"/>
-      ${visage(0, -16, .75, o)}</g>`;
+    <path d="M-13 -24 Q-14 -40 0 -40 Q14 -40 13 -24 L19 24 Q9 31 0 27 Q-9 31 -19 24Z" fill="${C.manon}"/>
+    <path d="M-18.2 14 L-19 24 Q-9 31 0 27 Q9 31 19 24 L18.2 14 Q9 19 0 16 Q-9 19 -18.2 14Z" fill="${C.pointes}"/>
+    <path d="M-21 7 Q-15 0 -5 0 L0 7 L5 0 Q15 0 21 7 L25 46 L-25 46Z" fill="${C.manteau}"/>
+    <path d="M-5 0 L0 8 L5 0" stroke="#7d716a" stroke-width="1.6" fill="none"/>
+    <g ${tete}>${teteManon(o)}</g>`;
   return `
-    <path d="M-18 4 Q0 -2 18 4 L22 44 L-22 44Z" fill="url(#raye-chemise)"/><path d="M-5 2 L0 10 L5 2Z" fill="${C.peauT}"/>
-    <g ${tete}><circle cx="0" cy="-18" r="14" fill="${C.peauT}"/>
-      <path d="M-14.5 -19 Q-16 -35 -2 -36 Q14 -37 15 -22 Q12 -27 7 -27 Q9 -24 4 -24 Q1 -29 -5 -26 Q-9 -24 -14.5 -19Z" fill="${C.mathis}"/>
-      ${visage(0, -16, .75, { sourire: 'grand', ...o })}</g>`;
+    <path d="M-22 7 Q-15 0 -5 0 L0 8 L5 0 Q15 0 22 7 L26 46 L-26 46Z" fill="url(#raye-chemise)"/>
+    <path d="M-5 0 L0 9 L5 0Z" fill="${OMBRE}"/>
+    <g ${tete}>${teteMathis(o)}</g>`;
 }
 // vus de dos (dans l'avion, devant le hublot)
 function dos(qui) {
@@ -851,30 +862,26 @@ function dos(qui) {
     ? `<path d="M-17 4 Q0 -2 17 4 L21 44 L-21 44Z" fill="${C.manteau}"/><path d="M-15 -18 Q-15 -36 0 -36 Q15 -36 15 -18 L18 26 Q0 32 -18 26Z" fill="${C.manon}"/><path d="M-17.6 14 L-18 26 Q0 32 18 26 L17.6 14 Q0 19 -17.6 14Z" fill="${C.pointes}"/>`
     : `<path d="M-18 4 Q0 -2 18 4 L22 44 L-22 44Z" fill="url(#raye-chemise)"/><rect x="-5" y="-6" width="10" height="10" fill="${C.peauT}"/><circle cx="0" cy="-18" r="14" fill="${C.peauT}"/><path d="M-15 -17 Q-17 -36 0 -36 Q17 -36 15 -17 Q13 -8 8 -6 L-8 -6 Q-13 -8 -15 -17Z" fill="${C.mathis}"/>`;
 }
-// en pied (repère 120 × 190, pieds en bas) ; p = préfixe des id
+// en pied (repère 120 × 190, pieds en bas), silhouettes allongées ; p = préfixe des id
 function manonDebout(p) { return `
-  <path d="M38 40 Q36 18 60 15 Q84 18 82 40 L87 106 Q74 114 60 110 Q46 114 33 106Z" fill="${C.manon}"/>
-  <path d="M35 90 L33 106 Q46 114 60 110 Q74 114 87 106 L85 90 Q60 97 35 90Z" fill="${C.pointes}"/>
-  <rect class="jambe" x="50" y="138" width="8" height="42" rx="3" fill="${C.collant}"/><rect class="jambe" x="62" y="138" width="8" height="42" rx="3" fill="${C.collant}"/>
-  <g id="${p}-chaussures" fill="#5a3324"><ellipse cx="53" cy="181" rx="7" ry="4"/><ellipse cx="67" cy="181" rx="7" ry="4"/></g>
-  <g id="${p}-manteau"><path d="M41 63 Q60 56 79 63 L85 142 Q60 149 35 142Z" fill="${C.manteau}"/><path d="M60 67 V144" stroke="#7d716a" stroke-width="1.5"/><path d="M50 61 L60 72 L70 61" stroke="#7d716a" stroke-width="2" fill="none"/></g>
-  <g id="${p}-maillot" opacity="0"><path d="M44 63 Q60 58 76 63 L77 134 Q60 140 43 134Z" fill="${C.peau}"/><path d="M48 72 Q60 78 72 72 L74 126 Q60 134 46 126Z" fill="url(#raye)"/></g>
-  <circle cx="60" cy="40" r="19" fill="${C.peau}"/>
-  <path d="M41 39 Q41 19 60 19 Q79 19 79 39 Q73 26 61 26 L60 22 L59 26 Q47 26 41 39Z" fill="${C.manon}"/>
-  <path d="M41 39 Q38 52 41 66 L45 66 Q42 52 44 40Z M79 39 Q82 52 79 66 L75 66 Q78 52 76 40Z" fill="${C.manon}"/>
-  ${visage(60, 42)}
+  <path d="M47 40 Q46 24 60 24 Q74 24 73 40 L80 104 Q70 111 60 106 Q50 111 40 104Z" fill="${C.manon}"/>
+  <path d="M41.5 92 L40 104 Q50 111 60 106 Q70 111 80 104 L78.5 92 Q69 98 60 95 Q51 98 41.5 92Z" fill="${C.pointes}"/>
+  <rect class="jambe" x="51" y="138" width="7" height="43" rx="3" fill="${C.collant}"/><rect class="jambe" x="62" y="138" width="7" height="43" rx="3" fill="${C.collant}"/>
+  <g id="${p}-chaussures" fill="#5a3324"><ellipse cx="54" cy="182" rx="6.5" ry="3.6"/><ellipse cx="66" cy="182" rx="6.5" ry="3.6"/></g>
+  <g id="${p}-manteau"><path d="M43 64 Q50 58 56 58 L60 64 L64 58 Q70 58 77 64 L85 143 Q60 150 35 143Z" fill="${C.manteau}"/><path d="M60 66 V146" stroke="#7d716a" stroke-width="1.4"/><path d="M56 58 L60 68 L64 58" stroke="#7d716a" stroke-width="1.8" fill="none"/></g>
+  <g id="${p}-maillot" opacity="0"><path d="M45 62 Q60 58 75 62 L77 134 Q60 140 43 134Z" fill="${C.peau}"/><path d="M48 72 Q60 78 72 72 L74 126 Q60 134 46 126Z" fill="url(#raye)"/></g>
+  <g transform="translate(60 60)">${teteManon()}</g>
   <g id="${p}-echarpe" opacity="0"><path d="M45 60 Q60 70 75 60 L76 68 Q60 79 44 68Z" fill="#f6c945"/><path d="M66 70 L72 70 L70 96 L64 96Z" fill="#f6c945"/><path d="M46 64 Q60 72 74 64 M64.5 80h6.5 M64 88h6.5" stroke="#e8559a" stroke-width="2.4" fill="none"/></g>
-  <g id="${p}-bras-g"><path class="manche" d="M40 64 L48 64 L47 108 L39 108Z" fill="${C.manteau}"/><circle cx="43" cy="111" r="4.5" fill="${C.peau}"/></g>
-  <g id="${p}-bras-d"><path class="manche" d="M72 64 L80 64 L81 108 L73 108Z" fill="${C.manteau}"/><circle cx="77" cy="111" r="4.5" fill="${C.peau}"/><g id="${p}-objet" transform="translate(77 111)"><g class="tenu"></g></g></g>`; }
+  <g id="${p}-bras-g"><path class="manche" d="M41 64 L48 64 L47 108 L40 108Z" fill="${C.manteau}"/><ellipse cx="43.5" cy="111" rx="3.6" ry="4.4" fill="${C.peau}"/></g>
+  <g id="${p}-bras-d"><path class="manche" d="M72 64 L79 64 L80 108 L73 108Z" fill="${C.manteau}"/><ellipse cx="76.5" cy="111" rx="3.6" ry="4.4" fill="${C.peau}"/><g id="${p}-objet" transform="translate(77 111)"><g class="tenu"></g></g></g>`; }
 function mathisDebout(p) { return `
-  <rect x="44" y="128" width="15" height="54" rx="3" fill="${C.jean}"/><rect x="61" y="128" width="15" height="54" rx="3" fill="${C.jean}"/>
-  <ellipse cx="51" cy="183" rx="9" ry="4" fill="#fbf1df"/><ellipse cx="69" cy="183" rx="9" ry="4" fill="#fbf1df"/>
-  <path d="M39 63 Q60 56 81 63 L83 134 Q60 139 37 134Z" fill="url(#raye-chemise)"/><path d="M53 61 L60 73 L67 61Z" fill="${C.peauT}"/>
-  <circle cx="60" cy="40" r="19" fill="${C.peauT}"/>
-  <path d="M40 38 Q38 16 58 15 Q80 13 81 34 Q77 25 69 25 Q72 30 64 30 Q59 23 51 28 Q46 31 40 38Z" fill="${C.mathis}"/>
-  ${visage(60, 42, 1, { sourire: 'grand' })}
-  <g id="${p}-bras-g"><path d="M38 64 L47 64 L46 84 L38 84Z" fill="url(#raye-chemise)"/><rect x="39" y="83" width="6.5" height="24" rx="3" fill="${C.peauT}"/><circle cx="42.5" cy="109" r="4.6" fill="${C.peauT}"/></g>
-  <g id="${p}-bras-d"><path d="M73 64 L82 64 L82 84 L74 84Z" fill="url(#raye-chemise)"/><rect x="74.5" y="83" width="6.5" height="24" rx="3" fill="${C.peauT}"/><circle cx="77.5" cy="109" r="4.6" fill="${C.peauT}"/></g>`; }
+  <path d="M45 128 L59 128 L58 182 L43 182Z" fill="${C.jean}"/><path d="M61 128 L75 128 L77 182 L62 182Z" fill="${C.jean}"/>
+  <path d="M51 140 L52 176 M69 140 L69 176" stroke="#7b9cbd" stroke-width="1.2"/>
+  <ellipse cx="50" cy="183" rx="8.5" ry="3.8" fill="#fbf1df"/><ellipse cx="70" cy="183" rx="8.5" ry="3.8" fill="#fbf1df"/>
+  <path d="M40 64 Q48 58 55 58 L60 66 L65 58 Q72 58 80 64 L83 134 Q60 139 37 134Z" fill="url(#raye-chemise)"/>
+  <g transform="translate(60 60)">${teteMathis()}</g>
+  <g id="${p}-bras-g"><path d="M38 64 L47 64 L46 84 L38 84Z" fill="url(#raye-chemise)"/><rect x="39.5" y="83" width="6" height="24" rx="3" fill="${C.peauT}"/><ellipse cx="42.5" cy="109" rx="3.6" ry="4.4" fill="${C.peauT}"/></g>
+  <g id="${p}-bras-d"><path d="M73 64 L82 64 L82 84 L74 84Z" fill="url(#raye-chemise)"/><rect x="74.5" y="83" width="6" height="24" rx="3" fill="${C.peauT}"/><ellipse cx="77.5" cy="109" rx="3.6" ry="4.4" fill="${C.peauT}"/></g>`; }
 // fait pivoter un bras autour de l'épaule (cx, cy) ; garde l'objet tenu bien droit
 // (l'angle de départ est lu au moment où le mouvement commence, pour pouvoir enchaîner les gestes dans une timeline)
 function pivote(el, cx, cy, angle, duree = .45, objet = null, ox = 77, oy = 111) {
@@ -1188,9 +1195,7 @@ function bouton(el, label, action) {
   el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); } });
 }
 // Mathis dort sur l'oreiller de gauche ; Manon, assise à droite, soulève la cloche du petit-déjeuner
-$('#lit-mathis').innerHTML = `<circle r="15" fill="${C.peauT}"/>
-  <path d="M-15 -2 Q-17 -18 -2 -19 Q14 -20 15 -6 Q11 -12 5 -11 Q7 -8 2 -8 Q-2 -13 -7 -10 Q-11 -8 -15 -2Z" fill="${C.mathis}"/>
-  ${visage(0, 2, .75, { dort: true })}`;
+$('#lit-mathis').innerHTML = `<g transform="translate(0 17)">${teteMathis({ dort: true })}</g>`;
 $('#lit-manon').innerHTML = buste('manon');
 if (!calme) gsap.timeline({ repeat: -1, repeatDelay: 2.2 })
   .fromTo('#zzz', { opacity: 0, y: 10 }, { opacity: .95, y: -6, duration: 1.4, ease: 'sine.out' })
