@@ -44,7 +44,8 @@
   .affiche { background: var(--creme); padding: 12px 12px 20px; border-radius: 4px; }
   #scene { display: block; width: 100%; height: auto; border-radius: 2px; }
   .venezia { font-size: clamp(64px, 21vw, 112px); font-weight: 900; font-style: italic; line-height: .9; color: var(--rose);
-             text-align: center; margin-top: 14px; letter-spacing: -.03em; text-shadow: 3px 3px 0 var(--encre); }
+             text-align: center; margin-top: 14px; letter-spacing: -.03em; text-shadow: 3px 3px 0 var(--encre);
+             overflow: hidden; padding: .06em .1em .1em; /* les lettres qui montent restent dans le titre */ }
   .venezia span { display: inline-block; }
   .dates-aff { text-align: center; font: 700 15px "Space Mono", monospace; letter-spacing: .18em; text-transform: uppercase; margin-top: 8px; }
   #hero .txt { color: var(--creme); margin-top: 30px; font-size: 24px; line-height: 1.3; }
@@ -340,7 +341,7 @@
         <g id="linge">
           <path d="M-10 72 Q200 128 410 58" stroke="#1f2a44" stroke-width="2" fill="none"/>
           <g transform="translate(36 81)"><g class="linge"><path d="M-14 0H14L22 10 16 15 13 12V44H-13V12L-16 15-22 10Z" fill="url(#pois)"/></g></g>
-          <g transform="translate(100 92)"><g class="linge"><path d="M-9 0H9L19 48H-19Z" fill="#e8559a"/><path d="M-14 26H14" stroke="#f6c945" stroke-width="3"/></g></g>
+          <g id="robe-rose" transform="translate(100 92)"><g class="linge"><path d="M-9 0H9L19 48H-19Z" fill="#e8559a"/><path d="M-14 26H14" stroke="#f6c945" stroke-width="3"/></g></g>
           <g transform="translate(160 98)"><g class="linge"><path d="M-12 0Q0 11 12 0L13 38H-13Z" fill="#6fb6e0"/></g></g>
           <g transform="translate(222 97)"><g class="linge"><rect x="-15" y="0" width="30" height="42" fill="#d63f86"/><path d="M-15 34H15" stroke="#fbf1df" stroke-width="2"/></g></g>
           <g transform="translate(290 88)"><g class="linge"><path d="M-12 0H12L13 54H3L0 16-3 54H-13Z" fill="#5f8a3a"/></g></g>
@@ -579,7 +580,8 @@ sceau.addEventListener('contextmenu', e => e.preventDefault());
 function ouvrir() {
   ouvert = true; demarrerMusique();
   const tl = gsap.timeline();
-  tl.to(sceau, { scale: 1.6, opacity: 0, duration: .35, ease: 'power2.out', transformOrigin: 'center' })
+  tl.to('#intro .pour, #intro .aide', { opacity: 0, y: -16, duration: .3 }, 0) // sinon la lettre qui sort passe sur « Per Manon »
+    .to(sceau, { scale: 1.6, opacity: 0, duration: .35, ease: 'power2.out', transformOrigin: 'center' }, 0)
     .to('#rabat', { scaleY: 0, duration: .3, ease: 'power2.in' })
     .to('#rabat-ouvert', { scaleY: 1, duration: .35, ease: 'back.out(2)' })
     .to('#lettre', { y: -110, duration: .7, ease: 'power3.out' })
@@ -601,7 +603,7 @@ function entreeAffiche() {
     .from('#tulipes', { y: 90, duration: .8 * d, ease: 'back.out(1.6)' }, .5)
     .from('#gondole-x', { x: -320, duration: 1.6 * d, ease: 'power2.out' }, .3)
     .to('.venezia span', { yPercent: 0, rotate: 0, opacity: 1, stagger: .06, duration: .7 * d, ease: 'back.out(2.2)' }, .7)
-    .from('#hero .txt, .dates-aff, .defile', { y: 30, opacity: 0, stagger: .12, duration: .6 * d }, 1.1);
+    .from('.dates-aff, .secrets, #hero .txt, .defile', { y: 30, opacity: 0, stagger: .12, duration: .6 * d }, 1.1);
   if (calme) return;
   gsap.to('#gondole-x', { x: 45, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.9 });
   gsap.to('#gondole', { y: '+=4', rotation: 1.5, svgOrigin: '200 590', duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
@@ -776,7 +778,7 @@ function plouf(x, y) {
     gsap.to(rond, { attr: { rx: 30 + i * 14, ry: 8 + i * 3 }, opacity: 0, duration: 1 + i * .4, delay: i * .15, onComplete: () => rond.remove() });
   }
 }
-document.querySelectorAll('#linge > g').forEach(g => secret(g, 'linge', 'Décrocher un vêtement', (el, fini) => {
+[$('#robe-rose')].forEach(g => secret(g, 'linge', 'Décrocher la robe rose', (el, fini) => {
   if (!el._eau) {
     el._fil = el._fil || { x: gsap.getProperty(el, 'x'), y: gsap.getProperty(el, 'y') };
     const x = gsap.utils.clamp(70, 320, el._fil.x + gsap.utils.random(-40, 40)), y = gsap.utils.random(582, 598);
