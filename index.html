@@ -3,95 +3,611 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Un cadeau pour Manon</title>
+<title>Per Manon</title>
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#fbf1df">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,400..900,0..100,0..1;1,9..144,400..900,0..100,0..1&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
-  :root { --nuit:#0e1b33; --lagune:#16365c; --or:#e2b65b; --creme:#fbf4e6; --texte:#f3ecdc; }
+  :root { --creme:#fbf1df; --rose:#e8559a; --jaune:#f6c945; --turquoise:#37c4c9; --corail:#ef6f55; --olive:#7f9c46;
+          --ciel:#8fd3ee; --encre:#1f2a44; --sarcelle:#1f8f8a; --lilas:#8e6bc4; }
   * { box-sizing: border-box; margin: 0; }
-  body { min-height: 100svh; background: radial-gradient(ellipse at top, var(--lagune), var(--nuit) 70%); color: var(--texte);
-         font-family: Inter, system-ui, sans-serif; overflow-x: hidden; }
-  canvas { position: fixed; inset: 0; pointer-events: none; }
-  main { position: relative; max-width: 460px; margin: 0 auto; padding: 48px 20px 40px; text-align: center; }
-  h1, h2 { font-family: "Playfair Display", serif; font-weight: 600; }
-  .petit { letter-spacing: .25em; text-transform: uppercase; font-size: 12px; color: var(--or); }
-  #intro h1 { font-size: 40px; margin: 14px 0 10px; }
-  #intro p { opacity: .85; line-height: 1.5; }
-  .cadeau { font-size: 110px; margin: 36px 0 24px; animation: tremble 2.4s ease-in-out infinite; display: inline-block; }
-  @keyframes tremble { 0%,80%,100% { transform: rotate(0) } 84% { transform: rotate(-8deg) } 88% { transform: rotate(8deg) } 92% { transform: rotate(-5deg) } 96% { transform: rotate(4deg) } }
-  button { font: 600 17px Inter, sans-serif; color: var(--nuit); background: var(--or); border: 0; border-radius: 999px;
-           padding: 16px 32px; cursor: pointer; box-shadow: 0 8px 30px #e2b65b55; }
-  button:focus-visible { outline: 3px solid var(--creme); outline-offset: 3px; }
-  #revelation { display: none; }
-  #revelation.visible { display: block; animation: apparait 1.2s ease both; }
-  @keyframes apparait { from { opacity: 0; transform: translateY(24px) scale(.97) } to { opacity: 1; transform: none } }
-  #revelation h1 { font-size: 46px; line-height: 1.1; margin: 12px 0 6px; }
-  #revelation h1 em { color: var(--or); font-style: italic; font-weight: 500; }
-  .dates { font-size: 18px; margin-bottom: 28px; opacity: .9; }
-  .vague { width: 100%; height: 40px; margin: 6px 0 22px; }
-  .carte { background: #ffffff10; border: 1px solid #e2b65b40; border-radius: 18px; padding: 18px 18px; margin: 12px 0;
-           text-align: left; display: flex; gap: 14px; align-items: flex-start; backdrop-filter: blur(4px); }
-  .carte .ico { font-size: 28px; line-height: 1; }
-  .carte h2 { font-size: 19px; margin-bottom: 4px; color: var(--creme); }
-  .carte p { font-size: 15px; opacity: .85; line-height: 1.45; }
-  .compte { margin: 30px 0 10px; }
-  .compte .nb { font-family: "Playfair Display", serif; font-size: 64px; color: var(--or); line-height: 1; }
-  .mot { font-family: "Playfair Display", serif; font-style: italic; font-size: 22px; margin-top: 30px; color: var(--creme); }
-  @media (prefers-reduced-motion: reduce) { .cadeau, #revelation.visible { animation: none; } }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--creme); color: var(--encre); font-family: Fraunces, Georgia, serif; overflow-x: hidden;
+         font-variation-settings: "SOFT" 100, "WONK" 1; }
+  body.ferme { overflow: hidden; height: 100svh; }
+  /* grain de papier sur tout le site */
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90; opacity: .22; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
+  section { position: relative; padding: 72px 16px; min-height: 100svh; }
+  .col { max-width: 480px; margin: 0 auto; }
+  .annot { font: 700 26px Caveat, cursive; transform: rotate(-3deg); display: inline-block; }
+  h2 { font-weight: 850; font-size: clamp(44px, 13vw, 68px); line-height: .95; letter-spacing: -.02em; margin: 6px 0 22px; }
+  h2 em { font-style: italic; font-weight: 600; }
+  p.txt { font-size: 19px; line-height: 1.45; }
+  .ombre { box-shadow: 7px 7px 0 var(--encre); }
+
+  /* ---------- enveloppe ---------- */
+  #intro { position: fixed; inset: 0; z-index: 80; background: var(--creme); display: flex; flex-direction: column;
+           align-items: center; justify-content: center; gap: 28px; padding: 16px; text-align: center; }
+  #intro .pour { font: 700 52px Caveat, cursive; transform: rotate(-4deg); }
+  #enveloppe { width: min(86vw, 360px); overflow: visible; }
+  #sceau { cursor: pointer; transform-box: fill-box; transform-origin: center; outline: none; touch-action: none; }
+  #sceau:focus-visible #anneau-fond { stroke: var(--rose); }
+  #intro .aide { font: 500 24px Caveat, cursive; color: #7a5a3a; }
+  #rabat-ouvert { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); }
+  #rabat { transform-box: fill-box; transform-origin: 50% 0%; }
+
+  /* ---------- affiche ---------- */
+  #hero { background: var(--rose); padding-top: 28px; }
+  .affiche { background: var(--creme); padding: 12px 12px 20px; border-radius: 4px; }
+  #scene { display: block; width: 100%; height: auto; border-radius: 2px; }
+  .venezia { font-size: clamp(64px, 21vw, 112px); font-weight: 900; font-style: italic; line-height: .9; color: var(--rose);
+             text-align: center; margin-top: 14px; letter-spacing: -.03em; text-shadow: 3px 3px 0 var(--encre); }
+  .venezia span { display: inline-block; }
+  .dates-aff { text-align: center; font: 700 15px "Space Mono", monospace; letter-spacing: .18em; text-transform: uppercase; margin-top: 8px; }
+  #hero .txt { color: var(--creme); margin-top: 30px; font-size: 24px; line-height: 1.3; }
+  #hero .txt strong { font-weight: 850; color: var(--jaune); }
+  .defile { font: 700 24px Caveat, cursive; color: var(--creme); margin-top: 26px; text-align: center; }
+  .linge { transform-box: fill-box; transform-origin: 50% 0; animation: vent 3.2s ease-in-out infinite alternate; }
+  .linge:nth-child(2n) { animation-duration: 2.6s; animation-delay: -1s; }
+  .linge:nth-child(3n) { animation-duration: 3.8s; animation-delay: -2s; }
+  @keyframes vent { from { transform: rotate(-5deg) } to { transform: rotate(5deg) skewX(3deg) } }
+  .reflet { animation: reflet 2.4s ease-in-out infinite alternate; }
+  .reflet:nth-child(2n) { animation-delay: -1.2s; }
+  @keyframes reflet { from { opacity: .2; transform: translateX(-4px) } to { opacity: .9; transform: translateX(4px) } }
+
+  /* ---------- tableau des départs ---------- */
+  #depart { background: var(--jaune); }
+  .tableau { background: var(--encre); border-radius: 12px; padding: 16px 12px 8px; }
+  .ligne { margin-bottom: 12px; }
+  .etiquette { font: 700 11px "Space Mono", monospace; letter-spacing: .15em; text-transform: uppercase; color: var(--jaune); margin: 0 0 5px 2px; }
+  .cases { display: grid; grid-template-columns: repeat(11, 1fr); gap: 3px; }
+  .case { position: relative; aspect-ratio: 3 / 4; display: grid; place-items: center; background: #2d3b5f; border-radius: 3px;
+          color: var(--creme); font: 700 clamp(13px, 4.6vw, 22px) "Space Mono", monospace; }
+  .case::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--encre); }
+  .ligne.dest .case { color: var(--jaune); }
+  .case.flip { animation: flip .07s linear; }
+  @keyframes flip { 50% { transform: scaleY(.1) } }
+
+  /* ---------- le vol ---------- */
+  #vol { background: var(--ciel); }
+  #carte-vol { width: 100%; height: auto; overflow: visible; }
+
+  /* ---------- fenêtre de l'hôtel ---------- */
+  #hotel { background: var(--corail); color: var(--creme); }
+  #hotel h2 { color: var(--creme); }
+  .mur { display: flex; flex-direction: column; align-items: center; }
+  .fenetre { position: relative; width: min(74vw, 290px); aspect-ratio: 3 / 4; border: 9px solid var(--creme); border-bottom-width: 12px;
+             border-radius: 999px 999px 4px 4px; overflow: hidden; perspective: 900px; background: var(--ciel); padding: 0; cursor: pointer; }
+  .fenetre:focus-visible { outline: 4px dashed var(--jaune); outline-offset: 6px; }
+  .fenetre svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .volet { position: absolute; top: 0; bottom: 0; width: 50%; background: var(--sarcelle);
+           background-image: repeating-linear-gradient(180deg, #ffffff22 0 3px, transparent 3px 14px);
+           border: 4px solid #176e6a; transition: transform 1.1s cubic-bezier(.3,1.4,.5,1); }
+  .volet.g { left: 0; transform-origin: 0 50%; }
+  .volet.d { right: 0; transform-origin: 100% 50%; }
+  .fenetre.ouverte .volet.g { transform: rotateY(-112deg); }
+  .fenetre.ouverte .volet.d { transform: rotateY(112deg); }
+  .jardiniere { width: min(84vw, 320px); margin-top: -4px; }
+  .indice { font: 700 26px Caveat, cursive; margin: 14px 0 8px; transform: rotate(-2deg); }
+  .indice { transition: opacity .4s; } .ouvert-ok .indice { opacity: 0; }
+  .hotel-info { opacity: 0; transform: translateY(20px); transition: .8s .5s; text-align: center; margin-top: 18px; }
+  .ouvert-ok .hotel-info { opacity: 1; transform: none; }
+  .hotel-info h3 { font-size: 30px; font-weight: 850; line-height: 1.05; }
+  .hotel-info p { font-size: 19px; margin-top: 8px; line-height: 1.4; }
+
+  /* ---------- billet ---------- */
+  #billet { background: var(--turquoise); }
+  .billet { background: var(--creme); border-radius: 14px; position: relative; }
+  .billet-haut { background: var(--rose); color: var(--creme); border-radius: 14px 14px 0 0; padding: 14px 18px;
+                 display: flex; justify-content: space-between; align-items: baseline; }
+  .billet-haut b { font-size: 26px; font-style: italic; font-weight: 850; }
+  .billet-haut span { font: 700 12px "Space Mono", monospace; letter-spacing: .15em; }
+  .champs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; padding: 18px; }
+  .champs dt { font: 700 10px "Space Mono", monospace; letter-spacing: .15em; text-transform: uppercase; opacity: .6; }
+  .champs dd { font-size: 21px; font-weight: 800; line-height: 1.1; margin-top: 3px; }
+  .champs .large { grid-column: 1 / -1; }
+  .talon { display: block; width: 100%; border: 0; font: inherit; color: inherit; text-align: center; cursor: grab;
+           background: var(--creme); border-top: 3px dashed #c9b79a; border-radius: 0 0 14px 14px; padding: 16px 18px 18px; touch-action: none; }
+  .talon:focus-visible { outline: 4px dashed var(--encre); outline-offset: 4px; }
+  .talon .tire { font: 700 26px Caveat, cursive; color: var(--rose); }
+  .code-barre { height: 46px; margin-top: 8px; background: repeating-linear-gradient(90deg, var(--encre) 0 2px, transparent 2px 4px, var(--encre) 4px 7px, transparent 7px 9px, var(--encre) 9px 10px, transparent 10px 14px); }
+  #fin { text-align: center; margin-top: 40px; color: var(--encre); }
+  #fin[hidden] { display: none; }
+  #fin .nb { font-size: clamp(110px, 38vw, 170px); font-weight: 900; font-style: italic; line-height: .85; color: var(--creme); text-shadow: 5px 5px 0 var(--encre); }
+  #fin .giorni { font: 700 34px Caveat, cursive; }
+  #fin .mot { font-size: 30px; font-weight: 850; font-style: italic; line-height: 1.15; margin-top: 26px; }
+  #fin .ps { font: 500 22px Caveat, cursive; margin-top: 14px; }
+
+  /* ---------- son ---------- */
+  #son { position: fixed; top: 14px; right: 14px; z-index: 85; width: 48px; height: 48px; border-radius: 50%; border: 0;
+         background: var(--creme); box-shadow: 3px 3px 0 var(--encre); display: grid; place-items: center; cursor: pointer; }
+  #son[hidden] { display: none; }
+  #son:focus-visible { outline: 3px solid var(--encre); outline-offset: 3px; }
+  #son[aria-pressed="false"] .barre { display: block; }
+  #son .barre { display: none; }
+  #confettis { position: fixed; inset: 0; pointer-events: none; z-index: 70; overflow: hidden; }
+  #confettis i { position: absolute; top: 0; width: 10px; height: 14px; border-radius: 2px; }
+
+  @media (prefers-reduced-motion: reduce) { .linge, .reflet { animation: none; } .volet { transition-duration: .01s; } }
 </style>
 </head>
-<body>
-<canvas id="neige" aria-hidden="true"></canvas>
+<body class="ferme">
+
+<!-- ===================== ENVELOPPE ===================== -->
+<div id="intro">
+  <p class="pour">Per Manon</p>
+  <svg id="enveloppe" viewBox="0 0 300 210" aria-hidden="false">
+    <rect x="0" y="10" width="300" height="200" rx="8" fill="#e9c99a"/>
+    <path id="rabat-ouvert" d="M0 10 L150 -95 L300 10Z" fill="#dcb07c"/>
+    <g id="lettre"><rect x="22" y="18" width="256" height="170" rx="4" fill="#fbf1df"/>
+      <text x="150" y="70" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="34" fill="#e8559a">Buon Natale</text></g>
+    <path d="M0 210 L0 12 L150 122 L300 12 L300 210Z" fill="#f2d4a6"/>
+    <path d="M0 210 L120 112 M300 210 L180 112" stroke="#dcb07c" stroke-width="2"/>
+    <!-- timbre + tampon -->
+    <rect x="236" y="150" width="46" height="46" fill="#fbf1df" stroke="#e8559a" stroke-width="3" stroke-dasharray="4 3"/>
+    <path d="M259 186 C244 175 245 163 253 163 C257 163 259 167 259 169 C259 167 261 163 265 163 C273 163 274 175 259 186Z" fill="#c42f3a"/>
+    <circle cx="232" cy="160" r="20" fill="none" stroke="#1f2a44" stroke-width="1.5" opacity=".45"/>
+    <text x="232" y="164" text-anchor="middle" font-family="Space Mono" font-size="7" fill="#1f2a44" opacity=".55">25.12.26</text>
+    <path id="rabat" d="M0 10 L150 126 L300 10Z" fill="#e2bd8c" stroke="#d2a670" stroke-width="2" stroke-linejoin="round"/>
+    <g id="sceau" role="button" tabindex="0" aria-label="Reste appuyée pour briser le sceau">
+      <circle id="anneau-fond" cx="150" cy="126" r="42" fill="none" stroke="#1f2a4422" stroke-width="5"/>
+      <circle id="anneau" cx="150" cy="126" r="42" fill="none" stroke="#1f2a44" stroke-width="5" stroke-linecap="round"
+              stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 150 126)"/>
+      <circle cx="122" cy="118" r="7" fill="#c42f3a"/><circle cx="176" cy="136" r="8" fill="#c42f3a"/><circle cx="160" cy="98" r="6" fill="#c42f3a"/>
+      <circle cx="150" cy="126" r="31" fill="#c42f3a"/>
+      <circle cx="150" cy="126" r="22" fill="none" stroke="#8e1f28" stroke-width="2.5"/>
+      <text x="150" y="137" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="900" font-size="30" fill="#f6d5c8">M</text>
+    </g>
+  </svg>
+  <p class="aide">reste appuyée sur le sceau…</p>
+</div>
+
+<button id="son" hidden aria-pressed="true" aria-label="Couper la musique">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1f2a44" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3" fill="#1f2a44"/><circle cx="17" cy="16" r="3" fill="#1f2a44"/>
+    <path class="barre" d="M3 3l18 18" stroke="#e8559a" stroke-width="3"/></svg>
+</button>
+
 <main>
-  <section id="intro">
-    <p class="petit">Joyeux Noël</p>
-    <h1>Manon,</h1>
-    <p>ton vrai cadeau ne tenait pas sous le sapin…<br>Il est caché juste ici.</p>
-    <div class="cadeau" aria-hidden="true">🎁</div><br>
-    <button id="ouvrir">Ouvrir mon cadeau</button>
-  </section>
+<!-- ===================== AFFICHE ===================== -->
+<section id="hero">
+  <div class="col">
+    <div class="affiche ombre">
+      <svg id="scene" viewBox="0 0 400 640" role="img" aria-label="Illustration d'un canal de Venise avec une gondole">
+        <defs>
+          <filter id="pinceau"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+          <pattern id="raye" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="4" fill="#fbf1df"/><rect y="4" width="8" height="4" fill="#1f2a44"/></pattern>
+          <pattern id="pois" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#2c4a9a"/><circle cx="4" cy="4" r="1.4" fill="#fbf1df"/></pattern>
+          <pattern id="brique" width="16" height="8" patternUnits="userSpaceOnUse"><rect width="16" height="8" fill="#d99a6a"/><path d="M0 8H16M8 0V4M0 4H16M16 4V8" stroke="#b8774f" stroke-width="1"/></pattern>
+          <pattern id="vagues" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="12" height="10" fill="#fbf1df"/><path d="M0 5 q3 -4 6 0 t6 0" stroke="#37c4c9" stroke-width="2" fill="none"/></pattern>
+          <symbol id="arche" viewBox="0 0 30 50"><path d="M1 49V17A14 14 0 0 1 29 17V49Z" fill="#fbf1df"/><path d="M5 46V18A10 10 0 0 1 25 18V46Z" fill="#1f8f8a"/><path d="M15 8V46" stroke="#fbf1df" stroke-width="2"/></symbol>
+          <symbol id="arche-sombre" viewBox="0 0 30 50"><path d="M1 49V17A14 14 0 0 1 29 17V49Z" fill="#fbf1df"/><path d="M5 46V18A10 10 0 0 1 25 18V46Z" fill="#6b2b3a"/></symbol>
+          <symbol id="volets" viewBox="0 0 30 46"><rect x="0" y="0" width="30" height="46" fill="#fbf1df"/><rect x="3" y="3" width="11" height="40" fill="#c9a23a"/><rect x="16" y="3" width="11" height="40" fill="#c9a23a"/><path d="M3 10h24M3 18h24M3 26h24M3 34h24" stroke="#a8842a" stroke-width="1.5"/></symbol>
+          <symbol id="fen-vague" viewBox="0 0 30 46"><rect x="0" y="0" width="30" height="46" rx="2" fill="#fbf1df"/><rect x="4" y="4" width="22" height="38" fill="url(#vagues)"/></symbol>
+        </defs>
 
-  <section id="revelation" aria-live="polite">
-    <p class="petit">Prépare ta valise</p>
-    <h1>On part à <em>Venise</em>&nbsp;!</h1>
-    <p class="dates">4 jours · du 22 au 25 février 2027</p>
-    <svg class="vague" viewBox="0 0 400 40" aria-hidden="true"><path d="M0 20 Q25 5 50 20 T100 20 T150 20 T200 20 T250 20 T300 20 T350 20 T400 20" fill="none" stroke="#e2b65b" stroke-width="2"/></svg>
+        <rect width="400" height="640" fill="#8fd3ee"/>
+        <g id="soleil"><circle cx="252" cy="205" r="28" fill="#f8e26b"/></g>
+        <g id="oiseaux" fill="none" stroke="#2b3a67" stroke-width="3" stroke-linecap="round">
+          <path d="M150 168 q7 -8 14 0 q7 -8 14 0"/><path d="M205 135 q6 -6 12 0 q6 -6 12 0"/><path d="M300 178 q5 -5 10 0 q5 -5 10 0"/><path d="M330 120 q5 -6 10 0 q5 -6 10 0"/>
+        </g>
 
-    <div class="carte"><span class="ico">✈️</span><div>
-      <h2>Le vol</h2><p>Départ de Paris-Charles de Gaulle, direction Venise.</p></div></div>
-    <div class="carte"><span class="ico">🏨</span><div>
-      <h2>B&amp;B HOTEL Venezia Laguna</h2><p>Une chambre avec vue sur la mer et un lit ultra confort.</p></div></div>
-    <div class="carte"><span class="ico">🌙</span><div>
-      <h2>3 nuits rien que nous deux</h2><p>Gondoles, ruelles, spritz et pâtes au bord de l'eau.</p></div></div>
+        <g filter="url(#pinceau)">
+          <!-- fond : maisons verte et rose -->
+          <g id="fond">
+            <rect x="148" y="300" width="72" height="215" fill="#7f9c46"/><rect x="144" y="292" width="80" height="12" fill="#d9774f"/>
+            <use href="#arche-sombre" x="156" y="318" width="14" height="24"/><use href="#arche-sombre" x="177" y="318" width="14" height="24"/><use href="#arche-sombre" x="198" y="318" width="14" height="24"/>
+            <use href="#arche-sombre" x="156" y="360" width="14" height="24"/><use href="#arche-sombre" x="198" y="360" width="14" height="24"/>
+            <g fill="#e8559a"><circle cx="160" cy="348" r="3"/><circle cx="168" cy="349" r="3"/><circle cx="185" cy="348" r="3"/><circle cx="203" cy="349" r="3"/><circle cx="211" cy="348" r="3"/></g>
+            <rect x="218" y="268" width="84" height="247" fill="#ea74a8"/><rect x="214" y="262" width="92" height="9" fill="#c94f86"/>
+            <g fill="#fbf1df"><rect x="228" y="285" width="9" height="15"/><rect x="246" y="285" width="9" height="15"/><rect x="264" y="285" width="9" height="15"/><rect x="282" y="285" width="9" height="15"/>
+              <rect x="228" y="315" width="9" height="15"/><rect x="246" y="315" width="9" height="15"/><rect x="264" y="315" width="9" height="15"/><rect x="282" y="315" width="9" height="15"/>
+              <rect x="228" y="345" width="9" height="15"/><rect x="246" y="345" width="9" height="15"/><rect x="264" y="345" width="9" height="15"/><rect x="282" y="345" width="9" height="15"/>
+              <rect x="228" y="375" width="9" height="15"/><rect x="264" y="375" width="9" height="15"/><rect x="282" y="375" width="9" height="15"/></g>
+          </g>
+          <!-- pont -->
+          <g id="pont">
+            <path d="M104 500 Q215 445 326 500" stroke="#1f5a5a" stroke-width="16" stroke-dasharray="2.5 6" fill="none" transform="translate(0 -10)"/>
+            <path d="M104 482 Q215 427 326 482" stroke="#1f5a5a" stroke-width="3" fill="none"/>
+            <path d="M100 498 Q215 445 330 498 L330 526 Q215 478 100 526Z" fill="#e9b48a"/>
+            <path d="M100 498 Q215 445 330 498" stroke="#c98d62" stroke-width="3" fill="none"/>
+          </g>
+          <!-- canal -->
+          <path d="M30 640 L118 520 Q215 506 318 520 L392 640Z" fill="#37c4c9"/>
+          <path d="M118 520 Q215 506 318 520 L312 532 Q215 520 124 532Z" fill="#2aa7ad"/>
+          <g fill="#fbf1df">
+            <rect class="reflet" x="170" y="550" width="22" height="3" rx="1.5"/><rect class="reflet" x="236" y="566" width="30" height="3" rx="1.5"/>
+            <rect class="reflet" x="140" y="590" width="26" height="3" rx="1.5"/><rect class="reflet" x="280" y="604" width="20" height="3" rx="1.5"/>
+            <rect class="reflet" x="210" y="622" width="34" height="3" rx="1.5"/><rect class="reflet" x="195" y="538" width="16" height="2.5" rx="1.2"/>
+          </g>
+          <!-- maisons de gauche -->
+          <g id="entree-g"><g id="gauche">
+            <rect x="-20" y="30" width="112" height="610" fill="#e8559a"/>
+            <use href="#volets" x="22" y="150" width="40" height="62"/><use href="#volets" x="22" y="300" width="40" height="62"/>
+            <rect x="-20" y="470" width="112" height="170" fill="url(#brique)" opacity=".8"/>
+            <rect x="88" y="150" width="82" height="490" fill="#f6c945"/>
+            <use href="#fen-vague" x="106" y="185" width="42" height="64"/>
+            <rect x="88" y="300" width="82" height="70" fill="url(#brique)" opacity=".7"/>
+            <use href="#fen-vague" x="110" y="390" width="36" height="52"/>
+            <path d="M118 444h22l-3 12h-16z" fill="#e8559a"/><path d="M129 444c-8-10-6-20 0-24 6 4 8 14 0 24z M122 444c-8-4-12-12-8-16 4 2 8 8 8 16z M136 444c8-4 12-12 8-16-4 2-8 8-8 16z" fill="#5f8a3a"/>
+            <path d="M100 640V520A20 20 0 0 1 140 520V640Z" fill="#fbf1df"/><path d="M106 640V522A14 14 0 0 1 134 522V640Z" fill="#b5654a"/>
+          </g></g>
+          <!-- maison de droite -->
+          <g id="entree-d"><g id="droite">
+            <path d="M296 120 L340 92 L420 92 L420 640 L296 640Z" fill="#ef6f55"/>
+            <use href="#arche" x="312" y="150" width="30" height="50"/><use href="#arche" x="356" y="150" width="30" height="50"/>
+            <use href="#arche" x="312" y="270" width="30" height="50"/><use href="#arche" x="356" y="270" width="30" height="50"/>
+            <rect x="302" y="326" width="96" height="10" fill="#fbf1df"/>
+            <g fill="#e8559a"><circle cx="310" cy="322" r="6"/><circle cx="322" cy="318" r="7"/><circle cx="336" cy="322" r="6"/><circle cx="350" cy="317" r="7"/><circle cx="364" cy="322" r="6"/><circle cx="378" cy="318" r="7"/><circle cx="392" cy="322" r="6"/></g>
+            <g fill="#c42f6a"><circle cx="316" cy="314" r="3.5"/><circle cx="344" cy="312" r="3.5"/><circle cx="371" cy="312" r="3.5"/></g>
+            <g fill="#5f8a3a"><circle cx="330" cy="314" r="3"/><circle cx="358" cy="314" r="3"/><circle cx="386" cy="313" r="3"/></g>
+            <rect x="296" y="440" width="124" height="200" fill="url(#brique)" opacity=".75"/>
+            <use href="#arche" x="356" y="380" width="30" height="50"/>
+            <path d="M318 520V470A20 20 0 0 1 358 470V520Z" fill="#fbf1df"/><path d="M323 520V472A15 15 0 0 1 353 472V520Z" fill="#6b3a2a"/>
+          </g></g>
+        </g>
 
-    <div class="compte"><div class="nb" id="jours">–</div><p id="jours-txt">jours avant le départ</p></div>
-    <p class="mot">Joyeux Noël, je t'aime ❤️</p>
-  </section>
+        <!-- gondole (avec vous deux dedans) -->
+        <g id="gondole-x"><g id="gondole" transform="translate(60 545) scale(1.35)">
+          <path d="M28 -6 L66 72" stroke="#c58a3a" stroke-width="3.5" stroke-linecap="round"/>
+          <rect x="12" y="-26" width="12" height="36" fill="#1f2a44"/>
+          <rect x="9" y="-50" width="18" height="26" rx="3" fill="url(#raye)"/>
+          <circle cx="18" cy="-58" r="7" fill="#f0c6a0"/>
+          <ellipse cx="18" cy="-63" rx="12" ry="3.5" fill="#d9a441"/><rect x="11" y="-70" width="14" height="7" rx="2" fill="#d9a441"/><rect x="11" y="-66" width="14" height="2.5" fill="#1f2a44"/>
+          <path d="M0 14 Q85 40 168 10 Q182 2 184 -20 Q190 6 172 22 Q92 56 -4 30Z" fill="#1f2a44"/>
+          <path d="M178 -20 l10 -4 -2 6 6 0 -8 6z" fill="#e9b48a"/>
+          <rect x="58" y="10" width="64" height="10" rx="4" fill="#3d5aa8"/>
+          <path d="M70 12 q-2 -16 8 -20 q10 -2 10 12 l1 10z" fill="#5a3324"/>
+          <circle cx="79" cy="-6" r="8" fill="#f0c6a0"/>
+          <path d="M71 -6 q0 -12 8 -12 q9 0 9 10 q-4 -4 -9 -4 q-5 0 -8 6z" fill="#5a3324"/>
+          <rect x="94" y="0" width="18" height="16" rx="4" fill="#fbf1df"/>
+          <circle cx="103" cy="-8" r="8" fill="#f0c6a0"/>
+          <ellipse cx="103" cy="-14" rx="13" ry="3.5" fill="#d9a441"/><rect x="96" y="-22" width="14" height="8" rx="3" fill="#d9a441"/>
+          <path id="coeur" d="M91 -34 C83 -41 84 -48 89 -48 C91.5 -48 91 -45 91 -44 C91 -45 91.5 -48 94 -48 C99 -48 99 -41 91 -34Z" fill="#e8559a" transform-origin="91 -40"/>
+        </g></g>
+
+        <!-- linge -->
+        <g id="linge">
+          <path d="M-10 72 Q200 128 410 58" stroke="#1f2a44" stroke-width="2" fill="none"/>
+          <g transform="translate(36 81)"><g class="linge"><path d="M-14 0H14L22 10 16 15 13 12V44H-13V12L-16 15-22 10Z" fill="url(#pois)"/></g></g>
+          <g transform="translate(100 92)"><g class="linge"><path d="M-9 0H9L19 48H-19Z" fill="#e8559a"/><path d="M-14 26H14" stroke="#f6c945" stroke-width="3"/></g></g>
+          <g transform="translate(160 98)"><g class="linge"><path d="M-12 0Q0 11 12 0L13 38H-13Z" fill="#6fb6e0"/></g></g>
+          <g transform="translate(222 97)"><g class="linge"><rect x="-15" y="0" width="30" height="42" fill="#d63f86"/><path d="M-15 34H15" stroke="#fbf1df" stroke-width="2"/></g></g>
+          <g transform="translate(290 88)"><g class="linge"><path d="M-12 0H12L13 54H3L0 16-3 54H-13Z" fill="#5f8a3a"/></g></g>
+          <g transform="translate(356 72)"><g class="linge"><path d="M-14 0H14L22 10 16 15 13 12V44H-13V12L-16 15-22 10Z" fill="url(#raye)"/></g></g>
+        </g>
+        <!-- glycine -->
+        <g id="glycine">
+          <g fill="#5f8a3a"><ellipse cx="20" cy="18" rx="16" ry="7" transform="rotate(-20 20 18)"/><ellipse cx="96" cy="14" rx="15" ry="6" transform="rotate(25 96 14)"/><ellipse cx="60" cy="58" rx="12" ry="5" transform="rotate(60 60 58)"/></g>
+          <g fill="#8e6bc4"><circle cx="8" cy="30" r="10"/><circle cx="30" cy="22" r="11"/><circle cx="52" cy="10" r="12"/><circle cx="76" cy="26" r="10"/><circle cx="18" cy="52" r="9"/><circle cx="42" cy="44" r="9"/><circle cx="66" cy="44" r="7"/><circle cx="30" cy="70" r="7"/><circle cx="50" cy="66" r="6"/><circle cx="10" cy="80" r="6"/></g>
+          <g fill="#b496e6"><circle cx="24" cy="28" r="5"/><circle cx="56" cy="18" r="5"/><circle cx="40" cy="50" r="4"/><circle cx="14" cy="58" r="4"/><circle cx="72" cy="30" r="4"/></g>
+        </g>
+        <!-- tulipes -->
+        <g id="tulipes">
+          <path d="M-6 640 Q10 570 34 548 Q22 590 26 640Z" fill="#5f8a3a"/><path d="M60 640 Q58 590 84 566 Q78 600 82 640Z" fill="#7aa648"/>
+          <g stroke="#5f8a3a" stroke-width="3" fill="none"><path d="M18 640V592"/><path d="M40 640V600"/><path d="M58 640V585"/></g>
+          <path d="M10 594q0-14 8-16q8 2 8 16q-8 6-16 0z" fill="#ef6f55"/><path d="M32 602q0-14 8-16q8 2 8 16q-8 6-16 0z" fill="#e8559a"/><path d="M50 587q0-14 8-16q8 2 8 16q-8 6-16 0z" fill="#f6a3c7"/>
+        </g>
+      </svg>
+      <h1 class="venezia" aria-label="Venezia">Venezia</h1>
+      <p class="dates-aff">22 — 25 febbraio 2027</p>
+    </div>
+    <p class="txt">Manon, ton cadeau de Noël&nbsp;: <strong>quatre jours à Venise</strong>, rien que nous deux.</p>
+    <p class="defile">fais défiler ↓</p>
+  </div>
+</section>
+
+<!-- ===================== DÉPART ===================== -->
+<section id="depart">
+  <div class="col">
+    <span class="annot">1 · la partenza</span>
+    <h2>Le <em>départ</em></h2>
+    <div class="tableau ombre" id="tableau" role="table" aria-label="Tableau des départs"></div>
+  </div>
+</section>
+
+<!-- ===================== VOL ===================== -->
+<section id="vol">
+  <div class="col">
+    <span class="annot">2 · il volo</span>
+    <h2>Paris → <em>Venise</em></h2>
+    <svg id="carte-vol" viewBox="0 0 400 320" aria-label="Trajet en avion de Paris à Venise">
+      <defs><mask id="masque-route"><path id="route-masque" d="M52 86 C150 -6 268 52 348 236" stroke="#fff" stroke-width="10" fill="none"/></mask></defs>
+      <g fill="#fbf1df"><ellipse cx="300" cy="60" rx="34" ry="12"/><ellipse cx="320" cy="52" rx="20" ry="12"/><ellipse cx="90" cy="200" rx="30" ry="10"/><ellipse cx="110" cy="193" rx="18" ry="10"/></g>
+      <path d="M260 320 Q300 250 400 248 V320Z" fill="#37c4c9"/>
+      <g id="alpes">
+        <path d="M120 300 L170 200 L215 300Z" fill="#5f8a3a"/><path d="M170 200 L184 228 L174 222 L166 232 L158 224Z" fill="#fbf1df"/>
+        <path d="M180 300 L240 175 L300 300Z" fill="#7f9c46"/><path d="M240 175 L257 210 L246 202 L238 214 L228 204Z" fill="#fbf1df"/>
+        <path d="M250 300 L292 222 L330 300Z" fill="#5f8a3a"/><path d="M292 222 L303 243 L295 238 L288 246 L282 240Z" fill="#fbf1df"/>
+      </g>
+      <path id="route" d="M52 86 C150 -6 268 52 348 236" stroke="#1f2a44" stroke-width="3.5" stroke-dasharray="9 9" stroke-linecap="round" fill="none" mask="url(#masque-route)"/>
+      <circle cx="52" cy="86" r="8" fill="#1f2a44"/><text x="30" y="118" font-family="Caveat" font-weight="700" font-size="28" fill="#1f2a44">Paris CDG</text>
+      <circle cx="348" cy="236" r="8" fill="#e8559a"/><text x="300" y="292" font-family="Caveat" font-weight="700" font-size="30" fill="#1f2a44">Venezia</text>
+      <path id="coeur-vol" d="M348 222 C334 210 336 198 344 198 C348 198 348 203 348 204 C348 203 348 198 352 198 C360 198 362 210 348 222Z" fill="#e8559a" transform="translate(0 -26)" opacity="0"/>
+      <g id="avion"><path d="M-16 -3.5 L8 -3.5 L17 0 L8 3.5 L-16 3.5 Z" fill="#fbf1df" stroke="#1f2a44" stroke-width="2"/>
+        <path d="M-2 -3 L-9 -16 L-3 -16 L7 -3Z M-2 3 L-9 16 L-3 16 L7 3Z M-15 -3 L-19 -9 L-15 -9 L-11 -3Z" fill="#e8559a" stroke="#1f2a44" stroke-width="1.5"/></g>
+    </svg>
+    <p class="txt">Décollage de Charles de Gaulle, un peu moins de deux heures au-dessus des Alpes, et on atterrit au bord de la lagune.</p>
+  </div>
+</section>
+
+<!-- ===================== HÔTEL ===================== -->
+<section id="hotel">
+  <div class="col mur" id="mur">
+    <span class="annot" style="align-self:flex-start">3 · la stanza</span>
+    <h2 style="align-self:flex-start">Vue sur <em>mer</em></h2>
+    <p class="indice">tape sur les volets ↓</p>
+    <button class="fenetre" id="fenetre" aria-label="Ouvrir les volets" aria-expanded="false">
+      <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="300" height="400" fill="#8fd3ee"/><circle cx="210" cy="170" r="34" fill="#f8e26b"/>
+        <path d="M0 222 Q60 214 110 220 L110 228 L0 228Z" fill="#7f9c46"/>
+        <rect y="226" width="300" height="174" fill="#37c4c9"/>
+        <g stroke="#fbf1df" stroke-width="3" stroke-linecap="round" fill="none"><path d="M30 270 q10 -6 20 0"/><path d="M180 300 q10 -6 20 0"/><path d="M90 340 q12 -7 24 0"/><path d="M220 365 q10 -6 20 0"/><path d="M40 380 q10 -6 20 0"/></g>
+        <g id="voilier"><path d="M150 285 L150 222 L184 280Z" fill="#fbf1df"/><path d="M146 280 L146 236 L124 280Z" fill="#e8559a"/><path d="M118 286 L190 286 L180 298 L128 298Z" fill="#ef6f55"/></g>
+      </svg>
+      <span class="volet g"></span><span class="volet d"></span>
+    </button>
+    <svg class="jardiniere" viewBox="0 0 320 50" aria-hidden="true">
+      <g fill="#5f8a3a"><circle cx="40" cy="22" r="10"/><circle cx="110" cy="20" r="10"/><circle cx="200" cy="22" r="10"/><circle cx="280" cy="20" r="10"/></g>
+      <g fill="#e8559a"><circle cx="24" cy="18" r="10"/><circle cx="60" cy="14" r="11"/><circle cx="92" cy="18" r="10"/><circle cx="130" cy="13" r="11"/><circle cx="164" cy="18" r="10"/><circle cx="196" cy="12" r="11"/><circle cx="232" cy="17" r="10"/><circle cx="264" cy="13" r="11"/><circle cx="298" cy="18" r="10"/></g>
+      <g fill="#f6c945"><circle cx="60" cy="14" r="3.5"/><circle cx="130" cy="13" r="3.5"/><circle cx="196" cy="12" r="3.5"/><circle cx="264" cy="13" r="3.5"/></g>
+      <rect x="10" y="26" width="300" height="22" rx="3" fill="#fbf1df"/>
+    </svg>
+    <div class="hotel-info">
+      <h3>B&amp;B HOTEL Venezia Laguna</h3>
+      <p>Une chambre avec vue sur la mer,<br>un lit ultra confort, trois nuits à nous.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BILLET ===================== -->
+<section id="billet">
+  <div class="col">
+    <span class="annot">4 · il biglietto</span>
+    <h2>Ton <em>billet</em></h2>
+    <div class="billet ombre" id="carte-billet">
+      <div class="billet-haut"><b>Carta d'imbarco</b><span>N° AMORE</span></div>
+      <dl class="champs">
+        <div class="large"><dt>Passeggera</dt><dd>MANON</dd></div>
+        <div><dt>Da</dt><dd>Paris CDG</dd></div>
+        <div><dt>A</dt><dd>Venezia</dd></div>
+        <div><dt>Andata</dt><dd>22.02.2027</dd></div>
+        <div><dt>Ritorno</dt><dd>25.02.2027</dd></div>
+        <div><dt>Posto</dt><dd>À côté de moi</dd></div>
+        <div><dt>Hotel</dt><dd>Venezia Laguna</dd></div>
+      </dl>
+      <button class="talon" id="talon" aria-label="Déchirer le talon du billet">
+        <span class="tire">tire vers le bas pour déchirer ↓</span>
+        <div class="code-barre" aria-hidden="true"></div>
+      </button>
+    </div>
+    <div id="fin" hidden aria-live="polite">
+      <div class="nb" id="jours">0</div>
+      <p class="giorni">giorni avant de partir</p>
+      <p class="mot">Buon Natale, amore.<br>Je t'aime.</p>
+      <p class="ps">PS : prépare ton plus beau chapeau de paille.</p>
+    </div>
+  </div>
+</section>
 </main>
+<div id="confettis" aria-hidden="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/MotionPathPlugin.min.js"></script>
 <script>
-  const depart = new Date(2027, 1, 22); // 22 février 2027 (mois 0-indexé)
-  const jours = Math.ceil((depart - new Date()) / 864e5);
-  document.getElementById('jours').textContent = Math.max(jours, 0);
-  if (jours <= 0) document.getElementById('jours-txt').textContent = "C'est le grand jour !";
+gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+const $ = s => document.querySelector(s);
+const calme = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  document.getElementById('ouvrir').onclick = () => {
-    document.getElementById('intro').style.display = 'none';
-    document.getElementById('revelation').classList.add('visible');
-    window.scrollTo(0, 0);
-  };
+/* ================= MUSIQUE : sérénade à la mandoline, composée ici et jouée en direct ================= */
+let ac, sortie, prochaineBoucle = 0;
+const NOIRE = 0.42; // secondes par temps (valse 3/4)
+const ACCORDS = { C: [48, [64, 67, 72]], G7: [43, [62, 65, 71]], C7: [48, [64, 67, 70]], F: [41, [65, 69, 72]] };
+const GRILLE = ['C','C','G7','G7','G7','G7','C','C','C','C7','F','F','C','G7','C','C'];
+const MELODIE = [ // [note MIDI, durée en temps], 3 temps par mesure
+  [67,1],[72,1],[76,1], [76,2],[74,1], [74,1],[77,1],[74,1], [71,3],
+  [71,1],[74,1],[77,1], [77,2],[76,1], [76,1],[79,1],[76,1], [72,3],
+  [72,1],[76,1],[79,1], [79,2],[76,1], [77,1],[81,1],[77,1], [72,3],
+  [76,1],[79,1],[76,1], [74,1],[77,1],[71,1], [72,3], [72,2],[67,1] ];
+const hz = m => 440 * 2 ** ((m - 69) / 12);
 
-  // neige légère, coupée si l'utilisateur préfère moins d'animations
-  const c = document.getElementById('neige'), ctx = c.getContext('2d');
-  const fixe = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let flocons = [];
-  function taille() { c.width = innerWidth; c.height = innerHeight;
-    flocons = Array.from({ length: 70 }, () => ({ x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 2.5 + .8, v: Math.random() * .6 + .3 })); }
-  function dessine() { ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#ffffffcc';
-    for (const f of flocons) { ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill();
-      if (!fixe) { f.y += f.v; f.x += Math.sin(f.y / 40) * .3; if (f.y > c.height) f.y = -5; } }
-    if (!fixe) requestAnimationFrame(dessine); }
-  addEventListener('resize', taille); taille(); dessine();
+function pince(m, t, duree, vol, type, detune = 0) {
+  const o = ac.createOscillator(), f = ac.createBiquadFilter(), g = ac.createGain();
+  o.type = type; o.frequency.value = hz(m); o.detune.value = detune;
+  f.type = 'lowpass'; f.frequency.setValueAtTime(3800, t); f.frequency.exponentialRampToValueAtTime(700, t + duree);
+  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .004); g.gain.exponentialRampToValueAtTime(.0008, t + duree);
+  o.connect(f).connect(g).connect(sortie); o.start(t); o.stop(t + duree + .05);
+}
+function boucle(t0) {
+  // guitare : basse + accord (oum-pa-pa)
+  GRILLE.forEach((nom, i) => {
+    const [basse, acc] = ACCORDS[nom], t = t0 + i * 3 * NOIRE;
+    pince(basse, t, .55, .22, 'triangle');
+    [1, 2].forEach(b => acc.forEach(n => pince(n - 12, t + b * NOIRE, .3, .05, 'triangle')));
+  });
+  // mandoline : trémolo sur chaque note de la mélodie
+  let t = t0;
+  for (const [n, d] of MELODIE) {
+    const fin = t + d * NOIRE;
+    for (let p = t, k = 0; p < fin - .02; p += .072, k++) {
+      const v = (k % 2 ? .05 : .065) * (1 - (p - t) / (d * NOIRE) * .35);
+      pince(n, p, .13, v, 'sawtooth'); pince(n, p + .004, .13, v * .7, 'sawtooth', 7);
+    }
+    t = fin;
+  }
+  return GRILLE.length * 3 * NOIRE;
+}
+function demarrerMusique() {
+  try {
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+    sortie = ac.createGain(); sortie.gain.value = .7;
+    const rev = ac.createConvolver(), long = ac.sampleRate * 2.2, buf = ac.createBuffer(2, long, ac.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = buf.getChannelData(c); for (let i = 0; i < long; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / long) ** 3; }
+    rev.buffer = buf; const humide = ac.createGain(); humide.gain.value = .28;
+    sortie.connect(ac.destination); sortie.connect(rev).connect(humide).connect(ac.destination);
+    prochaineBoucle = ac.currentTime + .15;
+    // n'avance que si le son tourne : quand on coupe, currentTime se fige et rien ne s'empile
+    const planifier = () => { if (prochaineBoucle - ac.currentTime < 3) prochaineBoucle += boucle(prochaineBoucle); };
+    planifier(); setInterval(planifier, 1000);
+    $('#son').hidden = false;
+  } catch (e) { /* pas de son possible : le site marche quand même */ }
+}
+let bruit;
+function clac() {
+  if (!ac || ac.state !== 'running') return;
+  if (!bruit) { bruit = ac.createBuffer(1, ac.sampleRate * .02, ac.sampleRate); const d = bruit.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length) ** 4; }
+  const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+  s.buffer = bruit; f.type = 'highpass'; f.frequency.value = 1800; g.gain.value = .35;
+  s.connect(f).connect(g).connect(ac.destination); s.start();
+}
+$('#son').onclick = () => {
+  const on = ac.state === 'running';
+  on ? ac.suspend() : ac.resume();
+  $('#son').setAttribute('aria-pressed', String(!on));
+  $('#son').setAttribute('aria-label', on ? 'Remettre la musique' : 'Couper la musique');
+};
+
+/* ================= SCEAU : rester appuyée pour l'ouvrir ================= */
+const sceau = $('#sceau'), anneau = $('#anneau'), TENIR = 1200;
+let debut = 0, raf = 0, ouvert = false;
+function presser(e) { if (ouvert || debut) return; e.preventDefault(); debut = performance.now(); avancer(); }
+function avancer() {
+  const p = Math.min((performance.now() - debut) / TENIR, 1);
+  anneau.style.strokeDashoffset = 264 * (1 - p);
+  sceau.style.transform = `rotate(${(Math.random() - .5) * p * 16}deg) scale(${1 + p * .1})`;
+  if (navigator.vibrate && p > .5 && Math.random() < .15) navigator.vibrate(8);
+  p < 1 ? raf = requestAnimationFrame(avancer) : ouvrir();
+}
+function lacher() { if (ouvert) return; cancelAnimationFrame(raf); debut = 0; anneau.style.strokeDashoffset = 264; sceau.style.transform = ''; }
+sceau.addEventListener('pointerdown', presser);
+['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => sceau.addEventListener(ev, lacher));
+sceau.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) presser(e); });
+sceau.addEventListener('keyup', lacher);
+sceau.addEventListener('contextmenu', e => e.preventDefault());
+
+function ouvrir() {
+  ouvert = true; demarrerMusique();
+  const tl = gsap.timeline();
+  tl.to(sceau, { scale: 1.6, opacity: 0, duration: .35, ease: 'power2.out', transformOrigin: 'center' })
+    .to('#rabat', { scaleY: 0, duration: .3, ease: 'power2.in' })
+    .to('#rabat-ouvert', { scaleY: 1, duration: .35, ease: 'back.out(2)' })
+    .to('#lettre', { y: -110, duration: .7, ease: 'power3.out' })
+    .to('#intro', { opacity: 0, scale: 1.25, duration: .7, ease: 'power2.in' }, '+=.15')
+    .add(() => { $('#intro').remove(); document.body.classList.remove('ferme'); ScrollTrigger.refresh(); entreeAffiche(); });
+}
+
+/* ================= AFFICHE ================= */
+const titre = $('.venezia');
+titre.innerHTML = [...titre.textContent].map(c => `<span aria-hidden="true">${c}</span>`).join('');
+gsap.set('.venezia span', { yPercent: 120, rotate: 12, opacity: 0 });
+function entreeAffiche() {
+  const d = calme ? 0 : 1;
+  gsap.timeline()
+    .from('#entree-g', { x: -220, duration: 1.1 * d, ease: 'power3.out' }, 0)
+    .from('#entree-d', { x: 220, duration: 1.1 * d, ease: 'power3.out' }, 0)
+    .from('#linge', { y: -140, duration: 1 * d, ease: 'bounce.out' }, .25)
+    .from('#glycine', { scale: 0, transformOrigin: '0 0', duration: .8 * d, ease: 'back.out(2)' }, .4)
+    .from('#tulipes', { y: 90, duration: .8 * d, ease: 'back.out(1.6)' }, .5)
+    .from('#gondole-x', { x: -320, duration: 1.6 * d, ease: 'power2.out' }, .3)
+    .to('.venezia span', { yPercent: 0, rotate: 0, opacity: 1, stagger: .06, duration: .7 * d, ease: 'back.out(2.2)' }, .7)
+    .from('#hero .txt, .dates-aff, .defile', { y: 30, opacity: 0, stagger: .12, duration: .6 * d }, 1.1);
+  if (calme) return;
+  gsap.to('#gondole-x', { x: 45, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.9 });
+  gsap.to('#gondole', { y: '+=4', rotation: 1.5, svgOrigin: '200 590', duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to('#coeur', { y: -8, scale: 1.2, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.to('#oiseaux path', { x: () => gsap.utils.random(-20, 20), y: () => gsap.utils.random(-12, 8), duration: 2.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .4 });
+  gsap.to('.defile', { y: 8, duration: .8, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 2 });
+}
+if (!calme) {
+  const par = { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true };
+  gsap.to('#gauche', { x: -70, scrollTrigger: par });
+  gsap.to('#droite', { x: 70, scrollTrigger: par });
+  gsap.to('#soleil', { y: -60, scrollTrigger: par });
+  gsap.to('#linge', { y: -30, scrollTrigger: par });
+}
+
+/* ================= TABLEAU DES DÉPARTS ================= */
+const LIGNES = [['Destination', 'VENEZIA', 'dest'], ['Départ', 'PARIS CDG'], ['Aller', '22 FEB 2027'], ['Retour', '25 FEB 2027'], ['Passagers', 'MANON + MOI']];
+const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const tableau = $('#tableau');
+tableau.innerHTML = LIGNES.map(([lab, val, cls]) =>
+  `<div class="ligne ${cls || ''}" role="row"><p class="etiquette" role="rowheader">${lab}</p>
+   <div class="cases" role="cell" aria-label="${val}">${[...val.padEnd(11)].map(c => `<span class="case" aria-hidden="true" data-fin="${c}"> </span>`).join('')}</div></div>`).join('');
+function retourner() {
+  let dernier = 0;
+  document.querySelectorAll('.case').forEach((c, i) => {
+    const fin = c.dataset.fin, tours = calme ? 0 : 6 + (i % 11) * 2 + (Math.random() * 8 | 0) + (i / 11 | 0) * 3;
+    let n = 0;
+    const iv = setInterval(() => {
+      if (n++ >= tours) { c.textContent = fin; clearInterval(iv); return; }
+      c.textContent = ALPHA[Math.random() * ALPHA.length | 0];
+      c.classList.remove('flip'); void c.offsetWidth; c.classList.add('flip');
+      const now = performance.now(); if (now - dernier > 45) { dernier = now; clac(); }
+    }, 70);
+  });
+}
+ScrollTrigger.create({ trigger: '#tableau', start: 'top 80%', once: true, onEnter: retourner });
+
+/* ================= VOL ================= */
+const masque = $('#route-masque'), L = masque.getTotalLength();
+gsap.set(masque, { strokeDasharray: L, strokeDashoffset: L });
+gsap.set('#avion', { motionPath: { path: '#route', align: '#route', alignOrigin: [.5, .5], autoRotate: true, end: 0 } });
+const vol = gsap.timeline({ scrollTrigger: { trigger: '#carte-vol', start: 'top 75%', end: 'bottom 45%', scrub: calme ? false : 1 } });
+vol.to(masque, { strokeDashoffset: 0, ease: 'none', duration: 1 }, 0)
+   .to('#avion', { motionPath: { path: '#route', align: '#route', alignOrigin: [.5, .5], autoRotate: true }, ease: 'none', duration: 1 }, 0)
+   .to('#coeur-vol', { opacity: 1, y: -10, scale: 1.3, transformOrigin: 'center', ease: 'back.out(3)', duration: .15 }, .95);
+
+/* ================= VOLETS ================= */
+$('#fenetre').onclick = () => {
+  const f = $('#fenetre'), ouvre = !f.classList.contains('ouverte');
+  f.classList.toggle('ouverte', ouvre); f.setAttribute('aria-expanded', String(ouvre));
+  f.setAttribute('aria-label', ouvre ? 'Fermer les volets' : 'Ouvrir les volets');
+  $('#mur').classList.add('ouvert-ok');
+  if (ouvre && !calme) gsap.fromTo('#voilier', { x: -30 }, { x: 30, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+};
+
+/* ================= BILLET À DÉCHIRER ================= */
+const talon = $('#talon'); let y0 = null, dechire = false;
+talon.addEventListener('pointerdown', e => { y0 = e.clientY; talon.setPointerCapture(e.pointerId); talon.style.cursor = 'grabbing'; });
+talon.addEventListener('pointermove', e => {
+  if (y0 === null || dechire) return;
+  const dy = Math.max(0, e.clientY - y0);
+  gsap.set(talon, { y: dy * .7, rotation: dy * .06, transformOrigin: '0 0' });
+  if (dy > 90) dechirer();
+});
+talon.addEventListener('pointerup', () => { y0 = null; if (!dechire) gsap.to(talon, { y: 0, rotation: 0, duration: .5, ease: 'elastic.out(1,.5)' }); });
+talon.addEventListener('click', dechirer); // tap ou clavier
+
+function dechirer() {
+  if (dechire) return; dechire = true; y0 = null;
+  gsap.to(talon, { y: '+=260', x: 50, rotation: 22, opacity: 0, duration: .9, ease: 'power2.in', onComplete: () => talon.style.visibility = 'hidden' });
+  const fin = $('#fin'); fin.hidden = false;
+  const jours = Math.max(Math.ceil((new Date(2027, 1, 22) - new Date()) / 864e5), 0);
+  const c = { v: 0 };
+  gsap.to(c, { v: jours, duration: calme ? 0 : 2, ease: 'power3.out', delay: .4, onUpdate: () => $('#jours').textContent = Math.round(c.v) });
+  gsap.from('#fin > *', { y: 40, opacity: 0, stagger: .15, duration: .7, delay: .3 });
+  setTimeout(() => fin.scrollIntoView({ behavior: calme ? 'auto' : 'smooth', block: 'center' }), 350);
+  if (!calme) confettis();
+}
+function confettis() {
+  const box = $('#confettis'), couleurs = ['#e8559a', '#f6c945', '#37c4c9', '#ef6f55', '#7f9c46', '#8e6bc4', '#fbf1df'];
+  for (let i = 0; i < 90; i++) {
+    const p = document.createElement('i');
+    p.style.background = couleurs[i % couleurs.length]; p.style.left = Math.random() * 100 + 'vw';
+    if (i % 3 === 0) p.style.borderRadius = '50%';
+    box.appendChild(p);
+    gsap.fromTo(p, { y: -30, rotation: 0 }, { y: innerHeight + 40, x: gsap.utils.random(-80, 80), rotation: gsap.utils.random(-540, 540),
+      duration: gsap.utils.random(2.2, 4), delay: Math.random() * .8, ease: 'power1.in', onComplete: () => p.remove() });
+  }
+}
+
+/* ================= titres qui arrivent ================= */
+gsap.utils.toArray('section:not(#hero) h2, section:not(#hero) .annot').forEach(el =>
+  gsap.from(el, { y: 50, opacity: 0, rotate: -3, duration: calme ? 0 : .8, ease: 'back.out(1.7)', scrollTrigger: { trigger: el, start: 'top 88%' } }));
 </script>
 </body>
 </html>
