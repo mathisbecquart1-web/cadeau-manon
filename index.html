@@ -121,6 +121,36 @@
   #fin .mot { font-size: 30px; font-weight: 850; font-style: italic; line-height: 1.15; margin-top: 26px; }
   #fin .ps { font: 500 22px Caveat, cursive; margin-top: 14px; }
 
+  .secrets { text-align: center; font: 700 21px Caveat, cursive; margin-top: 8px; color: var(--encre); }
+  .secrets b { display: inline-block; font: 700 14px "Space Mono", monospace; background: var(--jaune); padding: 2px 8px; border-radius: 99px; }
+  #scene [role="button"] { cursor: pointer; outline: none; }
+  #scene [role="button"]:focus-visible { filter: drop-shadow(0 0 4px #fff); }
+  #fin .tic { font: 700 clamp(18px, 6vw, 26px) "Space Mono", monospace; color: var(--creme); background: var(--encre);
+              display: inline-block; padding: 6px 14px; border-radius: 10px; margin-top: 10px; }
+
+  /* ---------- valise ---------- */
+  #valise { background: var(--lilas); color: var(--creme); }
+  #valise h2 { color: var(--creme); }
+  .bulle { display: inline-block; background: var(--creme); color: var(--encre); font: 700 22px Caveat, cursive; line-height: 1.15;
+           padding: 10px 16px; border-radius: 18px; margin: 18px 0 30px; box-shadow: 3px 3px 0 var(--encre); min-height: 46px; }
+  .valise { display: grid; width: min(80vw, 300px); margin: 0 auto; perspective: 900px; }
+  .couvercle { grid-row: 1; position: relative; height: 112px; background: var(--corail); border: 4px solid var(--encre); border-radius: 18px 18px 6px 6px;
+               transform-origin: 50% 100%; transform: rotateX(18deg);
+               background-image: linear-gradient(90deg, transparent 20%, var(--jaune) 20% 28%, transparent 28% 72%, var(--jaune) 72% 80%, transparent 80%); }
+  .poignee { position: absolute; top: -20px; left: 50%; width: 74px; height: 20px; transform: translateX(-50%);
+             border: 5px solid var(--encre); border-bottom: 0; border-radius: 14px 14px 0 0; }
+  .corps { grid-row: 2; min-height: 112px; background: #d9583f; border: 4px solid var(--encre); border-radius: 6px 6px 18px 18px;
+           display: flex; flex-wrap: wrap; gap: 4px; padding: 10px; align-content: flex-start; box-shadow: inset 0 10px 0 #00000022; }
+  .mini svg { width: 46px; height: 46px; display: block; }
+  .compte-valise { text-align: center; font: 700 14px "Space Mono", monospace; letter-spacing: .1em; margin: 14px 0 22px; }
+  .objets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .objet { position: relative; z-index: 1; background: var(--creme); color: var(--encre); border: 3px solid var(--encre); border-radius: 14px;
+           padding: 8px 2px 6px; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 700 16px/1 Caveat, cursive;
+           box-shadow: 3px 3px 0 var(--encre); touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+  .objet.tenu { z-index: 5; cursor: grabbing; box-shadow: 8px 12px 0 #1f2a4455; }
+  .objet:focus-visible { outline: 3px solid var(--jaune); outline-offset: 2px; }
+  .objet svg { width: 46px; height: 46px; pointer-events: none; }
+
   /* ---------- son ---------- */
   #son { position: fixed; top: 14px; right: 14px; z-index: 85; width: 48px; height: 48px; border-radius: 50%; border: 0;
          background: var(--creme); box-shadow: 3px 3px 0 var(--encre); display: grid; place-items: center; cursor: pointer; }
@@ -191,14 +221,18 @@
           <symbol id="arche" viewBox="0 0 30 50"><path d="M1 49V17A14 14 0 0 1 29 17V49Z" fill="#fbf1df"/><path d="M5 46V18A10 10 0 0 1 25 18V46Z" fill="#1f8f8a"/><path d="M15 8V46" stroke="#fbf1df" stroke-width="2"/></symbol>
           <symbol id="arche-sombre" viewBox="0 0 30 50"><path d="M1 49V17A14 14 0 0 1 29 17V49Z" fill="#fbf1df"/><path d="M5 46V18A10 10 0 0 1 25 18V46Z" fill="#6b2b3a"/></symbol>
           <symbol id="volets" viewBox="0 0 30 46"><rect x="0" y="0" width="30" height="46" fill="#fbf1df"/><rect x="3" y="3" width="11" height="40" fill="#c9a23a"/><rect x="16" y="3" width="11" height="40" fill="#c9a23a"/><path d="M3 10h24M3 18h24M3 26h24M3 34h24" stroke="#a8842a" stroke-width="1.5"/></symbol>
+          <clipPath id="clip-chat"><path d="M361 426V398A10 10 0 0 1 381 398V426Z"/></clipPath>
           <symbol id="fen-vague" viewBox="0 0 30 46"><rect x="0" y="0" width="30" height="46" rx="2" fill="#fbf1df"/><rect x="4" y="4" width="22" height="38" fill="url(#vagues)"/></symbol>
         </defs>
 
         <rect width="400" height="640" fill="#8fd3ee"/>
-        <g id="soleil"><circle cx="252" cy="205" r="28" fill="#f8e26b"/></g>
+        <g id="soleil"><g id="soleil-in"><circle cx="252" cy="205" r="28" fill="#f8e26b"/>
+          <g id="visage" opacity="0"><circle id="oeil-g" cx="243" cy="200" r="3" fill="#1f2a44"/><circle id="oeil-d" cx="261" cy="200" r="3" fill="#1f2a44"/>
+            <path d="M242 211 q10 8 20 0" stroke="#1f2a44" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="237" cy="210" r="3.5" fill="#f4a3a8"/><circle cx="267" cy="210" r="3.5" fill="#f4a3a8"/></g></g></g>
+        <g id="oiseaux-vol"><rect x="140" y="104" width="230" height="68" fill="transparent"/>
         <g id="oiseaux" fill="none" stroke="#2b3a67" stroke-width="3" stroke-linecap="round">
           <path d="M150 168 q7 -8 14 0 q7 -8 14 0"/><path d="M205 135 q6 -6 12 0 q6 -6 12 0"/><path d="M300 178 q5 -5 10 0 q5 -5 10 0"/><path d="M330 120 q5 -6 10 0 q5 -6 10 0"/>
-        </g>
+        </g></g>
 
         <g filter="url(#pinceau)">
           <!-- fond : maisons verte et rose -->
@@ -251,6 +285,16 @@
             <g fill="#5f8a3a"><circle cx="330" cy="314" r="3"/><circle cx="358" cy="314" r="3"/><circle cx="386" cy="313" r="3"/></g>
             <rect x="296" y="440" width="124" height="200" fill="url(#brique)" opacity=".75"/>
             <use href="#arche" x="356" y="380" width="30" height="50"/>
+            <g id="fen-chat"><rect x="350" y="372" width="42" height="62" fill="transparent"/>
+              <g clip-path="url(#clip-chat)"><g id="chat" transform="translate(0 34)">
+                <ellipse cx="371" cy="430" rx="11" ry="7" fill="#e8913a"/>
+                <path d="M362 413 L365 400 L371 409Z M380 413 L377 400 L371 409Z" fill="#e8913a"/>
+                <circle cx="371" cy="415" r="9" fill="#e8913a"/>
+                <circle cx="367.5" cy="414" r="1.7" fill="#1f2a44"/><circle cx="374.5" cy="414" r="1.7" fill="#1f2a44"/>
+                <path d="M370 418h2l-1 1.5z" fill="#e8559a"/>
+              </g></g>
+              <text id="miao" x="371" y="370" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="17" fill="#1f2a44" opacity="0">miao !</text>
+            </g>
             <path d="M318 520V470A20 20 0 0 1 358 470V520Z" fill="#fbf1df"/><path d="M323 520V472A15 15 0 0 1 353 472V520Z" fill="#6b3a2a"/>
           </g></g>
         </g>
@@ -258,12 +302,15 @@
         <!-- gondole (avec vous deux dedans) -->
         <g id="gondole-x"><g id="gondole" transform="translate(60 545) scale(1.35)">
           <path d="M28 -6 L66 72" stroke="#c58a3a" stroke-width="3.5" stroke-linecap="round"/>
+          <g id="gondolier"><rect x="2" y="-74" width="34" height="86" fill="transparent"/>
           <rect x="12" y="-26" width="12" height="36" fill="#1f2a44"/>
           <rect x="9" y="-50" width="18" height="26" rx="3" fill="url(#raye)"/>
           <circle cx="18" cy="-58" r="7" fill="#f0c6a0"/>
-          <ellipse cx="18" cy="-63" rx="12" ry="3.5" fill="#d9a441"/><rect x="11" y="-70" width="14" height="7" rx="2" fill="#d9a441"/><rect x="11" y="-66" width="14" height="2.5" fill="#1f2a44"/>
+          <g id="chapeau"><ellipse cx="18" cy="-63" rx="12" ry="3.5" fill="#d9a441"/><rect x="11" y="-70" width="14" height="7" rx="2" fill="#d9a441"/><rect x="11" y="-66" width="14" height="2.5" fill="#1f2a44"/></g>
+          </g>
           <path d="M0 14 Q85 40 168 10 Q182 2 184 -20 Q190 6 172 22 Q92 56 -4 30Z" fill="#1f2a44"/>
           <path d="M178 -20 l10 -4 -2 6 6 0 -8 6z" fill="#e9b48a"/>
+          <g id="amoureux"><rect x="62" y="-50" width="56" height="70" fill="transparent"/>
           <rect x="58" y="10" width="64" height="10" rx="4" fill="#3d5aa8"/>
           <path d="M70 12 q-2 -16 8 -20 q10 -2 10 12 l1 10z" fill="#5a3324"/>
           <circle cx="79" cy="-6" r="8" fill="#f0c6a0"/>
@@ -272,6 +319,10 @@
           <circle cx="103" cy="-8" r="8" fill="#f0c6a0"/>
           <ellipse cx="103" cy="-14" rx="13" ry="3.5" fill="#d9a441"/><rect x="96" y="-22" width="14" height="8" rx="3" fill="#d9a441"/>
           <path id="coeur" d="M91 -34 C83 -41 84 -48 89 -48 C91.5 -48 91 -45 91 -44 C91 -45 91.5 -48 94 -48 C99 -48 99 -41 91 -34Z" fill="#e8559a" transform-origin="91 -40"/>
+          </g>
+          <g id="ciao" opacity="0"><rect x="-32" y="-112" width="82" height="26" rx="11" fill="#fbf1df" stroke="#1f2a44" stroke-width="1.5"/>
+            <path d="M10 -87 l5 9 4 -9z" fill="#fbf1df" stroke="#1f2a44" stroke-width="1.5" stroke-linejoin="round"/><rect x="9" y="-89" width="11" height="4" fill="#fbf1df"/>
+            <text x="9" y="-93" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="18" fill="#1f2a44">Ciao bella !</text></g>
         </g></g>
 
         <!-- linge -->
@@ -299,6 +350,7 @@
       </svg>
       <h1 class="venezia" aria-label="Venezia">Venezia</h1>
       <p class="dates-aff">22 — 25 febbraio 2027</p>
+      <p class="secrets" id="secrets" aria-live="polite">touche l'affiche, elle cache 7 secrets · <b>0/7</b></p>
     </div>
     <p class="txt">Manon, ton cadeau de Noël&nbsp;: <strong>quatre jours à Venise</strong>, rien que nous deux.</p>
     <p class="defile">fais défiler ↓</p>
@@ -368,10 +420,26 @@
   </div>
 </section>
 
+<!-- ===================== VALISE ===================== -->
+<section id="valise">
+  <div class="col">
+    <span class="annot">4 · la valigia</span>
+    <h2>Fais ta <em>valise</em></h2>
+    <p class="txt">Glisse dans la valise ce qu'il faut pour Venise en février. Attention, elle a ses exigences.</p>
+    <p class="bulle" id="valise-msg" aria-live="polite">Fais glisser un objet (ou touche-le).</p>
+    <div class="valise" id="la-valise">
+      <div class="corps" id="corps-valise"></div>
+      <div class="couvercle" id="couvercle"><span class="poignee"></span></div>
+    </div>
+    <p class="compte-valise" id="compte-valise">0 / 5 dans la valise</p>
+    <div class="objets" id="objets"></div>
+  </div>
+</section>
+
 <!-- ===================== BILLET ===================== -->
 <section id="billet">
   <div class="col">
-    <span class="annot">4 · il biglietto</span>
+    <span class="annot">5 · il biglietto</span>
     <h2>Ton <em>billet</em></h2>
     <div class="billet ombre" id="carte-billet">
       <div class="billet-haut"><b>Carta d'imbarco</b><span>N° AMORE</span></div>
@@ -392,8 +460,9 @@
     <div id="fin" hidden aria-live="polite">
       <div class="nb" id="jours">0</div>
       <p class="giorni">giorni avant de partir</p>
+      <p class="tic" id="tic" aria-hidden="true">00 h 00 min 00 s</p>
       <p class="mot">Buon Natale, amore.<br>Je t'aime.</p>
-      <p class="ps">PS : prépare ton plus beau chapeau de paille.</p>
+      <p class="ps">PS : prends ton plus beau manteau, il fait frais sur la lagune.</p>
     </div>
   </div>
 </section>
@@ -564,12 +633,25 @@ function dechirer() {
   if (dechire) return; dechire = true; y0 = null;
   gsap.to(talon, { y: '+=260', x: 50, rotation: 22, opacity: 0, duration: .9, ease: 'power2.in', onComplete: () => talon.style.visibility = 'hidden' });
   const fin = $('#fin'); fin.hidden = false;
-  const jours = Math.max(Math.ceil((new Date(2027, 1, 22) - new Date()) / 864e5), 0);
   const c = { v: 0 };
-  gsap.to(c, { v: jours, duration: calme ? 0 : 2, ease: 'power3.out', delay: .4, onUpdate: () => $('#jours').textContent = Math.round(c.v) });
+  gsap.to(c, { v: reste().j, duration: calme ? 0 : 2, ease: 'power3.out', delay: .4,
+    onUpdate: () => $('#jours').textContent = Math.round(c.v), onComplete: () => { tic(); setInterval(tic, 1000); } });
   gsap.from('#fin > *', { y: 40, opacity: 0, stagger: .15, duration: .7, delay: .3 });
   setTimeout(() => fin.scrollIntoView({ behavior: calme ? 'auto' : 'smooth', block: 'center' }), 350);
   if (!calme) confettis();
+}
+/* compte à rebours en direct jusqu'au 22 février 2027, 0 h (heure du téléphone) */
+const DEPART = new Date(2027, 1, 22);
+function reste() {
+  const ms = Math.max(DEPART - new Date(), 0);
+  return { j: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60, fini: ms === 0 };
+}
+const deux = n => String(n).padStart(2, '0');
+function tic() {
+  const r = reste();
+  $('#jours').textContent = r.j;
+  $('#tic').textContent = `${deux(r.h)} h ${deux(r.m)} min ${deux(r.s)} s`;
+  if (r.fini) $('.giorni').textContent = "c'est le grand jour !";
 }
 function confettis() {
   const box = $('#confettis'), couleurs = ['#e8559a', '#f6c945', '#37c4c9', '#ef6f55', '#7f9c46', '#8e6bc4', '#fbf1df'];
@@ -581,6 +663,161 @@ function confettis() {
     gsap.fromTo(p, { y: -30, rotation: 0 }, { y: innerHeight + 40, x: gsap.utils.random(-80, 80), rotation: gsap.utils.random(-540, 540),
       duration: gsap.utils.random(2.2, 4), delay: Math.random() * .8, ease: 'power1.in', onComplete: () => p.remove() });
   }
+}
+
+/* ================= SCÈNE À EXPLORER : 7 secrets cachés dans l'affiche ================= */
+const NS = 'http://www.w3.org/2000/svg', scene = $('#scene'), trouves = new Set(), TOTAL = 7;
+const occupe = new Set(); // évite de relancer une animation déjà en cours
+function secret(el, id, label, action) {
+  el.setAttribute('role', 'button'); el.setAttribute('tabindex', '0'); el.setAttribute('aria-label', label);
+  const go = e => {
+    e.stopPropagation();
+    if (occupe.has(el)) return;
+    occupe.add(el);
+    action(el, () => occupe.delete(el));
+    if (!trouves.has(id)) { trouves.add(id); majSecrets(); }
+  };
+  el.addEventListener('click', go);
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(e); } });
+}
+function majSecrets() {
+  const n = trouves.size;
+  if (n === TOTAL) { $('#secrets').innerHTML = '<b>7/7</b> brava ! tu connais déjà Venise par cœur'; confettis(); }
+  else $('#secrets b').textContent = `${n}/${TOTAL}`;
+  gsap.fromTo('#secrets b', { scale: 1.7 }, { scale: 1, duration: .5, ease: 'back.out(3)' });
+}
+function forme(tag, attrs, parent = scene) {
+  const el = document.createElementNS(NS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  parent.appendChild(el); return el;
+}
+
+secret($('#oiseaux-vol'), 'oiseaux', 'Faire s\'envoler les oiseaux', (el, fini) => gsap.timeline({ onComplete: fini })
+  .to('#oiseaux', { x: 260, y: -230, duration: 1.1, ease: 'power2.in' })
+  .set('#oiseaux', { x: -280, y: -40 })
+  .to('#oiseaux', { x: 0, y: 0, duration: 2, ease: 'power2.out', delay: 1.4 }));
+
+document.querySelectorAll('#linge > g').forEach((g, i) => secret(g, 'linge', 'Décrocher un vêtement', (el, fini) => {
+  gsap.timeline({ onComplete: fini })
+    .to(el, { y: '+=440', rotation: gsap.utils.random(-70, 70), duration: 1, ease: 'power2.in' })
+    .add(() => { // plouf dans le canal
+      const x = gsap.getProperty(el, 'x');
+      const rond = forme('ellipse', { cx: x, cy: 600, rx: 2, ry: 1, fill: 'none', stroke: '#fbf1df', 'stroke-width': 3 });
+      gsap.to(rond, { attr: { rx: 30, ry: 8 }, opacity: 0, duration: 1, onComplete: () => rond.remove() });
+    })
+    .set(el, { y: '-=540', rotation: 0 })
+    .to(el, { y: '+=100', duration: .9, ease: 'bounce.out', delay: 1.6 });
+}));
+
+secret($('#soleil'), 'soleil', 'Réveiller le soleil', (el, fini) => gsap.timeline({ onComplete: fini })
+  .to('#soleil-in', { rotation: 360, scale: 1.3, transformOrigin: '50% 50%', duration: .9, ease: 'back.out(2)' })
+  .to('#visage', { opacity: 1, duration: .2 }, .35)
+  .to('#oeil-d', { scaleY: .1, transformOrigin: 'center', duration: .12, yoyo: true, repeat: 3 })
+  .to('#soleil-in', { scale: 1, transformOrigin: '50% 50%', duration: .5 })
+  .set('#soleil-in', { rotation: 0 }));
+
+secret($('#fen-chat'), 'chat', 'Toquer à la fenêtre', (el, fini) => gsap.timeline({ onComplete: fini })
+  .to('#chat', { y: 0, duration: .5, ease: 'back.out(2.5)' })
+  .to('#miao', { opacity: 1, y: -6, duration: .3 }, '-=.2')
+  .to('#miao', { opacity: 0, duration: .3, delay: 1.5 })
+  .to('#chat', { y: 34, duration: .4, ease: 'power2.in' }, '-=.1')
+  .set('#miao', { y: 0 }));
+
+gsap.set('#ciao', { scale: .4, transformOrigin: '50% 100%' });
+secret($('#gondolier'), 'gondolier', 'Saluer le gondolier', (el, fini) => gsap.timeline({ onComplete: fini })
+  .to('#chapeau', { y: -12, rotation: -25, transformOrigin: '50% 100%', duration: .22, yoyo: true, repeat: 3 })
+  .to('#ciao', { opacity: 1, scale: 1, duration: .35, ease: 'back.out(3)' }, 0)
+  .to('#ciao', { opacity: 0, scale: .4, duration: .3, delay: 1.6 }));
+
+secret($('#amoureux'), 'amoureux', 'Faire s\'envoler des cœurs', (el, fini) => {
+  for (let i = 0; i < 8; i++) {
+    const c = forme('path', { d: $('#coeur').getAttribute('d'), fill: i % 2 ? '#e8559a' : '#ef6f55' }, el);
+    gsap.fromTo(c, { x: 0, y: 0, scale: .5, opacity: 1, transformOrigin: '50% 50%' },
+      { x: gsap.utils.random(-45, 45), y: gsap.utils.random(-110, -60), scale: gsap.utils.random(.8, 1.5), opacity: 0,
+        duration: gsap.utils.random(1, 1.8), ease: 'power1.out', onComplete: () => c.remove() });
+  }
+  setTimeout(fini, 900);
+});
+
+secret($('#glycine'), 'glycine', 'Secouer la glycine', (el, fini) => {
+  gsap.fromTo(el, { rotation: -4, svgOrigin: '0 0' }, { rotation: 0, duration: .6, ease: 'elastic.out(1,.3)' });
+  for (let i = 0; i < 16; i++) {
+    const p = forme('circle', { cx: gsap.utils.random(5, 90), cy: gsap.utils.random(20, 80), r: gsap.utils.random(2, 4), fill: i % 3 ? '#8e6bc4' : '#b496e6' });
+    gsap.to(p, { y: gsap.utils.random(450, 580), x: gsap.utils.random(20, 140), duration: gsap.utils.random(2.5, 4.2), ease: 'sine.in', onComplete: () => p.remove() });
+  }
+  setTimeout(fini, 1200);
+});
+
+/* ================= VALISE ================= */
+const ICONES = {
+  echarpe: '<path d="M14 10h36v14H30v30H16V24h-2z" fill="#e8559a"/><path d="M14 17h36M16 34h14M16 44h14" stroke="#fbf1df" stroke-width="3"/><path d="M18 54v7M23 54v7M28 54v7" stroke="#e8559a" stroke-width="2.5"/>',
+  photo: '<rect x="8" y="20" width="48" height="32" rx="6" fill="#1f2a44"/><rect x="20" y="14" width="16" height="8" rx="2" fill="#1f2a44"/><circle cx="32" cy="36" r="11" fill="#fbf1df"/><circle cx="32" cy="36" r="7" fill="#37c4c9"/><rect x="44" y="24" width="7" height="4" rx="1" fill="#f6c945"/>',
+  parapluie: '<path d="M6 32a26 22 0 0 1 52 0z" fill="#f6c945"/><path d="M19 32a13 22 0 0 1 26 0z" fill="#ef6f55"/><path d="M32 10v42a5 5 0 0 1-10 0" stroke="#1f2a44" stroke-width="3" fill="none" stroke-linecap="round"/>',
+  carte: '<rect x="6" y="14" width="52" height="36" rx="4" fill="#fbf1df" stroke="#1f2a44" stroke-width="2.5"/><rect x="11" y="20" width="16" height="20" rx="2" fill="#8fd3ee"/><circle cx="19" cy="27" r="4" fill="#1f2a44"/><path d="M13 38a6 5 0 0 1 12 0z" fill="#1f2a44"/><path d="M32 24h20M32 31h16M32 38h20" stroke="#1f2a44" stroke-width="2.5" stroke-linecap="round"/>',
+  baskets: '<path d="M6 44V30q6 0 10-6l6 4q10 6 22 6q14 0 14 10v0z" fill="#fbf1df" stroke="#1f2a44" stroke-width="2.5" stroke-linejoin="round"/><path d="M5 44h54v7H5z" fill="#37c4c9"/><path d="M20 31l5 3M25 28l5 3" stroke="#e8559a" stroke-width="2.5"/>',
+  maillot: '<path d="M16 10v9q16 10 32 0v-9l6 2v36q-22 12-44 0V12z" fill="#ef6f55"/><path d="M10 34q22 10 44 0" stroke="#f6c945" stroke-width="3" fill="none"/>',
+  skis: '<rect x="14" y="4" width="8" height="56" rx="4" fill="#37c4c9" transform="rotate(-15 18 32)"/><rect x="42" y="4" width="8" height="56" rx="4" fill="#e8559a" transform="rotate(15 46 32)"/><path d="M27 8v50M37 8v50" stroke="#1f2a44" stroke-width="2.5"/>',
+  ordi: '<rect x="12" y="14" width="40" height="28" rx="3" fill="#1f2a44"/><rect x="16" y="18" width="32" height="20" fill="#8fd3ee"/><path d="M6 46h52l-4 6H10z" fill="#9aa3b5"/>'
+};
+const OBJETS = [ // [icône, nom, accepté ?, réponse de la valise]
+  ['photo', 'Appareil photo', true, 'Indispensable pour les gondoles !'],
+  ['maillot', 'Maillot', false, 'En février ? L\'eau est à 8 °C…'],
+  ['echarpe', 'Écharpe', true, 'Bien vu, il fait frais sur la lagune.'],
+  ['skis', 'Skis', false, 'On va à Venise, pas à Val Thorens.'],
+  ['parapluie', 'Parapluie', true, 'Acqua alta : excellent réflexe.'],
+  ['carte', 'Carte d\'identité', true, 'Sans elle, pas d\'avion !'],
+  ['ordi', 'Ordi du boulot', false, 'Interdit. Ce sont des vacances.'],
+  ['baskets', 'Baskets', true, 'On va marcher dans toutes les ruelles.']
+];
+gsap.set('#couvercle', { rotationX: 18 });
+const A_RANGER = OBJETS.filter(o => o[2]).length, zone = $('#la-valise');
+let ranges = 0;
+$('#objets').innerHTML = OBJETS.map(([ic, nom], i) =>
+  `<button class="objet" data-i="${i}" aria-label="Mettre « ${nom} » dans la valise"><svg viewBox="0 0 64 64" aria-hidden="true">${ICONES[ic]}</svg><span>${nom}</span></button>`).join('');
+function dire(txt) { const b = $('#valise-msg'); b.textContent = txt; gsap.fromTo(b, { scale: .85, rotate: -3 }, { scale: 1, rotate: 0, duration: .5, ease: 'back.out(3)' }); }
+document.querySelectorAll('.objet').forEach(b => {
+  let x0 = null, y0, bouge = false;
+  b.addEventListener('pointerdown', e => { x0 = e.clientX; y0 = e.clientY; bouge = false; b.setPointerCapture(e.pointerId); b.classList.add('tenu'); });
+  b.addEventListener('pointermove', e => {
+    if (x0 === null) return;
+    const dx = e.clientX - x0, dy = e.clientY - y0;
+    if (Math.hypot(dx, dy) > 8) bouge = true;
+    gsap.set(b, { x: dx, y: dy, rotation: dx * .06, scale: 1.08 });
+  });
+  b.addEventListener('pointerup', e => {
+    if (x0 === null) return;
+    x0 = null; b.classList.remove('tenu'); b.dataset.glisse = bouge ? '1' : '';
+    const r = zone.getBoundingClientRect(), dedans = e.clientX > r.left && e.clientX < r.right && e.clientY > r.top - 20 && e.clientY < r.bottom;
+    if (bouge && dedans) ranger(b);
+    else if (bouge) gsap.to(b, { x: 0, y: 0, rotation: 0, scale: 1, duration: .6, ease: 'elastic.out(1,.6)' });
+  });
+  // un simple tap (ou Entrée au clavier) envoie l'objet direct dans la valise
+  b.addEventListener('click', () => { if (b.dataset.glisse) { b.dataset.glisse = ''; return; } ranger(b); });
+});
+function ranger(b) {
+  if (b.disabled) return;
+  const [ic, , ok, rep] = OBJETS[b.dataset.i];
+  dire(rep);
+  if (!ok) { // la valise refuse : elle tremble et recrache l'objet
+    gsap.fromTo(zone, { x: -7 }, { x: 0, duration: .45, ease: 'elastic.out(2,.2)' });
+    gsap.to(b, { x: 0, y: 0, rotation: 0, scale: 1, duration: .7, ease: 'elastic.out(1,.5)' });
+    return;
+  }
+  b.disabled = true; b.setAttribute('aria-disabled', 'true');
+  gsap.to(b, { scale: 0, opacity: 0, duration: .35, ease: 'back.in(2)', onComplete: () => b.style.visibility = 'hidden' });
+  const mini = document.createElement('span'); mini.className = 'mini';
+  mini.innerHTML = `<svg viewBox="0 0 64 64" aria-hidden="true">${ICONES[ic]}</svg>`;
+  $('#corps-valise').appendChild(mini);
+  gsap.from(mini, { y: -90, scale: 1.6, opacity: 0, duration: .7, ease: 'bounce.out' });
+  ranges++;
+  $('#compte-valise').textContent = `${ranges} / ${A_RANGER} dans la valise`;
+  if (ranges === A_RANGER) setTimeout(() => {
+    gsap.to('#couvercle', { rotationX: -180, duration: .8, ease: 'power3.in' });
+    gsap.fromTo(zone, { y: 0 }, { y: -18, duration: .25, yoyo: true, repeat: 1, delay: .8, ease: 'power2.out' });
+    dire('Valise bouclée. Andiamo !');
+    $('#compte-valise').textContent = 'prête pour Venise ✓';
+    setTimeout(confettis, 900);
+  }, 700);
 }
 
 /* ================= titres qui arrivent ================= */
