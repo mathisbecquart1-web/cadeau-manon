@@ -31,7 +31,9 @@
   /* ---------- enveloppe ---------- */
   #intro { position: fixed; inset: 0; z-index: 80; background: var(--creme); display: flex; flex-direction: column;
            align-items: center; justify-content: center; gap: 28px; padding: 16px; text-align: center; }
-  #intro { gap: 18px; }
+  #intro { gap: 18px; /* appui long sur téléphone : ni sélection de texte, ni menu, ni surbrillance */
+           user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; touch-action: none; }
+  #enveloppe { cursor: pointer; -webkit-user-drag: none; }
   #intro .date-lettre { font: 700 11px "Space Mono", monospace; letter-spacing: .25em; text-transform: uppercase; color: #b88a5a; margin-bottom: -8px; }
   #intro .pour { font: italic 600 clamp(30px, 9vw, 40px)/1.05 Fraunces, serif; letter-spacing: -.01em; margin-bottom: 8px; }
   #enveloppe { width: min(86vw, 360px); overflow: visible; }
@@ -196,19 +198,23 @@
     <ellipse cx="150" cy="218" rx="138" ry="7" fill="#1f2a44" opacity=".13"/>
     <rect x="0" y="10" width="300" height="200" rx="5" fill="#e9d6b2"/>
     <path id="rabat-ouvert" d="M0 10 L150 -95 L300 10Z" fill="#f1e2c4"/>
+    <rect x="3.5" y="13.5" width="293" height="193" rx="3" fill="none" stroke="url(#avion)" stroke-width="7"/>
     <g id="lettre">
       <rect x="22" y="16" width="256" height="176" rx="2" fill="#fffaf0"/>
       <rect x="31" y="25" width="238" height="158" fill="none" stroke="#e8559a" stroke-width="1" opacity=".55"/>
       <g stroke="#8fd3ee" stroke-width=".8" opacity=".6"><path d="M44 112H256M44 128H256M44 144H256M44 160H256"/></g>
       <text x="150" y="70" text-anchor="middle" font-family="Parisienne" font-size="38" fill="#e8559a">Buon Natale</text>
       <text x="150" y="94" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="15" fill="#1f2a44">amore mio</text>
+      <g id="mot-lettre" opacity="0"><g font-family="Fraunces" font-style="italic" font-size="12.5" fill="#1f2a44" text-anchor="middle">
+        <text x="150" y="124">Ton vrai cadeau ne tenait pas</text><text x="150" y="140">sous le sapin. Il t'attend juste ici…</text></g>
+      <text x="246" y="170" text-anchor="end" font-family="Parisienne" font-size="22" fill="#e8559a">con amore</text></g>
     </g>
     <path d="M0 210 L0 12 L150 122 L300 12 L300 210Z" fill="#fbf4e4"/>
     <path d="M4 206 L132 113 M296 206 L168 113" stroke="#eadbbd" stroke-width="1.5"/>
-    <rect x="3.5" y="13.5" width="293" height="193" rx="3" fill="none" stroke="url(#avion)" stroke-width="7"/>
+    <path d="M3.5 13.5V206.5H296.5V13.5" fill="none" stroke="url(#avion)" stroke-width="7"/>
     <!-- adresse -->
-    <text x="30" y="188" font-family="Parisienne" font-size="31" fill="#1f2a44">Per Manon</text>
-    <path d="M30 195 q62 5 134 -2" stroke="#1f2a44" stroke-width="1" fill="none" opacity=".3"/>
+    <text x="24" y="192" font-family="Parisienne" font-size="28" fill="#1f2a44">Per Manon</text>
+    <path d="M24 198 q56 4 118 -2" stroke="#1f2a44" stroke-width="1" fill="none" opacity=".3"/>
     <!-- tampon de la poste -->
     <g fill="none" stroke="#1f2a44" opacity=".5"><circle cx="212" cy="156" r="17" stroke-width="1.3"/><circle cx="212" cy="156" r="12.5" stroke-width=".8"/></g>
     <text x="212" y="154" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="5.5" fill="#1f2a44" opacity=".55">PARIS</text>
@@ -602,22 +608,32 @@ function avancer() {
   p < 1 ? raf = requestAnimationFrame(avancer) : ouvrir();
 }
 function lacher() { if (ouvert) return; cancelAnimationFrame(raf); debut = 0; anneau.style.strokeDashoffset = 264; sceau.style.transform = ''; }
-sceau.addEventListener('pointerdown', presser);
-['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => sceau.addEventListener(ev, lacher));
+// toute l'enveloppe se presse (plus facile au doigt) ; la capture garde l'appui même si le doigt glisse un peu
+const env = $('#enveloppe');
+env.addEventListener('pointerdown', e => { try { env.setPointerCapture(e.pointerId); } catch (_) { /* pointeur déjà relâché */ } presser(e); });
+['pointerup', 'pointercancel'].forEach(ev => env.addEventListener(ev, lacher));
 sceau.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) presser(e); });
 sceau.addEventListener('keyup', lacher);
-sceau.addEventListener('contextmenu', e => e.preventDefault());
+$('#intro').addEventListener('contextmenu', e => e.preventDefault());
 
 function ouvrir() {
   ouvert = true; demarrerMusique();
-  const tl = gsap.timeline();
-  tl.to('#intro .pour, #intro .aide, #intro .date-lettre', { opacity: 0, y: -16, duration: .3 }, 0) // sinon la lettre qui sort passe sur « Per Manon »
+  const enveloppe = '#enveloppe > :not(#lettre):not(defs)';
+  gsap.timeline()
+    .to('#intro .pour, #intro .aide, #intro .date-lettre', { opacity: 0, y: -16, duration: .3 }, 0)
     .to(sceau, { scale: 1.6, opacity: 0, duration: .35, ease: 'power2.out', transformOrigin: 'center' }, 0)
     .to('#rabat', { scaleY: 0, duration: .3, ease: 'power2.in' })
     .to('#rabat-ouvert', { scaleY: 1, duration: .35, ease: 'back.out(2)' })
-    .to('#lettre', { y: -110, duration: .7, ease: 'power3.out' })
-    .to('#intro', { opacity: 0, scale: 1.25, duration: .7, ease: 'power2.in' }, '+=.15')
-    .add(() => { $('#intro').remove(); document.body.classList.remove('ferme'); ScrollTrigger.refresh(); entreeAffiche(); });
+    .to('#lettre', { y: -120, duration: .8, ease: 'power3.out' })
+    // l'enveloppe glisse vers le bas et s'efface, la lettre se pose au centre et grandit
+    .to(enveloppe, { y: 70, opacity: 0, duration: .5, ease: 'power2.in' }, '+=.15')
+    .to('#lettre', { y: 0, scale: 1.18, transformOrigin: '50% 50%', duration: .8, ease: 'power3.inOut' }, '<.1')
+    .to('#mot-lettre', { opacity: 1, duration: .5 }, '<.5')
+    .to({}, { duration: 1.6 }) // le temps de lire la lettre
+    // rideau : l'intro remonte d'un bloc, opaque, donc rien ne se superpose à l'affiche
+    .to('#intro', { yPercent: -100, duration: .9, ease: 'power3.inOut' })
+    .add(entreeAffiche, '-=.5')
+    .add(() => { $('#intro').remove(); document.body.classList.remove('ferme'); ScrollTrigger.refresh(); });
 }
 
 /* ================= AFFICHE ================= */
