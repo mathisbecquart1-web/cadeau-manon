@@ -79,7 +79,19 @@
   /* ---------- le vol ---------- */
   #vol { background: var(--ciel); }
   #carte-vol { width: 100%; height: auto; overflow: visible; }
-
+  .derive { animation: derive 40s linear infinite; }
+  @keyframes derive { from { transform: translateX(-170px); } to { transform: translateX(470px); } }
+  .rayons { transform-box: fill-box; transform-origin: center; animation: tourne 18s linear infinite; }
+  @keyframes tourne { to { transform: rotate(360deg); } }
+  .cockpit { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--encre); color: var(--creme); border-radius: 14px; padding: 12px; margin: 10px 0 20px; }
+  .cockpit > div { text-align: center; }
+  .cockpit span { display: block; font: 700 10px "Space Mono", monospace; letter-spacing: .15em; text-transform: uppercase; opacity: .7; }
+  .cockpit b { display: block; font: 700 clamp(15px, 4.6vw, 20px) "Space Mono", monospace; color: var(--jaune); margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .cockpit .progression { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+  .cockpit .progression em { font: 700 11px "Space Mono", monospace; font-style: normal; }
+  .piste { position: relative; flex: 1; height: 4px; border-radius: 2px; background: repeating-linear-gradient(90deg, #fbf1df66 0 6px, transparent 6px 10px); }
+  #mini-avion { position: absolute; top: 50%; left: 0; width: 18px; height: 18px; margin: -9px 0 0 -9px; background: var(--rose); border-radius: 50%; box-shadow: 0 0 0 3px #e8559a55; }
+  @media (prefers-reduced-motion: reduce) { .derive, .rayons { animation: none; } }
   /* ---------- fenêtre de l'hôtel ---------- */
   #hotel { background: var(--corail); color: var(--creme); }
   #hotel h2 { color: var(--creme); }
@@ -533,23 +545,68 @@
   <div class="col">
     <span class="annot">3 · il volo</span>
     <h2>Paris → <em>Venise</em></h2>
-    <svg id="carte-vol" viewBox="0 0 400 320" aria-label="Trajet en avion de Paris à Venise">
-      <defs><mask id="masque-route"><path id="route-masque" d="M52 86 C150 -6 268 52 348 236" stroke="#fff" stroke-width="10" fill="none"/></mask></defs>
-      <g fill="#fbf1df"><ellipse cx="300" cy="60" rx="34" ry="12"/><ellipse cx="320" cy="52" rx="20" ry="12"/><ellipse cx="90" cy="200" rx="30" ry="10"/><ellipse cx="110" cy="193" rx="18" ry="10"/></g>
-      <path d="M260 320 Q300 250 400 248 V320Z" fill="#37c4c9"/>
-      <g id="alpes">
-        <path d="M120 300 L170 200 L215 300Z" fill="#5f8a3a"/><path d="M170 200 L184 228 L174 222 L166 232 L158 224Z" fill="#fbf1df"/>
-        <path d="M180 300 L240 175 L300 300Z" fill="#7f9c46"/><path d="M240 175 L257 210 L246 202 L238 214 L228 204Z" fill="#fbf1df"/>
-        <path d="M250 300 L292 222 L330 300Z" fill="#5f8a3a"/><path d="M292 222 L303 243 L295 238 L288 246 L282 240Z" fill="#fbf1df"/>
+    <svg id="carte-vol" viewBox="0 0 400 420" aria-label="Le vol de Paris-Charles-de-Gaulle à Venise, au-dessus des Alpes">
+      <defs><mask id="masque-route"><path id="route-masque" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fff" stroke-width="12" fill="none"/></mask></defs>
+      <!-- soleil qui rayonne -->
+      <g class="rayons"><g stroke="#f8e26b" stroke-width="4" stroke-linecap="round" opacity=".8">
+        <path d="M340 22v-12M340 82v12M310 52h-12M370 52h12M319 31l-8-8M361 73l8 8M361 31l8-8M319 73l-8 8"/></g></g>
+      <circle cx="340" cy="52" r="20" fill="#f8e26b"/>
+      <!-- nuages lointains -->
+      <g fill="#fbf1df" opacity=".75">
+        <g class="derive" style="animation-duration:46s;animation-delay:-8s"><ellipse cx="60" cy="70" rx="34" ry="10"/><ellipse cx="80" cy="62" rx="20" ry="11"/></g>
+        <g class="derive" style="animation-duration:58s;animation-delay:-30s"><ellipse cx="40" cy="160" rx="28" ry="8"/><ellipse cx="56" cy="153" rx="16" ry="9"/></g>
+        <g class="derive" style="animation-duration:52s;animation-delay:-44s"><ellipse cx="90" cy="230" rx="30" ry="9"/><ellipse cx="108" cy="222" rx="18" ry="10"/></g>
       </g>
-      <path id="route" d="M52 86 C150 -6 268 52 348 236" stroke="#1f2a44" stroke-width="3.5" stroke-dasharray="9 9" stroke-linecap="round" fill="none" mask="url(#masque-route)"/>
-      <circle cx="52" cy="86" r="8" fill="#1f2a44"/><text x="30" y="118" font-family="Caveat" font-weight="700" font-size="28" fill="#1f2a44">Paris CDG</text>
-      <circle cx="348" cy="236" r="8" fill="#e8559a"/><text x="300" y="292" font-family="Caveat" font-weight="700" font-size="30" fill="#1f2a44">Venezia</text>
-      <path id="coeur-vol" d="M348 222 C334 210 336 198 344 198 C348 198 348 203 348 204 C348 203 348 198 352 198 C360 198 362 210 348 222Z" fill="#e8559a" transform="translate(0 -26)" opacity="0"/>
+      <!-- les Alpes -->
+      <g filter="url(#pinceau)">
+        <path d="M110 372 L168 250 L206 312 L240 214 L292 312 L318 270 L356 372Z" fill="#7f9c46"/>
+        <path d="M150 372 L198 284 L232 372Z" fill="#5f8a3a"/><path d="M262 372 L300 300 L334 372Z" fill="#5f8a3a"/>
+        <path d="M240 214 L258 248 L246 242 L238 254 L228 244 L222 246Z" fill="#fbf1df"/>
+        <path d="M168 250 L182 278 L172 272 L164 282 L158 272Z" fill="#fbf1df"/><path d="M318 270 L328 290 L320 286 L313 294 L308 288Z" fill="#fbf1df"/>
+      </g>
+      <text x="196" y="402" font-family="Caveat" font-weight="700" font-size="20" fill="#1f2a44" opacity=".7">le Alpi</text>
+      <!-- Paris : la tour Eiffel, la piste de CDG -->
+      <g filter="url(#pinceau)">
+        <path d="M0 360 Q60 346 130 360 L130 420 L0 420Z" fill="#a9c97a"/>
+        <rect x="10" y="356" width="104" height="9" rx="3" fill="#8a8f9c"/><path d="M18 360.5h88" stroke="#fbf1df" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path d="M44 344 L49 304 L54 344 M46 330h6 M45.5 338h7" stroke="#1f2a44" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      </g>
+      <text x="6" y="398" font-family="Caveat" font-weight="700" font-size="24" fill="#1f2a44">Paris CDG</text>
+      <!-- Venise : la lagune, le campanile, une gondole -->
+      <g filter="url(#pinceau)">
+        <path d="M300 372 Q350 352 400 356 L400 420 L290 420Z" fill="#37c4c9"/>
+        <rect x="336" y="356" width="64" height="8" rx="3" fill="#8a8f9c"/><path d="M342 360h52" stroke="#fbf1df" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <rect x="352" y="318" width="9" height="40" fill="#ef6f55"/><path d="M350 318 l6.5 -14 l6.5 14z" fill="#2c4a9a"/>
+        <path d="M368 358 a14 13 0 0 1 28 0z" fill="#e9a0b4"/><rect x="380" y="340" width="4" height="6" fill="#e9a0b4"/>
+        <path d="M318 392 q16 6 32 -2 q3 -2 4 -7 q1 6 -4 9 q-16 8 -32 2z" fill="#1f2a44"/>
+      </g>
+      <text x="300" y="412" font-family="Caveat" font-weight="700" font-size="24" fill="#1f2a44">Venezia</text>
+      <!-- traînée blanche derrière l'avion -->
+      <g mask="url(#masque-route)">
+        <path id="route" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fbf1df" stroke-width="5" stroke-linecap="round" fill="none" opacity=".9"/>
+        <path d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#1f2a44" stroke-width="1.5" stroke-dasharray="5 7" fill="none" opacity=".45"/>
+      </g>
       <g id="avion"><path d="M-16 -3.5 L8 -3.5 L17 0 L8 3.5 L-16 3.5 Z" fill="#fbf1df" stroke="#1f2a44" stroke-width="2"/>
-        <path d="M-2 -3 L-9 -16 L-3 -16 L7 -3Z M-2 3 L-9 16 L-3 16 L7 3Z M-15 -3 L-19 -9 L-15 -9 L-11 -3Z" fill="#e8559a" stroke="#1f2a44" stroke-width="1.5"/></g>
+        <path d="M-2 -3 L-9 -16 L-3 -16 L7 -3Z M-2 3 L-9 16 L-3 16 L7 3Z M-15 -3 L-19 -9 L-15 -9 L-11 -3Z" fill="#e8559a" stroke="#1f2a44" stroke-width="1.5"/>
+        <g fill="#2c4a9a"><circle cx="2" cy="0" r="1"/><circle cx="-2" cy="0" r="1"/><circle cx="-6" cy="0" r="1"/><circle cx="-10" cy="0" r="1"/></g></g>
+      <!-- nuages au premier plan : l'avion passe derrière -->
+      <g fill="#ffffff" opacity=".88">
+        <g class="derive" style="animation-duration:30s;animation-delay:-6s"><ellipse cx="150" cy="150" rx="40" ry="13"/><ellipse cx="172" cy="140" rx="24" ry="14"/><ellipse cx="130" cy="144" rx="18" ry="10"/></g>
+        <g class="derive" style="animation-duration:36s;animation-delay:-22s"><ellipse cx="260" cy="120" rx="34" ry="11"/><ellipse cx="280" cy="112" rx="20" ry="12"/></g>
+      </g>
+      <g id="arrivee" opacity="0">
+        <path d="M366 312 C350 299 352 286 360 286 C364 286 366 291 366 292 C366 291 368 286 372 286 C380 286 382 299 366 312Z" fill="#e8559a"/>
+        <text x="366" y="278" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="22" fill="#1f2a44">Benvenuti !</text>
+      </g>
     </svg>
-    <p class="txt">Décollage de Charles de Gaulle, un peu moins de deux heures au-dessus des Alpes, et on atterrit au bord de la lagune.</p>
+    <!-- tableau de bord qui suit le vol -->
+    <div class="cockpit ombre" aria-hidden="true">
+      <div><span>Altitude</span><b id="alt">0 m</b></div>
+      <div><span>Vitesse</span><b id="vit">0 km/h</b></div>
+      <div><span>Reste</span><b id="reste">845 km</b></div>
+      <div class="progression"><em>CDG</em><span class="piste"><i id="mini-avion"></i></span><em>VCE</em></div>
+    </div>
+    <p class="txt">Décollage de Charles-de-Gaulle, un peu moins de deux heures au-dessus des Alpes, et on atterrit au bord de la lagune.</p>
   </div>
 </section>
 
@@ -745,9 +802,21 @@ if (CLE) (async () => {
 else $('#legende').textContent = 'Séance réservée à la détentrice du billet.';
 
 /* ================= CINÉMA ================= */
+// fondu de la chanson : on la fait passer par un gain Web Audio (sur iPhone, audio.volume est bloqué à 1)
+let gainChanson = null;
+function brancherFondu() {
+  if (gainChanson || !ac || !CLE) return;
+  try { const src = ac.createMediaElementSource(audio); gainChanson = ac.createGain(); src.connect(gainChanson); gainChanson.connect(ac.destination); }
+  catch (e) { gainChanson = null; }
+}
+function fonduChanson(cible, duree) {
+  if (!gainChanson) { cible ? audio.play().catch(() => {}) : audio.pause(); return; } // repli : coupure nette
+  const g = gainChanson.gain, t = ac.currentTime;
+  g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(cible, t + duree);
+}
 function lancerFilm() {
   ecran.classList.remove('charge'); ecran.classList.add('ouvert');
-  if (!audio.paused) { audio.pause(); musiqueCoupee = true; } // la chanson se tait pendant le film
+  if (!audio.paused) { fonduChanson(0, .9); musiqueCoupee = true; } // la chanson s'efface pendant le film
   film.currentTime = 0;
   film.play().catch(() => { ecran.classList.remove('ouvert'); $('#legende').textContent = 'touche l\'écran pour lancer la séance'; });
   $('#legende').textContent = 'Silence, ça tourne…';
@@ -761,8 +830,8 @@ ecran.addEventListener('click', () => {
 });
 film.addEventListener('ended', () => {
   ecran.classList.remove('ouvert'); ecran.setAttribute('aria-label', 'Revoir le film');
-  $('#legende').innerHTML = 'Elle mangera <em>autant que nécessaire</em>.<br>C\'est noté, amore.';
-  if (musiqueCoupee && voulu) { musiqueCoupee = false; audio.play().catch(() => {}); }
+  $('#legende').innerHTML = 'Elle mangera <em>autant que nécessaire</em> :<br>pâtes et gelatos à volonté. C\'est noté, amore.';
+  if (musiqueCoupee && voulu) { musiqueCoupee = false; fonduChanson(1, 2.2); } // et revient doucement
 });
 window.onYouTubeIframeAPIReady = () => {
   if (CLE) return; // la chanson chiffrée suffit
@@ -783,6 +852,8 @@ function jouer() {
 function demarrerMusique() {
   voulu = true; $('#son').hidden = false;
   try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { /* pas de clac, tant pis */ }
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { /* iPhone : jouer même en mode silencieux */ }
+  brancherFondu();
   jouer();
   // si le navigateur bloque quand même, on montre le petit lecteur pour qu'elle appuie sur ▶ elle-même
   setTimeout(() => { if (!joue && voulu) CLE ? $('#son').classList.add('appel') : $('#radio').classList.add('visible'); }, 3000);
@@ -923,14 +994,27 @@ placerTrain(0);
 gsap.to(trajet, { p: 1, ease: 'none', onUpdate: () => placerTrain(trajet.p),
   scrollTrigger: { trigger: '#carte-train', start: 'top 75%', end: 'bottom 45%', scrub: calme ? false : 1 } });
 if (!calme) gsap.to('#pales', { rotation: 360, svgOrigin: '112 130', duration: 6, ease: 'none', repeat: -1 });
-/* ================= VOL ================= */
-const masque = $('#route-masque'), L = masque.getTotalLength();
-gsap.set(masque, { strokeDasharray: L, strokeDashoffset: L });
-gsap.set('#avion', { motionPath: { path: '#route', align: '#route', alignOrigin: [.5, .5], autoRotate: true, end: 0 } });
-const vol = gsap.timeline({ scrollTrigger: { trigger: '#carte-vol', start: 'top 75%', end: 'bottom 45%', scrub: calme ? false : 1 } });
-vol.to(masque, { strokeDashoffset: 0, ease: 'none', duration: 1 }, 0)
-   .to('#avion', { motionPath: { path: '#route', align: '#route', alignOrigin: [.5, .5], autoRotate: true }, ease: 'none', duration: 1 }, 0)
-   .to('#coeur-vol', { opacity: 1, y: -10, scale: 1.3, transformOrigin: 'center', ease: 'back.out(3)', duration: .15 }, .95);
+/* ================= VOL : décollage, croisière au-dessus des nuages, atterrissage à Venise ================= */
+const route = $('#route'), masqueRoute = $('#route-masque'), LR = route.getTotalLength();
+masqueRoute.style.strokeDasharray = LR;
+const vol = { p: 0 };
+function placerAvion() {
+  const p = vol.p, d = p * LR, pt = route.getPointAtLength(d);
+  const a = route.getPointAtLength(Math.max(d - 4, 0)), b = route.getPointAtLength(Math.min(d + 4, LR));
+  const angle = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+  const alt = Math.max(0, Math.sin(Math.PI * Math.min(1, Math.max(0, (p - .08) / .86)))); // 0 sur les pistes, 1 en croisière
+  const tangage = calme ? 0 : Math.sin(performance.now() / 420) * 2.2 * alt;       // l'avion ondule un peu en vol
+  $('#avion').setAttribute('transform', `translate(${pt.x} ${pt.y + tangage}) rotate(${angle + tangage * 2}) scale(${1 + alt * .9})`);
+  masqueRoute.style.strokeDashoffset = LR - d;
+  $('#alt').textContent = (Math.round(alt * 110) * 100).toLocaleString('fr-FR') + ' m';
+  $('#vit').textContent = (p <= 0 || p >= 1 ? 0 : Math.round(260 + 610 * Math.min(1, alt * 1.3))) + ' km/h';
+  $('#reste').textContent = Math.round(845 * (1 - p)) + ' km';
+  $('#mini-avion').style.left = (p * 100) + '%';
+  $('#arrivee').style.opacity = p > .97 ? 1 : 0;
+}
+gsap.to(vol, { p: 1, ease: 'none', scrollTrigger: { trigger: '#carte-vol', start: 'top 70%', end: 'bottom 35%', scrub: calme ? false : 1 } });
+gsap.ticker.add(placerAvion); // à chaque image : position + petit tangage
+placerAvion();
 
 /* ================= VOLETS ================= */
 // 1er tap : les volets s'ouvrent ; ensuite chaque tap fait passer la journée (après-midi → coucher de soleil → nuit)
