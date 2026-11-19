@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Un cadeau pour Manon</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --nuit:#0e1b33; --lagune:#16365c; --or:#e2b65b; --creme:#fbf4e6; --texte:#f3ecdc; }
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100svh; background: radial-gradient(ellipse at top, var(--lagune), var(--nuit) 70%); color: var(--texte);
+         font-family: Inter, system-ui, sans-serif; overflow-x: hidden; }
+  canvas { position: fixed; inset: 0; pointer-events: none; }
+  main { position: relative; max-width: 460px; margin: 0 auto; padding: 48px 20px 40px; text-align: center; }
+  h1, h2 { font-family: "Playfair Display", serif; font-weight: 600; }
+  .petit { letter-spacing: .25em; text-transform: uppercase; font-size: 12px; color: var(--or); }
+  #intro h1 { font-size: 40px; margin: 14px 0 10px; }
+  #intro p { opacity: .85; line-height: 1.5; }
+  .cadeau { font-size: 110px; margin: 36px 0 24px; animation: tremble 2.4s ease-in-out infinite; display: inline-block; }
+  @keyframes tremble { 0%,80%,100% { transform: rotate(0) } 84% { transform: rotate(-8deg) } 88% { transform: rotate(8deg) } 92% { transform: rotate(-5deg) } 96% { transform: rotate(4deg) } }
+  button { font: 600 17px Inter, sans-serif; color: var(--nuit); background: var(--or); border: 0; border-radius: 999px;
+           padding: 16px 32px; cursor: pointer; box-shadow: 0 8px 30px #e2b65b55; }
+  button:focus-visible { outline: 3px solid var(--creme); outline-offset: 3px; }
+  #revelation { display: none; }
+  #revelation.visible { display: block; animation: apparait 1.2s ease both; }
+  @keyframes apparait { from { opacity: 0; transform: translateY(24px) scale(.97) } to { opacity: 1; transform: none } }
+  #revelation h1 { font-size: 46px; line-height: 1.1; margin: 12px 0 6px; }
+  #revelation h1 em { color: var(--or); font-style: italic; font-weight: 500; }
+  .dates { font-size: 18px; margin-bottom: 28px; opacity: .9; }
+  .vague { width: 100%; height: 40px; margin: 6px 0 22px; }
+  .carte { background: #ffffff10; border: 1px solid #e2b65b40; border-radius: 18px; padding: 18px 18px; margin: 12px 0;
+           text-align: left; display: flex; gap: 14px; align-items: flex-start; backdrop-filter: blur(4px); }
+  .carte .ico { font-size: 28px; line-height: 1; }
+  .carte h2 { font-size: 19px; margin-bottom: 4px; color: var(--creme); }
+  .carte p { font-size: 15px; opacity: .85; line-height: 1.45; }
+  .compte { margin: 30px 0 10px; }
+  .compte .nb { font-family: "Playfair Display", serif; font-size: 64px; color: var(--or); line-height: 1; }
+  .mot { font-family: "Playfair Display", serif; font-style: italic; font-size: 22px; margin-top: 30px; color: var(--creme); }
+  @media (prefers-reduced-motion: reduce) { .cadeau, #revelation.visible { animation: none; } }
+</style>
+</head>
+<body>
+<canvas id="neige" aria-hidden="true"></canvas>
+<main>
+  <section id="intro">
+    <p class="petit">Joyeux Noël</p>
+    <h1>Manon,</h1>
+    <p>ton vrai cadeau ne tenait pas sous le sapin…<br>Il est caché juste ici.</p>
+    <div class="cadeau" aria-hidden="true">🎁</div><br>
+    <button id="ouvrir">Ouvrir mon cadeau</button>
+  </section>
+
+  <section id="revelation" aria-live="polite">
+    <p class="petit">Prépare ta valise</p>
+    <h1>On part à <em>Venise</em>&nbsp;!</h1>
+    <p class="dates">4 jours · du 22 au 25 février 2027</p>
+    <svg class="vague" viewBox="0 0 400 40" aria-hidden="true"><path d="M0 20 Q25 5 50 20 T100 20 T150 20 T200 20 T250 20 T300 20 T350 20 T400 20" fill="none" stroke="#e2b65b" stroke-width="2"/></svg>
+
+    <div class="carte"><span class="ico">✈️</span><div>
+      <h2>Le vol</h2><p>Départ de Paris-Charles de Gaulle, direction Venise.</p></div></div>
+    <div class="carte"><span class="ico">🏨</span><div>
+      <h2>B&amp;B HOTEL Venezia Laguna</h2><p>Une chambre avec vue sur la mer et un lit ultra confort.</p></div></div>
+    <div class="carte"><span class="ico">🌙</span><div>
+      <h2>3 nuits rien que nous deux</h2><p>Gondoles, ruelles, spritz et pâtes au bord de l'eau.</p></div></div>
+
+    <div class="compte"><div class="nb" id="jours">–</div><p id="jours-txt">jours avant le départ</p></div>
+    <p class="mot">Joyeux Noël, je t'aime ❤️</p>
+  </section>
+</main>
+<script>
+  const depart = new Date(2027, 1, 22); // 22 février 2027 (mois 0-indexé)
+  const jours = Math.ceil((depart - new Date()) / 864e5);
+  document.getElementById('jours').textContent = Math.max(jours, 0);
+  if (jours <= 0) document.getElementById('jours-txt').textContent = "C'est le grand jour !";
+
+  document.getElementById('ouvrir').onclick = () => {
+    document.getElementById('intro').style.display = 'none';
+    document.getElementById('revelation').classList.add('visible');
+    window.scrollTo(0, 0);
+  };
+
+  // neige légère, coupée si l'utilisateur préfère moins d'animations
+  const c = document.getElementById('neige'), ctx = c.getContext('2d');
+  const fixe = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let flocons = [];
+  function taille() { c.width = innerWidth; c.height = innerHeight;
+    flocons = Array.from({ length: 70 }, () => ({ x: Math.random() * c.width, y: Math.random() * c.height, r: Math.random() * 2.5 + .8, v: Math.random() * .6 + .3 })); }
+  function dessine() { ctx.clearRect(0, 0, c.width, c.height); ctx.fillStyle = '#ffffffcc';
+    for (const f of flocons) { ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 7); ctx.fill();
+      if (!fixe) { f.y += f.v; f.x += Math.sin(f.y / 40) * .3; if (f.y > c.height) f.y = -5; } }
+    if (!fixe) requestAnimationFrame(dessine); }
+  addEventListener('resize', taille); taille(); dessine();
+</script>
+</body>
+</html>
