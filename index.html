@@ -188,6 +188,9 @@
   #son:focus-visible { outline: 3px solid var(--encre); outline-offset: 3px; }
   #son[aria-pressed="false"] .barre { display: block; }
   #son .barre { display: none; }
+  /* le bouton musique bat comme un cœur si le téléphone a bloqué le son : un tap le lance */
+  #son.appel { animation: appel 1s ease-in-out infinite; background: var(--jaune); }
+  @keyframes appel { 50% { transform: scale(1.18); } }
   #radio { position: fixed; left: 12px; bottom: 12px; z-index: 85; background: var(--creme); padding: 10px; border-radius: 12px;
            box-shadow: 4px 4px 0 var(--encre); transform: translateY(calc(100% + 40px)); transition: transform .6s cubic-bezier(.3,1.4,.5,1); }
   #radio.visible { transform: none; }
@@ -601,10 +604,26 @@ gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 const $ = s => document.querySelector(s);
 const calme = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ================= MUSIQUE : « Sarà perché ti amo » via le lecteur YouTube officiel ================= */
-const VIDEO = 'Ji-2oQHJ5f4';
+/* ================= MUSIQUE : « Sarà perché ti amo » =================
+   Avec la carte : le QR contient la clé après le # (jamais envoyée au serveur) ; on déchiffre chanson.bin
+   et on joue le MP3, fiable sur iPhone. Sans la clé : repli sur le lecteur YouTube. */
+const VIDEO = 'Ji-2oQHJ5f4', CLE = new URLSearchParams(location.hash.slice(1)).get('k');
 let lecteur, pret = false, voulu = false, joue = false, ac;
+const audio = new Audio(); audio.loop = true;
+audio.addEventListener('playing', () => { joue = true; $('#son').classList.remove('appel'); });
+audio.addEventListener('pause', () => { joue = false; });
+if (CLE) (async () => {
+  try {
+    const brut = Uint8Array.from(atob(CLE.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    const cle = await crypto.subtle.importKey('raw', brut, 'AES-GCM', false, ['decrypt']);
+    const tout = new Uint8Array(await (await fetch('chanson.bin')).arrayBuffer());
+    const clair = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: tout.slice(0, 12) }, cle, tout.slice(12));
+    audio.src = URL.createObjectURL(new Blob([clair], { type: 'audio/mpeg' }));
+    pret = true; jouer();
+  } catch (e) { console.warn('chanson illisible, repli sur YouTube', e); }
+})();
 window.onYouTubeIframeAPIReady = () => {
+  if (CLE) return; // la chanson chiffrée suffit
   lecteur = new YT.Player('yt-lecteur', { videoId: VIDEO, width: 220, height: 124, host: 'https://www.youtube-nocookie.com',
     playerVars: { playsinline: 1, rel: 0, loop: 1, playlist: VIDEO },
     events: { onReady: () => { pret = true; jouer(); },
@@ -613,6 +632,7 @@ window.onYouTubeIframeAPIReady = () => {
 function jouer() {
   if (ac && ac.state === 'suspended') ac.resume();
   if (!pret || !voulu || joue) return;
+  if (CLE) { audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return; }
   lecteur.unMute(); lecteur.setVolume(85); lecteur.playVideo();
 }
 // sur mobile le son n'est autorisé qu'au moment où le doigt se relève : on retente à chaque geste
@@ -622,7 +642,7 @@ function demarrerMusique() {
   try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { /* pas de clac, tant pis */ }
   jouer();
   // si le navigateur bloque quand même, on montre le petit lecteur pour qu'elle appuie sur ▶ elle-même
-  setTimeout(() => { if (!joue && voulu) $('#radio').classList.add('visible'); }, 3000);
+  setTimeout(() => { if (!joue && voulu) CLE ? $('#son').classList.add('appel') : $('#radio').classList.add('visible'); }, 3000);
 }
 let bruit;
 function clac() {
@@ -634,7 +654,8 @@ function clac() {
 }
 $('#son').onclick = () => {
   voulu = !voulu;
-  voulu ? jouer() : lecteur && lecteur.pauseVideo();
+  if (voulu) jouer(); else if (CLE) audio.pause(); else if (lecteur) lecteur.pauseVideo();
+  $('#son').classList.remove('appel');
   $('#son').setAttribute('aria-pressed', String(voulu));
   $('#son').setAttribute('aria-label', voulu ? 'Couper la musique' : 'Remettre la musique');
 };
