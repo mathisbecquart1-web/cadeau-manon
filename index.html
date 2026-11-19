@@ -253,7 +253,7 @@
       <rect x="40" y="17" width="84" height="13" rx="2.5" fill="#2c4a9a"/>
       <text x="82" y="26" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="6" fill="#fbf1df" letter-spacing=".3">PAR AVION · VIA AEREA</text>
     </g>
-    <g id="sceau" role="button" tabindex="0" aria-label="Reste appuyée pour briser le sceau">
+    <g id="sceau" role="button" tabindex="0" aria-label="Tape trois fois pour briser le sceau">
       <circle id="anneau-fond" cx="150" cy="126" r="42" fill="none" stroke="#1f2a4422" stroke-width="5"/>
       <circle id="anneau" cx="150" cy="126" r="42" fill="none" stroke="#1f2a44" stroke-width="5" stroke-linecap="round"
               stroke-dasharray="264" stroke-dashoffset="264" transform="rotate(-90 150 126)"/>
@@ -261,9 +261,13 @@
       <circle cx="150" cy="126" r="31" fill="#c42f3a"/>
       <circle cx="150" cy="126" r="22" fill="none" stroke="#8e1f28" stroke-width="2.5"/>
       <text x="150" y="137" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="900" font-size="30" fill="#f6d5c8">M</text>
+      <g fill="none" stroke="#5c0f1a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path id="fissure1" opacity="0" d="M141 97 L146 108 L139 116 L145 126"/>
+        <path id="fissure2" opacity="0" d="M178 124 L166 128 L162 138 L153 142 L150 156"/>
+      </g>
     </g>
   </svg>
-  <p class="aide">reste appuyée sur le sceau de cire</p>
+  <p class="aide">tape 3 fois sur le sceau de cire</p>
 </div>
 
 <button id="son" hidden aria-pressed="true" aria-label="Couper la musique">
@@ -660,24 +664,31 @@ $('#son').onclick = () => {
   $('#son').setAttribute('aria-label', voulu ? 'Couper la musique' : 'Remettre la musique');
 };
 
-/* ================= SCEAU : rester appuyée pour l'ouvrir ================= */
-const sceau = $('#sceau'), anneau = $('#anneau'), TENIR = 1200;
-let debut = 0, raf = 0, ouvert = false;
-function presser(e) { if (ouvert || debut) return; e.preventDefault(); debut = performance.now(); avancer(); }
-function avancer() {
-  const p = Math.min((performance.now() - debut) / TENIR, 1);
-  anneau.style.strokeDashoffset = 264 * (1 - p);
-  sceau.style.transform = `rotate(${(Math.random() - .5) * p * 16}deg) scale(${1 + p * .1})`;
-  if (navigator.vibrate && p > .5 && Math.random() < .15) navigator.vibrate(8);
-  p < 1 ? raf = requestAnimationFrame(avancer) : ouvrir();
+/* ================= SCEAU : 3 taps pour le briser =================
+   Un tap terminé est le seul geste qui autorise le son sur téléphone (un appui long est souvent annulé
+   par l'iPhone) : le 3e tap ouvre la lettre ET lance la chanson dans le même geste. */
+const sceau = $('#sceau'), anneau = $('#anneau'), TAPS = 3;
+let taps = 0, ouvert = false;
+// si la chanson n'est pas encore déchiffrée au moment des taps, on « déverrouille » le lecteur avec un blanc d'un dixième de seconde :
+// le téléphone acceptera ensuite de lancer la vraie chanson dès qu'elle sera prête
+const SILENCE = 'data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA';
+function debloquerSon() { if (!CLE || pret || audio.src) return; audio.src = SILENCE; audio.play().then(() => audio.pause()).catch(() => {}); }
+function taper() {
+  if (ouvert) return;
+  debloquerSon();
+  taps++;
+  anneau.style.strokeDashoffset = 264 * (1 - taps / TAPS);
+  if (navigator.vibrate) navigator.vibrate(taps < TAPS ? 15 : 40);
+  if (taps < TAPS) {
+    gsap.to(`#fissure${taps}`, { opacity: 1, duration: .12 });
+    gsap.fromTo(sceau, { rotation: taps % 2 ? -9 : 9, scale: 1.08 }, { rotation: 0, scale: 1, transformOrigin: '50% 50%', duration: .5, ease: 'elastic.out(1.2,.3)' });
+    return;
+  }
+  ouvrir();
 }
-function lacher() { if (ouvert) return; cancelAnimationFrame(raf); debut = 0; anneau.style.strokeDashoffset = 264; sceau.style.transform = ''; }
-// toute l'enveloppe se presse (plus facile au doigt) ; la capture garde l'appui même si le doigt glisse un peu
-const env = $('#enveloppe');
-env.addEventListener('pointerdown', e => { try { env.setPointerCapture(e.pointerId); } catch (_) { /* pointeur déjà relâché */ } presser(e); });
-['pointerup', 'pointercancel'].forEach(ev => env.addEventListener(ev, lacher));
-sceau.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) presser(e); });
-sceau.addEventListener('keyup', lacher);
+// toute l'enveloppe répond au tap (plus facile au doigt)
+$('#enveloppe').addEventListener('click', taper);
+sceau.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); taper(); } });
 $('#intro').addEventListener('contextmenu', e => e.preventDefault());
 
 function ouvrir() {
