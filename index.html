@@ -152,6 +152,33 @@
   .plat .nom { display: inline-block; background: var(--creme); font: italic 750 17px/1.2 Fraunces, serif; padding: 2px 12px; border-radius: 99px; box-shadow: 2px 2px 0 var(--encre); }
   .plat .desc { font: 700 16px/1.1 Caveat, cursive; background: #fbf1dff0; padding: 3px 8px; border-radius: 8px; min-height: 2.3em; text-align: center; }
   .compte-repas { text-align: center; font: 700 14px "Space Mono", monospace; letter-spacing: .1em; margin-top: 18px; }
+  #train { background: #f3e6c8; }
+  #carte-train { width: 100%; height: auto; overflow: visible; margin-bottom: 8px; }
+
+  /* ---------- cinéma ---------- */
+  .cinema { margin-top: 34px; background: #2a1420; border-radius: 16px; padding: 14px 14px 16px; }
+  .fronton { position: relative; text-align: center; background: var(--corail); color: var(--creme); border-radius: 10px; padding: 10px 8px 8px;
+             font: italic 900 34px/1 Fraunces, serif; letter-spacing: .12em; text-transform: uppercase; border: 6px dotted #ffe9a0;
+             animation: ampoules 1.6s steps(2) infinite; }
+  .fronton small { display: block; font: 700 11px "Space Mono", monospace; letter-spacing: .3em; margin-top: 4px; font-style: normal; }
+  @keyframes ampoules { 50% { border-color: #fff6d6; box-shadow: 0 0 14px #ffe9a088; } }
+  .ecran { position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; margin: 14px 0 0; padding: 0; border: 0; border-radius: 6px;
+           overflow: hidden; background: #111; cursor: pointer; }
+  .ecran::before { content: ""; position: absolute; z-index: 3; left: 0; right: 0; top: 0; height: 22px;
+                   background: radial-gradient(circle at 12px 0, #8e1427 14px, transparent 15px) 0 0 / 24px 22px repeat-x, #8e1427; height: 14px; }
+  .ecran video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rideau { position: absolute; z-index: 2; top: 0; bottom: 0; width: 51%; transition: transform 1.3s cubic-bezier(.6,0,.2,1);
+            background: repeating-linear-gradient(90deg, #8e1427 0 6px, #c42f3a 6px 16px, #a3192d 16px 22px); }
+  .rideau.g { left: 0; transform-origin: 0 50%; } .rideau.d { right: 0; transform-origin: 100% 50%; }
+  .ecran.ouvert .rideau { transform: scaleX(.1); }
+  .lancer { position: absolute; z-index: 4; left: 50%; top: 50%; width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%;
+            background: var(--jaune); box-shadow: 4px 4px 0 var(--encre); display: grid; place-items: center; transition: opacity .3s, transform .3s; }
+  .lancer svg { width: 34px; height: 34px; margin-left: 4px; }
+  .ecran.ouvert .lancer { opacity: 0; transform: scale(.6); }
+  .ecran.charge .lancer { animation: appel 1s ease-in-out infinite; }
+  .ecran:focus-visible { outline: 3px dashed var(--jaune); outline-offset: 4px; }
+  .sieges { display: block; width: 100%; margin-top: -6px; position: relative; }
+  .legende { text-align: center; color: var(--creme); font: italic 600 19px/1.3 Fraunces, serif; margin-top: 10px; }
 
   /* ---------- valise ---------- */
   #valise { background: var(--lilas); color: var(--creme); }
@@ -438,10 +465,68 @@
   </div>
 </section>
 
+<!-- ===================== TRAIN ===================== -->
+<section id="train">
+  <div class="col">
+    <span class="annot">2 · il treno</span>
+    <h2>Tourcoing → <em>CDG</em></h2>
+    <svg id="carte-train" viewBox="0 0 400 330" aria-label="Trajet en TGV OUIGO de Tourcoing à l'aéroport Charles-de-Gaulle">
+      <defs><mask id="masque-voie"><path id="voie-masque" d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#fff" stroke-width="16" fill="none"/></mask></defs>
+      <!-- champs du Nord, peints -->
+      <g filter="url(#pinceau)">
+        <path d="M10 60 Q120 20 220 50 Q260 90 200 130 Q90 150 30 120Z" fill="#c8d98a"/>
+        <path d="M230 120 Q330 100 390 150 Q395 230 320 240 Q240 230 220 180Z" fill="#a9c97a"/>
+        <path d="M10 170 Q90 150 150 200 Q160 260 90 300 Q30 300 10 260Z" fill="#e2d58f"/>
+        <path d="M170 250 Q260 240 330 270 Q360 320 250 325 Q170 320 160 290Z" fill="#8fb565"/>
+        <g stroke="#ffffff66" stroke-width="2" fill="none"><path d="M40 80 Q120 60 200 80"/><path d="M40 100 Q120 82 190 100"/><path d="M250 150 Q320 140 370 170"/><path d="M245 175 Q320 165 365 195"/></g>
+      </g>
+      <!-- Tourcoing : maisons de brique et beffroi -->
+      <g filter="url(#pinceau)">
+        <rect x="262" y="40" width="22" height="26" fill="#b5543a"/><path d="M260 40l13-12 13 12z" fill="#7a3324"/>
+        <rect x="350" y="42" width="24" height="24" fill="#c0644a"/><path d="M348 42l14-12 14 12z" fill="#7a3324"/>
+        <rect x="306" y="10" width="16" height="56" fill="#b5543a"/><path d="M304 10l10-16 10 16z" fill="#2c4a9a"/><circle cx="314" cy="24" r="4" fill="#fbf1df"/>
+        <rect x="288" y="46" width="16" height="20" fill="#c0644a"/><rect x="326" y="48" width="20" height="18" fill="#b5543a"/>
+        <g fill="#fbf1df"><rect x="268" y="50" width="4" height="5"/><rect x="276" y="50" width="4" height="5"/><rect x="356" y="50" width="4" height="5"/><rect x="364" y="50" width="4" height="5"/></g>
+      </g>
+      <text x="166" y="54" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Tourcoing</text>
+      <!-- moulin et arbres -->
+      <g filter="url(#pinceau)">
+        <path d="M100 176 L106 140 L118 140 L124 176Z" fill="#fbf1df"/><path d="M104 140 L112 128 L120 140Z" fill="#c42f3a"/>
+        <g id="pales" fill="#5a3324"><rect x="110.5" y="104" width="3" height="24"/><rect x="110.5" y="132" width="3" height="24"/><rect x="88" y="128.5" width="24" height="3"/><rect x="112" y="128.5" width="24" height="3"/></g>
+        <g fill="#5f8a3a"><circle cx="246" cy="214" r="11"/><circle cx="262" cy="220" r="9"/><circle cx="54" cy="208" r="10"/><circle cx="210" cy="78" r="9"/><circle cx="350" cy="196" r="10"/></g>
+      </g>
+      <!-- Roissy : le terminal rond, la tour, un avion qui attend -->
+      <g filter="url(#pinceau)">
+        <ellipse cx="62" cy="300" rx="30" ry="11" fill="#e8e1d2"/><ellipse cx="62" cy="296" rx="18" ry="6" fill="#cfc6b3"/>
+        <rect x="124" y="262" width="6" height="40" fill="#e8e1d2"/><rect x="119" y="254" width="16" height="10" rx="2" fill="#2c4a9a"/>
+        <path d="M148 304 l26 0 l6 -3 l-6 -3 l-26 0z M158 298 l6 -9 l4 0 l-3 9z M158 304 l6 8 l4 0 l-3 -8z" fill="#fbf1df" stroke="#1f2a44" stroke-width=".8"/>
+      </g>
+      <text x="10" y="276" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Paris CDG</text>
+      <!-- la voie, dévoilée au défilement -->
+      <g mask="url(#masque-voie)">
+        <path d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#5a3324" stroke-width="11" stroke-dasharray="2.5 6" fill="none"/>
+        <path id="voie" d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#1f2a44" stroke-width="3" fill="none"/>
+      </g>
+      <!-- le TGV OUIGO (nez à gauche : il suit la voie avec un demi-tour) -->
+      <g id="tgv"><g transform="scale(1.6)">
+        <path d="M-34 -7 C-44 -7 -50 -2 -53 5 L-53 7 L-34 7Z" fill="#e8559a" stroke="#1f2a44" stroke-width="1"/>
+        <rect x="-34" y="-7" width="38" height="14" rx="2" fill="#37c4c9" stroke="#1f2a44" stroke-width="1"/>
+        <rect x="6" y="-7" width="36" height="14" rx="2" fill="#37c4c9" stroke="#1f2a44" stroke-width="1"/>
+        <path d="M-41 -5 C-45 -4 -47 -2 -48 0 L-41 0Z" fill="#1f2a44"/>
+        <g fill="#fbf1df"><rect x="-30" y="-5" width="30" height="3.4" rx="1"/><rect x="9" y="-5" width="30" height="3.4" rx="1"/></g>
+        <rect x="-53" y="4" width="95" height="2.6" fill="#e8559a"/>
+        <text x="-26" y="2.6" font-family="Space Mono" font-weight="700" font-size="4.6" fill="#fbf1df">OUIGO</text>
+        <path d="M-20 -7 l4 -5 l6 0" stroke="#1f2a44" stroke-width="1.2" fill="none"/>
+      </g></g>
+    </svg>
+    <p class="txt">On commence en TGV OUIGO, de Tourcoing jusqu'à l'aéroport Charles-de-Gaulle. Là-bas, l'avion nous attend.</p>
+  </div>
+</section>
+
 <!-- ===================== VOL ===================== -->
 <section id="vol">
   <div class="col">
-    <span class="annot">2 · il volo</span>
+    <span class="annot">3 · il volo</span>
     <h2>Paris → <em>Venise</em></h2>
     <svg id="carte-vol" viewBox="0 0 400 320" aria-label="Trajet en avion de Paris à Venise">
       <defs><mask id="masque-route"><path id="route-masque" d="M52 86 C150 -6 268 52 348 236" stroke="#fff" stroke-width="10" fill="none"/></mask></defs>
@@ -466,7 +551,7 @@
 <!-- ===================== HÔTEL ===================== -->
 <section id="hotel">
   <div class="col mur" id="mur">
-    <span class="annot" style="align-self:flex-start">3 · la stanza</span>
+    <span class="annot" style="align-self:flex-start">4 · la stanza</span>
     <h2 style="align-self:flex-start">Vue sur <em>mer</em></h2>
     <p class="indice">tape sur les volets ↓</p>
     <button class="fenetre" id="fenetre" aria-label="Ouvrir les volets" aria-expanded="false">
@@ -540,18 +625,35 @@
 <!-- ===================== REPAS ===================== -->
 <section id="repas">
   <div class="col">
-    <span class="annot">4 · a tavola</span>
+    <span class="annot">5 · a tavola</span>
     <h2>On va se <em>régaler</em></h2>
     <p class="txt">Le petit-déjeuner est à l'hôtel. Le reste du temps, on goûte à tout. Soulève les cloches.</p>
     <div class="nappe ombre" id="nappe"></div>
     <p class="compte-repas" id="compte-repas" aria-live="polite">0 / 6 plats découverts</p>
+    <!-- petit cinéma : la vidéo de Manon (chiffrée, lisible seulement avec la clé de la carte) -->
+    <div class="cinema ombre">
+      <p class="fronton">Cinema<small>séance spéciale</small></p>
+      <button class="ecran" id="ecran" aria-label="Lancer le film">
+        <video id="film" playsinline preload="none"></video>
+        <span class="rideau g"></span><span class="rideau d"></span>
+        <span class="lancer" id="lancer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#1f2a44"/></svg></span>
+      </button>
+      <svg class="sieges" viewBox="0 0 300 46" aria-hidden="true">
+        <g fill="#5c1a2b"><rect x="6" y="18" width="34" height="28" rx="8"/><rect x="46" y="18" width="34" height="28" rx="8"/><rect x="86" y="18" width="34" height="28" rx="8"/>
+          <rect x="180" y="18" width="34" height="28" rx="8"/><rect x="220" y="18" width="34" height="28" rx="8"/><rect x="260" y="18" width="34" height="28" rx="8"/>
+          <rect x="126" y="18" width="48" height="28" rx="8"/></g>
+        <g fill="#1f0b14"><circle cx="139" cy="14" r="9"/><circle cx="161" cy="13" r="9"/><path d="M128 18q11-6 22 0v8h-22zM150 18q11-6 22 0v8h-22z"/></g>
+        <path d="M150 4 C144 -1 145 -6 148 -6 C149.5 -6 150 -4.5 150 -4 C150 -4.5 150.5 -6 152 -6 C155 -6 156 -1 150 4Z" fill="#e8559a"/>
+      </svg>
+      <p class="legende" id="legende">Une déclaration importante de Manon…</p>
+    </div>
   </div>
 </section>
 
 <!-- ===================== VALISE ===================== -->
 <section id="valise">
   <div class="col">
-    <span class="annot">5 · la valigia</span>
+    <span class="annot">6 · la valigia</span>
     <h2>Fais ta <em>valise</em></h2>
     <p class="txt">Glisse dans la valise ce qu'il faut pour Venise en février. Attention, elle a ses exigences.</p>
     <p class="bulle" id="valise-msg" aria-live="polite">Fais glisser un objet (ou touche-le).</p>
@@ -567,7 +669,7 @@
 <!-- ===================== BILLET ===================== -->
 <section id="billet">
   <div class="col">
-    <span class="annot">6 · il biglietto</span>
+    <span class="annot">7 · il biglietto</span>
     <h2>Ton <em>billet</em></h2>
     <div class="billet ombre" id="carte-billet">
       <div class="billet-haut"><b>Carta d'imbarco</b><span>N° AMORE</span></div>
@@ -616,16 +718,47 @@ let lecteur, pret = false, voulu = false, joue = false, ac;
 const audio = new Audio(); audio.loop = true;
 audio.addEventListener('playing', () => { joue = true; $('#son').classList.remove('appel'); });
 audio.addEventListener('pause', () => { joue = false; });
+// fichier.bin = IV (12 octets) + données chiffrées AES-GCM ; renvoie une adresse locale (blob) lisible par le navigateur
+async function dechiffrer(fichier, cle, type) {
+  const tout = new Uint8Array(await (await fetch(fichier)).arrayBuffer());
+  const clair = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: tout.slice(0, 12) }, cle, tout.slice(12));
+  return URL.createObjectURL(new Blob([clair], { type }));
+}
+const film = $('#film'), ecran = $('#ecran');
+let filmPret = false, filmAttendu = false, musiqueCoupee = false;
 if (CLE) (async () => {
   try {
     const brut = Uint8Array.from(atob(CLE.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
     const cle = await crypto.subtle.importKey('raw', brut, 'AES-GCM', false, ['decrypt']);
-    const tout = new Uint8Array(await (await fetch('chanson.bin')).arrayBuffer());
-    const clair = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: tout.slice(0, 12) }, cle, tout.slice(12));
-    audio.src = URL.createObjectURL(new Blob([clair], { type: 'audio/mpeg' }));
+    audio.src = await dechiffrer('chanson.bin', cle, 'audio/mpeg');
     pret = true; jouer();
-  } catch (e) { console.warn('chanson illisible, repli sur YouTube', e); }
+    film.src = await dechiffrer('video.bin', cle, 'video/mp4'); // la vidéo ensuite, pour ne pas retarder la chanson
+    filmPret = true;
+    if (filmAttendu) lancerFilm();
+  } catch (e) { console.warn('fichier illisible, repli sur YouTube', e); }
 })();
+else $('#legende').textContent = 'Séance réservée à la détentrice du billet.';
+
+/* ================= CINÉMA ================= */
+function lancerFilm() {
+  ecran.classList.remove('charge'); ecran.classList.add('ouvert');
+  if (!audio.paused) { audio.pause(); musiqueCoupee = true; } // la chanson se tait pendant le film
+  film.currentTime = 0;
+  film.play().catch(() => { ecran.classList.remove('ouvert'); $('#legende').textContent = 'touche l\'écran pour lancer la séance'; });
+  $('#legende').textContent = 'Silence, ça tourne…';
+  ecran.setAttribute('aria-label', 'Mettre le film en pause');
+}
+ecran.addEventListener('click', () => {
+  if (!CLE) return;
+  if (!filmPret) { filmAttendu = true; ecran.classList.add('charge'); $('#legende').textContent = 'la séance se prépare…'; return; }
+  if (!ecran.classList.contains('ouvert') || film.ended) return lancerFilm();
+  film.paused ? film.play() : film.pause();
+});
+film.addEventListener('ended', () => {
+  ecran.classList.remove('ouvert'); ecran.setAttribute('aria-label', 'Revoir le film');
+  $('#legende').innerHTML = 'Elle mangera <em>autant que nécessaire</em>.<br>C\'est noté, amore.';
+  if (musiqueCoupee && voulu) { musiqueCoupee = false; audio.play().catch(() => {}); }
+});
 window.onYouTubeIframeAPIReady = () => {
   if (CLE) return; // la chanson chiffrée suffit
   lecteur = new YT.Player('yt-lecteur', { videoId: VIDEO, width: 220, height: 124, host: 'https://www.youtube-nocookie.com',
@@ -636,6 +769,7 @@ window.onYouTubeIframeAPIReady = () => {
 function jouer() {
   if (ac && ac.state === 'suspended') ac.resume();
   if (!pret || !voulu || joue) return;
+  if (!film.paused && !film.ended) return; // pas de chanson par-dessus le film
   if (CLE) { audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return; }
   lecteur.unMute(); lecteur.setVolume(85); lecteur.playVideo();
 }
@@ -762,6 +896,15 @@ function retourner() {
   });
 }
 ScrollTrigger.create({ trigger: '#tableau', start: 'top 80%', once: true, onEnter: retourner });
+
+/* ================= TRAIN (même principe que l'avion) ================= */
+const masqueVoie = $('#voie-masque'), LV = masqueVoie.getTotalLength();
+gsap.set(masqueVoie, { strokeDasharray: LV, strokeDashoffset: LV });
+gsap.set('#tgv', { motionPath: { path: '#voie', align: '#voie', alignOrigin: [.5, .5], autoRotate: 180, end: 0 } });
+gsap.timeline({ scrollTrigger: { trigger: '#carte-train', start: 'top 75%', end: 'bottom 45%', scrub: calme ? false : 1 } })
+  .to(masqueVoie, { strokeDashoffset: 0, ease: 'none', duration: 1 }, 0)
+  .to('#tgv', { motionPath: { path: '#voie', align: '#voie', alignOrigin: [.5, .5], autoRotate: 180 }, ease: 'none', duration: 1 }, 0);
+if (!calme) gsap.to('#pales', { rotation: 360, svgOrigin: '112 130', duration: 6, ease: 'none', repeat: -1 });
 
 /* ================= VOL ================= */
 const masque = $('#route-masque'), L = masque.getTotalLength();
