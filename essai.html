@@ -1094,11 +1094,17 @@ window.onYouTubeIframeAPIReady = () => {
     events: { onReady: () => { pret = true; jouer(); },
               onStateChange: e => { joue = e.data === YT.PlayerState.PLAYING; if (joue) $('#radio').classList.remove('visible'); } } });
 };
+let musiqueAttend = true;
 function jouer() {
   if (ac && ac.state === 'suspended') ac.resume();
   if (!pret || !voulu || joue) return;
   if (musiqueCoupee || (!film.paused && !film.ended)) return; // pas de chanson par-dessus le film (ni pendant une pause)
-  if (CLE) { audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return; }
+  if (CLE) {
+    if (musiqueAttend && gainChanson) gainChanson.gain.value = 0; // elle tourne, mais muette
+    else if (musiqueAttend) { if (!jouer.debloque) { jouer.debloque = true; audio.play().then(() => { if (musiqueAttend) audio.pause(); }).catch(() => { jouer.debloque = false; }); } return; }
+    audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return;
+  }
+  if (musiqueAttend) return; // repli YouTube : il démarrera sur l'affiche
   lecteur.unMute(); lecteur.setVolume(85); lecteur.playVideo();
 }
 // sur mobile le son n'est autorisé qu'au moment où le doigt se relève : on retente à chaque geste
@@ -1122,7 +1128,7 @@ function clac() {
 }
 $('#son').onclick = () => {
   voulu = !voulu;
-  if (voulu && gainChanson && !musiqueCoupee) { clearTimeout(fonduChanson.fin); gainChanson.gain.cancelScheduledValues(0); gainChanson.gain.value = 1; } // après un fondu, repartir à plein volume
+  if (voulu && gainChanson && !musiqueCoupee && !musiqueAttend) { clearTimeout(fonduChanson.fin); gainChanson.gain.cancelScheduledValues(0); gainChanson.gain.value = 1; } // après un fondu, repartir à plein volume
   if (voulu) jouer(); else if (CLE) audio.pause(); else if (lecteur) lecteur.pauseVideo();
   $('#son').classList.remove('appel');
   $('#son').setAttribute('aria-pressed', String(voulu));
@@ -1208,6 +1214,12 @@ function deverrouiller() {
   $('#vol-texte').textContent = 'Décollage de Charles-de-Gaulle, un peu moins de deux heures au-dessus des Alpes, et on atterrit au bord de la lagune.';
   $('#tableau').classList.add('revele'); $('.ligne.dest .cases').setAttribute('aria-label', 'VENEZIA');
   $('#carte-vol').setAttribute('aria-label', 'Le vol de Paris-Charles-de-Gaulle à Venise, au-dessus des Alpes');
+  // « Sarà perché ti amo » démarre avec l'affiche
+  musiqueAttend = false;
+  if (!voulu) return;
+  if (!CLE) return jouer();
+  audio.currentTime = 0;
+  if (gainChanson) fonduChanson(1, 1.6); else audio.play().catch(() => {});
 }
 ScrollTrigger.create({ trigger: '#hero', start: 'top 55%', once: true, onEnter: () => { entreeAffiche(); deverrouiller(); } });
 if (!calme) {
