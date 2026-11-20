@@ -73,6 +73,7 @@
           color: var(--creme); font: 700 clamp(13px, 4.6vw, 22px) "Space Mono", monospace; }
   .case::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--encre); }
   .ligne.dest .case { color: var(--jaune); }
+  .ligne.dest .cases { filter: blur(6px); }
   .case.flip { animation: flip .07s linear; }
   @keyframes flip { 50% { transform: scaleY(.1) } }
 
@@ -403,10 +404,19 @@
   </div>
 </section>
 
+<!-- ===================== DÉPART ===================== -->
+<section id="depart">
+  <div class="col">
+    <span class="annot">2 · la partenza</span>
+    <h2>Le <em>départ</em></h2>
+    <div class="tableau ombre" id="tableau" role="table" aria-label="Tableau des départs"></div>
+  </div>
+</section>
+
 <!-- ===================== VOL ===================== -->
 <section id="vol">
   <div class="col">
-    <span class="annot">2 · il volo</span>
+    <span class="annot">3 · il volo</span>
     <h2>Paris → <em>???</em></h2>
     <svg id="carte-vol" viewBox="0 0 400 420" aria-label="Le vol depuis Paris-Charles-de-Gaulle, au-dessus des Alpes, vers une destination secrète">
       <defs><mask id="masque-route"><path id="route-masque" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fff" stroke-width="12" fill="none"/></mask></defs>
@@ -625,15 +635,6 @@
     </div>
     <p class="txt">Manon, ton cadeau de Noël&nbsp;: <strong>quatre jours à Venise</strong>, rien que nous deux.</p>
     <p class="defile">fais défiler ↓</p>
-  </div>
-</section>
-
-<!-- ===================== DÉPART ===================== -->
-<section id="depart">
-  <div class="col">
-    <span class="annot">3 · la partenza</span>
-    <h2>Le <em>départ</em></h2>
-    <div class="tableau ombre" id="tableau" role="table" aria-label="Tableau des départs"></div>
   </div>
 </section>
 
@@ -1194,7 +1195,7 @@ const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const tableau = $('#tableau');
 tableau.innerHTML = LIGNES.map(([lab, val, cls]) =>
   `<div class="ligne ${cls || ''}" role="row"><p class="etiquette" role="rowheader">${lab}</p>
-   <div class="cases" role="cell" aria-label="${val}">${[...val.padEnd(11)].map(c => `<span class="case" aria-hidden="true" data-fin="${c}"> </span>`).join('')}</div></div>`).join('');
+   <div class="cases" role="cell" aria-label="${cls === 'dest' ? 'destination secrète' : val}">${[...val.padEnd(11)].map(c => `<span class="case" aria-hidden="true" data-fin="${c}"> </span>`).join('')}</div></div>`).join('');
 function retourner() {
   let dernier = 0;
   document.querySelectorAll('.case').forEach((c, i) => {
