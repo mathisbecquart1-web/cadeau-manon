@@ -1222,13 +1222,15 @@ function deverrouiller() {
   if (gainChanson) fonduChanson(1, 1.6); else audio.play().catch(() => {});
 }
 ScrollTrigger.create({ trigger: '#hero', start: 'top 55%', once: true, onEnter: () => { entreeAffiche(); deverrouiller(); } });
-if (!calme) {
+// le léger décalage au défilement ne se met en place qu'une fois l'affiche arrivée : sinon il partirait
+// des positions cachées de l'entrée (le linge restait 140 px trop haut)
+if (!calme) affiche.eventCallback('onComplete', () => {
   const par = { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true };
   gsap.to('#gauche', { x: -70, scrollTrigger: par });
   gsap.to('#droite', { x: 70, scrollTrigger: par });
   gsap.to('#soleil', { y: -60, scrollTrigger: par });
   gsap.to('#linge', { y: -30, scrollTrigger: par });
-}
+});
 
 /* ================= TABLEAU DES DÉPARTS ================= */
 const LIGNES = [['Destination', 'VENEZIA', 'dest'], ['Départ', 'PARIS CDG'], ['Aller', '22 FEB 2027'], ['Retour', '25 FEB 2027'], ['Passagers', 'MANON + MOI']];
