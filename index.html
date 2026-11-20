@@ -1100,8 +1100,16 @@ function jouer() {
   if (!pret || !voulu || joue) return;
   if (musiqueCoupee || (!film.paused && !film.ended)) return; // pas de chanson par-dessus le film (ni pendant une pause)
   if (CLE) {
-    if (musiqueAttend && gainChanson) gainChanson.gain.value = 0; // elle tourne, mais muette
-    else if (musiqueAttend) { if (!jouer.debloque) { jouer.debloque = true; audio.play().then(() => { if (musiqueAttend) audio.pause(); }).catch(() => { jouer.debloque = false; }); } return; }
+    // avant l'affiche : on la « débloque » pendant le tap (lancée en silence puis arrêtée net, remise au début),
+    // pour que l'iPhone la laisse démarrer toute seule sur l'affiche, sans nouveau geste
+    if (musiqueAttend) {
+      if (!jouer.debloque) {
+        jouer.debloque = true;
+        if (gainChanson) gainChanson.gain.value = 0;
+        audio.play().then(() => { if (musiqueAttend) { audio.pause(); audio.currentTime = 0; } }).catch(() => { jouer.debloque = false; });
+      }
+      return;
+    }
     audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return;
   }
   if (musiqueAttend) return; // repli YouTube : il démarrera sur l'affiche
@@ -1116,7 +1124,7 @@ function demarrerMusique() {
   brancherFondu();
   jouer();
   // si le navigateur bloque quand même, on montre le petit lecteur pour qu'elle appuie sur ▶ elle-même
-  setTimeout(() => { if (!joue && voulu) CLE ? $('#son').classList.add('appel') : $('#radio').classList.add('visible'); }, 3000);
+  setTimeout(() => { if (!joue && voulu && !musiqueAttend) CLE ? $('#son').classList.add('appel') : $('#radio').classList.add('visible'); }, 3000);
 }
 let bruit;
 function clac() {
@@ -1218,8 +1226,17 @@ function deverrouiller() {
   musiqueAttend = false;
   if (!voulu) return;
   if (!CLE) return jouer();
+  demarrerSurAffiche();
+}
+// départ propre : remise au début pendant qu'elle est arrêtée, volume à zéro, et le fondu ne commence
+// qu'au moment où le son sort vraiment (sur iPhone, play() met un instant à démarrer)
+async function demarrerSurAffiche() {
+  if (ac && ac.state !== 'running') await ac.resume().catch(() => {});
+  if (!audio.paused) audio.pause();
   audio.currentTime = 0;
-  if (gainChanson) fonduChanson(1, 1.6); else audio.play().catch(() => {});
+  if (gainChanson) { const g = gainChanson.gain; g.cancelScheduledValues(0); g.value = 0; }
+  audio.addEventListener('playing', () => { if (gainChanson) fonduChanson(1, 2); }, { once: true });
+  audio.play().catch(() => { /* bloqué : le prochain tap la relancera */ });
 }
 ScrollTrigger.create({ trigger: '#hero', start: 'top 55%', once: true, onEnter: () => { entreeAffiche(); deverrouiller(); } });
 // le léger décalage au défilement ne se met en place qu'une fois l'affiche arrivée : sinon il partirait
