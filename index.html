@@ -1001,7 +1001,7 @@ function tire(angle, duree) { const t = pivote(brasMC, ...EPAULE, angle, duree),
 brasMC._a = 165; brasMC.setAttribute('transform', `rotate(165 ${EPAULE})`); corde();
 let animTireur;
 // deux grandes tractions (il plie les genoux), les rideaux s'ouvrent, il lâche la corde, fait coucou, et sort de scène
-function tirerRideaux() {
+function tirerRideaux(alOuverture) {
   if (animTireur) animTireur.kill();
   const plie = { y: 7, scaleY: .96, transformOrigin: '50% 100%', duration: .32, ease: 'power2.in' }, deplie = { y: 0, scaleY: 1, duration: .24, ease: 'power2.out' };
   animTireur = gsap.timeline()
@@ -1009,7 +1009,7 @@ function tirerRideaux() {
     .add(tire(40, .32)).to(tireur, plie, '<')
     .add(tire(150, .26)).to(tireur, deplie, '<')
     .add(tire(40, .32)).to(tireur, plie, '<')
-    .add(() => ecran.classList.add('ouvert'))
+    .add(() => { ecran.classList.add('ouvert'); if (alOuverture) alOuverture(); })
     .add(() => { cordeEtat.x = mainA(...EPAULE, brasMC._a).x; })
     .to(cordeEtat, { lache: 260, duration: .55, ease: 'power3.in', onUpdate: corde }, '+=.1')
     .add(tire(4, .35), '<').to(tireur, deplie, '<')
@@ -1037,15 +1037,24 @@ function brancherFondu() {
 }
 function fonduChanson(cible, duree) {
   if (!gainChanson) { cible ? audio.play().catch(() => {}) : audio.pause(); return; } // repli : coupure nette
+  if (ac.state === 'suspended') ac.resume();
   const g = gainChanson.gain, t = ac.currentTime;
   g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); g.linearRampToValueAtTime(cible, t + duree);
+  clearTimeout(fonduChanson.fin);
+  if (cible) audio.play().catch(() => {});
+  else fonduChanson.fin = setTimeout(() => audio.pause(), duree * 1000 + 60); // une fois éteinte, on l'arrête pour de vrai
 }
+// Sur iPhone, une vidéo qui démarre avec le son coupe net toute autre musique : on la « débloque » muette pendant le tap,
+// la chanson s'efface pendant que Mathis tire la corde, et le film démarre avec le son quand le rideau s'ouvre.
 function lancerFilm() {
   ecran.classList.remove('charge');
-  if (!audio.paused) { fonduChanson(0, .9); musiqueCoupee = true; } // la chanson s'efface pendant le film
-  film.currentTime = 0;
-  film.play().catch(() => { ecran.classList.remove('ouvert'); revientTireur(); $('#legende').textContent = 'touche l\'écran pour lancer la séance'; });
-  tirerRideaux();
+  if (!audio.paused) { fonduChanson(0, 1.1); musiqueCoupee = true; }
+  film.muted = true; film.currentTime = 0;
+  film.play().then(() => { if (!ecran.classList.contains('ouvert')) film.pause(); }).catch(() => {});
+  tirerRideaux(() => {
+    film.currentTime = 0; film.muted = false;
+    film.play().catch(() => { ecran.classList.remove('ouvert'); revientTireur(); $('#legende').textContent = 'touche l\'écran pour lancer la séance'; });
+  });
   $('#legende').textContent = 'Silence, ça tourne…';
   ecran.setAttribute('aria-label', 'Mettre le film en pause');
 }
@@ -1058,8 +1067,8 @@ ecran.addEventListener('click', () => {
 film.addEventListener('ended', () => {
   revientTireur(.6);
   ecran.classList.remove('ouvert'); ecran.setAttribute('aria-label', 'Revoir le film');
-  $('#legende').innerHTML = 'Elle mangera <em>autant que nécessaire</em> :<br>pâtes et gelatos à volonté. C\'est noté, amore.';
-  if (musiqueCoupee && voulu) { musiqueCoupee = false; fonduChanson(1, 2.2); } // et revient doucement
+  $('#legende').innerHTML = 'Elle mangera <em>autant que nécessaire</em>&nbsp;:<br>pâtes, pizzas et gelatos à volonté. C\'est noté, amore.';
+  if (musiqueCoupee) { musiqueCoupee = false; if (voulu) fonduChanson(1, 2.2); } // et revient doucement
 });
 window.onYouTubeIframeAPIReady = () => {
   if (CLE) return; // la chanson chiffrée suffit
@@ -1071,7 +1080,7 @@ window.onYouTubeIframeAPIReady = () => {
 function jouer() {
   if (ac && ac.state === 'suspended') ac.resume();
   if (!pret || !voulu || joue) return;
-  if (!film.paused && !film.ended) return; // pas de chanson par-dessus le film
+  if (musiqueCoupee || (!film.paused && !film.ended)) return; // pas de chanson par-dessus le film (ni pendant une pause)
   if (CLE) { audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return; }
   lecteur.unMute(); lecteur.setVolume(85); lecteur.playVideo();
 }
@@ -1096,6 +1105,7 @@ function clac() {
 }
 $('#son').onclick = () => {
   voulu = !voulu;
+  if (voulu && gainChanson && !musiqueCoupee) { clearTimeout(fonduChanson.fin); gainChanson.gain.cancelScheduledValues(0); gainChanson.gain.value = 1; } // après un fondu, repartir à plein volume
   if (voulu) jouer(); else if (CLE) audio.pause(); else if (lecteur) lecteur.pauseVideo();
   $('#son').classList.remove('appel');
   $('#son').setAttribute('aria-pressed', String(voulu));
