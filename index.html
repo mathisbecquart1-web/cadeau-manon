@@ -141,6 +141,14 @@
   #fin .giorni { font: 700 34px Caveat, cursive; }
   #fin .mot { font-size: 30px; font-weight: 850; font-style: italic; line-height: 1.15; margin-top: 26px; }
   #fin .ps { font: 500 22px Caveat, cursive; margin-top: 14px; }
+  /* l'image souvenir à garder dans ses photos */
+  .souvenir { margin-top: 44px; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  #souvenir-apercu { width: min(58vw, 230px); aspect-ratio: 9 / 16; background: #f3e6c8; border: 6px solid var(--creme);
+                     box-shadow: 7px 7px 0 var(--encre); transform: rotate(-3deg); object-fit: cover; }
+  .bouton-souvenir { font: 700 28px Caveat, cursive; color: var(--encre); background: var(--jaune); border: 0; border-radius: 999px;
+                     padding: 10px 26px 12px; box-shadow: 4px 4px 0 var(--encre); cursor: pointer; }
+  .bouton-souvenir:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--encre); }
+  .bouton-souvenir:focus-visible { outline: 3px dashed var(--encre); outline-offset: 4px; }
 
   .secrets { text-align: center; font: 700 21px Caveat, cursive; margin-top: 8px; color: var(--encre); }
   .secrets b { display: inline-block; font: 700 14px "Space Mono", monospace; background: var(--jaune); padding: 2px 8px; border-radius: 99px; }
@@ -503,7 +511,6 @@
     <span class="annot">2 · il treno</span>
     <h2>Tourcoing → <em>CDG</em></h2>
     <svg id="carte-train" viewBox="0 0 400 330" aria-label="Trajet en TGV OUIGO de Tourcoing à l'aéroport Charles-de-Gaulle">
-      <defs><mask id="masque-voie"><path id="voie-masque" d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#fff" stroke-width="16" fill="none"/></mask></defs>
       <!-- champs du Nord, peints -->
       <g filter="url(#pinceau)">
         <path d="M10 60 Q120 20 220 50 Q260 90 200 130 Q90 150 30 120Z" fill="#c8d98a"/>
@@ -534,8 +541,8 @@
         <path d="M148 304 l26 0 l6 -3 l-6 -3 l-26 0z M158 298 l6 -9 l4 0 l-3 9z M158 304 l6 8 l4 0 l-3 -8z" fill="#fbf1df" stroke="#1f2a44" stroke-width=".8"/>
       </g>
       <text x="4" y="232" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Paris CDG</text>
-      <!-- la voie, dévoilée au défilement -->
-      <g mask="url(#masque-voie)">
+      <!-- la voie, posée en entier : le train roule dessus -->
+      <g>
         <path d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#5a3324" stroke-width="11" stroke-dasharray="2.5 6" fill="none"/>
         <path id="voie" d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#1f2a44" stroke-width="3" fill="none"/>
       </g>
@@ -845,6 +852,10 @@
       <p class="tic" id="tic" aria-hidden="true">00 h 00 min 00 s</p>
       <p class="mot">Buon Natale, amore.<br>Je t'aime.</p>
       <p class="ps">PS : prends ton plus beau manteau, il fait frais sur la lagune.</p>
+      <div class="souvenir">
+        <img id="souvenir-apercu" alt="Le souvenir de notre voyage à Venise">
+        <button class="bouton-souvenir" id="souvenir">Garder le souvenir ↓</button>
+      </div>
     </div>
   </div>
 </section>
@@ -1212,7 +1223,7 @@ function retourner() {
 ScrollTrigger.create({ trigger: '#tableau', start: 'top 80%', once: true, onEnter: retourner });
 
 /* ================= TRAIN : articulé, chaque voiture suit la voie et se plie dans les virages ================= */
-const voie = $('#voie'), masqueVoie = $('#voie-masque'), LV = voie.getTotalLength();
+const voie = $('#voie'), LV = voie.getTotalLength();
 const ECHELLE = 1.6, VOITURES = [['#loco', 0], ['#wagon2', (29 + 18 + 2) * ECHELLE]]; // [voiture, distance derrière le nez]
 const DEPART_TRAIN = VOITURES[1][1] + 30 * ECHELLE; // au départ, tout le train est déjà sur la voie
 function placerTrain(p) {
@@ -1223,10 +1234,7 @@ function placerTrain(p) {
     const angle = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI + 180; // dessinées nez à gauche
     $(sel).setAttribute('transform', `translate(${pt.x} ${pt.y}) rotate(${angle}) scale(${ECHELLE})`);
   }
-  // la voie se dessine juste devant la locomotive
-  masqueVoie.style.strokeDashoffset = LV - Math.min(LV, tete + 40);
 }
-masqueVoie.style.strokeDasharray = LV;
 const trajet = { p: 0 };
 placerTrain(0);
 gsap.to(trajet, { p: 1, ease: 'none', onUpdate: () => placerTrain(trajet.p),
@@ -1411,7 +1419,68 @@ function dechirer() {
   gsap.from('#fin > *', { y: 40, opacity: 0, stagger: .15, duration: .7, delay: .3 });
   setTimeout(() => fin.scrollIntoView({ behavior: calme ? 'auto' : 'smooth', block: 'center' }), 350);
   if (!calme) confettis();
+  souvenirPret = fabriquerSouvenir(); // préparée tout de suite : sur iPhone, le partage doit partir dans le même geste que le tap
 }
+
+/* ================= SOUVENIR : une image 1080 × 1920 qui résume tout, à garder dans ses photos =================
+   L'illustration (l'affiche + des taches de gouache) est un SVG dessiné dans un canvas, puis les textes en Fraunces / Caveat. */
+let souvenirPret = null;
+async function fabriquerSouvenir() {
+  const L = 1080, H = 1920, scene = $('#scene');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${L}" height="${H}" viewBox="0 0 ${L} ${H}">
+    <filter id="grain-s"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .5 0"/></filter>
+    <filter id="tache" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="3" seed="9"/><feDisplacementMap in="SourceGraphic" scale="60"/></filter>
+    <rect width="${L}" height="${H}" fill="#fbf1df"/>
+    <g filter="url(#tache)" opacity=".9">
+      <ellipse cx="-30" cy="20" rx="210" ry="140" fill="#f6c945"/><ellipse cx="1110" cy="760" rx="150" ry="230" fill="#e8559a" opacity=".85"/>
+      <ellipse cx="-40" cy="1120" rx="160" ry="230" fill="#37c4c9" opacity=".8"/><ellipse cx="1110" cy="1930" rx="210" ry="120" fill="#ef6f55" opacity=".85"/>
+    </g>
+    <rect x="244" y="404" width="620" height="992" fill="#1f2a44"/>
+    <rect x="218" y="378" width="644" height="1016" fill="#fbf1df"/>
+    <svg x="230" y="390" width="620" height="992" viewBox="0 0 400 640" preserveAspectRatio="xMidYMid slice">${scene.innerHTML}</svg>
+    <g fill="#e8559a" transform="translate(540 1832) scale(2.4)"><path d="M0 10 C-14 0 -12 -10 -6 -10 C-3 -10 0 -7 0 -5 C0 -7 3 -10 6 -10 C12 -10 14 0 0 10Z"/></g>
+    <rect width="${L}" height="${H}" filter="url(#grain-s)" opacity=".35" style="mix-blend-mode:multiply"/>
+  </svg>`;
+  const img = new Image();
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  await Promise.all([img.decode(), ...['italic 900 200px Fraunces', '600 40px Fraunces', '700 64px Caveat', '700 38px "Space Mono"'].map(f => document.fonts.load(f))]);
+  const cv = document.createElement('canvas'); cv.width = L; cv.height = H;
+  const c = cv.getContext('2d');
+  c.drawImage(img, 0, 0);
+  c.textAlign = 'center'; c.textBaseline = 'alphabetic';
+  const texte = (t, x, y, police, couleur, ombre) => {
+    c.font = police;
+    if (ombre) { c.fillStyle = '#1f2a44'; c.fillText(t, x + ombre, y + ombre); }
+    c.fillStyle = couleur; c.fillText(t, x, y);
+  };
+  c.save(); c.translate(540, 104); c.rotate(-.05); texte('pour Manon', 0, 0, '700 64px Caveat', '#1f2a44'); c.restore();
+  texte('Venezia', 540, 268, 'italic 900 196px Fraunces', '#e8559a', 9);
+  if ('letterSpacing' in c) c.letterSpacing = '6px';
+  texte('22 — 25 FÉVRIER 2027', 540, 348, '700 38px "Space Mono"', '#1f2a44');
+  if ('letterSpacing' in c) c.letterSpacing = '0px';
+  const etapes = [['#37c4c9', 'Tourcoing → Paris CDG, en TGV OUIGO'], ['#ef6f55', 'Paris CDG → Venise, en avion'],
+                  ['#f6c945', '3 nuits au B&B Venezia Laguna'], ['#e8559a', 'pâtes, pizzas et gelatos à volonté']];
+  etapes.forEach(([couleur, t], i) => {
+    const y = 1486 + i * 76;
+    c.font = '600 40px Fraunces'; const w = c.measureText(t).width, x = 540 - w / 2 + 24;
+    c.fillStyle = couleur; c.beginPath(); c.ellipse(x - 40, y - 13, 15, 13, -.3, 0, Math.PI * 2); c.fill();
+    c.textAlign = 'left'; c.fillStyle = '#1f2a44'; c.fillText(t, x, y); c.textAlign = 'center';
+  });
+  texte('Manon + Mathis', 540, 1800, '700 64px Caveat', '#1f2a44');
+  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+  $('#souvenir-apercu').src = URL.createObjectURL(blob);
+  return new File([blob], 'venezia-manon-mathis.png', { type: 'image/png' });
+}
+$('#souvenir').onclick = async () => {
+  const fichier = await (souvenirPret || (souvenirPret = fabriquerSouvenir()));
+  // iPhone : la feuille de partage propose « Enregistrer l'image » (dans Photos) ; sinon, simple téléchargement
+  if (navigator.canShare && navigator.canShare({ files: [fichier] })) {
+    try { await navigator.share({ files: [fichier], title: 'Venezia · 22 — 25 février 2027' }); return; }
+    catch (e) { if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(fichier); a.download = fichier.name;
+  document.body.append(a); a.click(); a.remove();
+};
 /* compte à rebours en direct jusqu'au 22 février 2027, 0 h (heure du téléphone) */
 const DEPART = new Date(2027, 1, 22);
 function reste() {
