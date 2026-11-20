@@ -14,6 +14,9 @@
           --ciel:#8fd3ee; --encre:#1f2a44; --sarcelle:#1f8f8a; --lilas:#8e6bc4; }
   * { box-sizing: border-box; margin: 0; }
   html { -webkit-text-size-adjust: 100%; }
+  /* iPhone : pas de carré gris au toucher, ni de contour au doigt (le contour reste au clavier) */
+  * { -webkit-tap-highlight-color: transparent; }
+  :focus:not(:focus-visible) { outline: none; }
   body { background: var(--creme); color: var(--encre); font-family: Fraunces, Georgia, serif; overflow-x: hidden;
          font-variation-settings: "SOFT" 100, "WONK" 1; }
   body.ferme { overflow: hidden; height: 100svh; }
