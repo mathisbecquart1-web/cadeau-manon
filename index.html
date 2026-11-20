@@ -16,12 +16,13 @@
   html { -webkit-text-size-adjust: 100%; }
   /* iPhone : pas de carré gris au toucher, ni de contour au doigt (le contour reste au clavier) */
   * { -webkit-tap-highlight-color: transparent; }
+  .hors-champ *, .hors-champ::before, .hors-champ::after { animation-play-state: paused !important; }
   :focus:not(:focus-visible) { outline: none; }
   body { background: var(--creme); color: var(--encre); font-family: Fraunces, Georgia, serif; overflow-x: hidden;
          font-variation-settings: "SOFT" 100, "WONK" 1; }
   body.ferme { overflow: hidden; height: 100svh; }
   /* grain de papier sur tout le site */
-  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90; opacity: .22; mix-blend-mode: multiply;
+  body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90; opacity: .16;
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"); }
   section { position: relative; padding: 72px 16px; min-height: 100svh; }
   .col { max-width: 480px; margin: 0 auto; }
@@ -888,6 +889,9 @@
 <script>
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 const $ = s => document.querySelector(s);
+// FLUIDITÉ (téléphone) : chaque animation en boucle est rangée avec sa scène et ne tourne que quand la scène est à l'écran
+const boucles = {};
+const enBoucle = (sec, t) => ((boucles[sec] = boucles[sec] || []).push(t), t);
 const calme = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= PERSONNAGES : Manon (longs cheveux blond doré, manteau taupe) et Mathis (brun, chemise rayée) =================
@@ -1209,11 +1213,11 @@ const affiche = gsap.timeline({ paused: true }) // préparée cachée dès le ch
 function entreeAffiche() {
   affiche.play();
   if (calme) return;
-  gsap.to('#gondole-x', { x: 45, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.9 });
-  gsap.to('#gondole', { y: '+=4', rotation: 1.5, svgOrigin: '200 590', duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('#coeur', { y: -8, scale: 1.2, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-  gsap.to('#oiseaux path', { x: () => gsap.utils.random(-20, 20), y: () => gsap.utils.random(-12, 8), duration: 2.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .4 });
-  gsap.to('.defile', { y: 8, duration: .8, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 2 });
+  enBoucle('#hero', gsap.to('#gondole-x', { x: 45, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.9 }));
+  enBoucle('#hero', gsap.to('#gondole', { y: '+=4', rotation: 1.5, svgOrigin: '200 590', duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
+  enBoucle('#hero', gsap.to('#coeur', { y: -8, scale: 1.2, duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
+  enBoucle('#hero', gsap.to('#oiseaux path', { x: () => gsap.utils.random(-20, 20), y: () => gsap.utils.random(-12, 8), duration: 2.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .4 }));
+  enBoucle('#hero', gsap.to('.defile', { y: 8, duration: .8, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 2 }));
 }
 // une fois l'affiche atteinte, tout ce qui était caché plus haut se déverrouille : l'avion et le panneau disent « Venise »
 let destinationRevelee = false;
@@ -1291,7 +1295,7 @@ const trajet = { p: 0 };
 placerTrain(0);
 gsap.to(trajet, { p: 1, ease: 'none', onUpdate: () => placerTrain(trajet.p),
   scrollTrigger: { trigger: '#carte-train', start: 0, end: 'bottom 15%', scrub: calme ? false : 1 } });
-if (!calme) gsap.to('#pales', { rotation: 360, svgOrigin: '112 130', duration: 6, ease: 'none', repeat: -1 });
+if (!calme) enBoucle('#train', gsap.to('#pales', { rotation: 360, svgOrigin: '112 130', duration: 6, ease: 'none', repeat: -1 }));
 /* ================= VOL : décollage, croisière au-dessus des nuages, atterrissage à Venise ================= */
 const route = $('#route'), masqueRoute = $('#route-masque'), LR = route.getTotalLength();
 masqueRoute.style.strokeDasharray = LR;
@@ -1304,15 +1308,16 @@ function placerAvion() {
   const tangage = calme ? 0 : Math.sin(performance.now() / 420) * 2.2 * alt;       // l'avion ondule un peu en vol
   $('#avion').setAttribute('transform', `translate(${pt.x} ${pt.y + tangage}) rotate(${angle + tangage * 2}) scale(${1 + alt * .9})`);
   masqueRoute.style.strokeDashoffset = LR - d;
-  $('#alt').textContent = (Math.round(alt * 110) * 100).toLocaleString('fr-FR') + ' m';
-  $('#vit').textContent = (p <= 0 || p >= 1 ? 0 : Math.round(260 + 610 * Math.min(1, alt * 1.3))) + ' km/h';
-  $('#reste').textContent = Math.round(845 * (1 - p)) + ' km';
+  ecrire('#alt', (Math.round(alt * 110) * 100).toLocaleString('fr-FR') + ' m');
+  ecrire('#vit', (p <= 0 || p >= 1 ? 0 : Math.round(260 + 610 * Math.min(1, alt * 1.3))) + ' km/h');
+  ecrire('#reste', Math.round(845 * (1 - p)) + ' km');
   $('#mini-avion').style.left = (p * 100) + '%';
   $('#arrivee').style.opacity = p > .97 ? 1 : 0;
   $('#mystere').style.opacity = p > .84 || destinationRevelee ? 0 : 1;
 }
 gsap.to(vol, { p: 1, ease: 'none', scrollTrigger: { trigger: '#carte-vol', start: 'top 70%', end: 'bottom 35%', scrub: calme ? false : 1 } });
-gsap.ticker.add(placerAvion); // à chaque image : position + petit tangage
+const ecrire = (sel, t) => { const el = $(sel); if (el.textContent !== t) el.textContent = t; };
+gsap.ticker.add(() => { if (!$('#vol').classList.contains('hors-champ')) placerAvion(); }); // à chaque image, quand le vol est à l'écran
 placerAvion();
 
 /* ================= VOLETS ================= */
@@ -1330,11 +1335,11 @@ $('#fenetre').onclick = () => {
     $('.indice').textContent = 'touche la vue pour changer l\'heure';
     $('#moment').textContent = MOMENTS[0].nom;
     if (calme) return;
-    gsap.fromTo('#voilier', { x: -30 }, { x: 30, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
-    gsap.fromTo('#vaporetto', { x: -90 }, { x: 320, duration: 15, ease: 'none', repeat: -1 });
-    gsap.fromTo('#v-mouettes', { x: -60, y: 20 }, { x: 330, y: -40, duration: 10, ease: 'none', repeat: -1 });
-    gsap.to('.nuage', { x: '+=35', duration: 7, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 2 });
-    gsap.to('.scintille', { scale: .3, transformOrigin: '50% 50%', duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .5 });
+    enBoucle('#hotel', gsap.fromTo('#voilier', { x: -30 }, { x: 30, duration: 4, ease: 'sine.inOut', yoyo: true, repeat: -1 }));
+    enBoucle('#hotel', gsap.fromTo('#vaporetto', { x: -90 }, { x: 320, duration: 15, ease: 'none', repeat: -1 }));
+    enBoucle('#hotel', gsap.fromTo('#v-mouettes', { x: -60, y: 20 }, { x: 330, y: -40, duration: 10, ease: 'none', repeat: -1 }));
+    enBoucle('#hotel', gsap.to('.nuage', { x: '+=35', duration: 7, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 2 }));
+    enBoucle('#hotel', gsap.to('.scintille', { scale: .3, transformOrigin: '50% 50%', duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .5 }));
     return;
   }
   const m = MOMENTS[moment = (moment + 1) % MOMENTS.length], d = calme ? 0 : 1.6;
@@ -1359,9 +1364,9 @@ function bouton(el, label, action) {
 // Mathis dort sur l'oreiller de gauche ; Manon, assise à droite, soulève la cloche du petit-déjeuner
 $('#lit-mathis').innerHTML = `<g transform="translate(0 27) scale(1.5)">${teteMathis({ dort: true })}</g>`;
 $('#lit-manon').innerHTML = buste('manon');
-if (!calme) gsap.timeline({ repeat: -1, repeatDelay: 2.2 })
+if (!calme) enBoucle('#hotel', gsap.timeline({ repeat: -1, repeatDelay: 2.2 })
   .fromTo('#zzz', { opacity: 0, y: 10 }, { opacity: .95, y: -6, duration: 1.4, ease: 'sine.out' })
-  .to('#zzz', { opacity: 0, duration: .6 });
+  .to('#zzz', { opacity: 0, duration: .6 }));
 bouton($('#zone-lit'), 'Tester le lit', () => {
   if (gsap.isTweening('#oreillers')) return;
   gsap.to('#oreillers', { y: -16, duration: .18, ease: 'power1.out', yoyo: true, repeat: 3 });
@@ -1913,6 +1918,13 @@ bouton($('#avion'), 'Monter dans l\'avion', () => ouvrirVignette('à bord, place
 /* ================= titres qui arrivent ================= */
 gsap.utils.toArray('section:not(#hero) h2, section:not(#hero) .annot').forEach(el =>
   gsap.from(el, { y: 50, opacity: 0, rotate: -3, duration: calme ? 0 : .8, ease: 'back.out(1.7)', scrollTrigger: { trigger: el, start: 'top 88%' } }));
+// une scène hors écran : ses boucles GSAP et CSS s'arrêtent (classe .hors-champ), elles reprennent en revenant
+function basculer(sec, actif) {
+  sec.classList.toggle('hors-champ', !actif);
+  (boucles['#' + sec.id] || []).forEach(t => actif ? t.resume() : t.pause());
+}
+document.querySelectorAll('main > section').forEach(sec => ScrollTrigger.create({ trigger: sec, start: 'top bottom', end: 'bottom top',
+  onToggle: st => basculer(sec, st.isActive), onRefresh: st => basculer(sec, st.isActive) }));
 </script>
 </body>
 </html>
