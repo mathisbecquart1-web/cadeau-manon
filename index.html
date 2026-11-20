@@ -232,7 +232,8 @@
                      color: var(--encre); font: 700 28px/1 Fraunces, serif; box-shadow: 3px 3px 0 var(--encre); cursor: pointer; }
   .vignette-fermer:focus-visible { outline: 3px solid var(--encre); outline-offset: 3px; }
   .cinema { position: relative; }
-  .tireur { position: absolute; z-index: 5; left: 0; bottom: 74px; width: 80px; height: auto; overflow: visible; pointer-events: none; }
+  /* Mathis est sur la scène, devant le rideau : l'écran coupe la corde en haut et le cache quand il sort */
+  .tireur { position: absolute; z-index: 2; left: 2%; bottom: 3%; width: 46%; height: auto; overflow: visible; pointer-events: none; }
   .scene-valise { display: flex; align-items: flex-end; justify-content: center; gap: 2px; margin-top: 56px; }
   .manon-valise { flex: none; width: 120px; height: auto; overflow: visible; transform-origin: 50% 100%; }
   .scene-valise .valise { width: min(56vw, 220px); margin: 0; }
@@ -646,25 +647,60 @@
     <p class="indice">tape sur les volets ↓</p>
     <button class="fenetre" id="fenetre" aria-label="Ouvrir les volets" aria-expanded="false">
       <svg viewBox="0 0 300 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <rect id="v-ciel" width="300" height="400" fill="#8fd3ee"/>
-        <g id="v-etoiles" fill="#fbf1df" opacity="0"><circle cx="30" cy="40" r="1.6"/><circle cx="120" cy="30" r="1.2"/><circle cx="170" cy="70" r="1.8"/><circle cx="250" cy="35" r="1.4"/><circle cx="270" cy="110" r="1.2"/><circle cx="60" cy="150" r="1.4"/><circle cx="215" cy="160" r="1.6"/><circle cx="140" cy="120" r="1.1"/><circle cx="20" cy="100" r="1.2"/></g>
-        <g id="v-lune" opacity="0"><circle cx="80" cy="95" r="20" fill="#fbf1df"/><circle cx="73" cy="90" r="4" fill="#e6d8bd"/><circle cx="86" cy="102" r="3" fill="#e6d8bd"/></g>
-        <circle id="v-soleil" cx="210" cy="150" r="32" fill="#f8e26b"/>
-        <g id="v-nuages" fill="#fbf1df"><g class="nuage"><ellipse cx="60" cy="70" rx="30" ry="10"/><ellipse cx="78" cy="62" rx="18" ry="10"/></g><g class="nuage"><ellipse cx="236" cy="52" rx="26" ry="9"/><ellipse cx="222" cy="45" rx="15" ry="9"/></g></g>
-        <g id="v-mouettes" fill="none" stroke="#1f2a44" stroke-width="2.5" stroke-linecap="round"><path d="M0 120 q6 -6 12 0 q6 -6 12 0"/><path d="M34 100 q5 -5 10 0 q5 -5 10 0"/></g>
-        <!-- l'île de San Giorgio au loin -->
-        <g id="v-ville" fill="#e9a0b4">
-          <rect x="18" y="206" width="112" height="22"/><path d="M42 207a22 19 0 0 1 44 0z"/><rect x="61" y="180" width="6" height="10"/><path d="M60 180l4-7 4 7z"/>
-          <rect x="104" y="158" width="13" height="50"/><path d="M102 158l8.5-18 8.5 18z"/><rect x="134" y="214" width="44" height="14"/><rect x="240" y="216" width="60" height="12"/>
+        <defs>
+          <linearGradient id="g-ciel" x1="0" y1="0" x2="0" y2="1"><stop id="ciel-haut" offset=".05" stop-color="#6fbde6"/><stop id="ciel-bas" offset=".57" stop-color="#d4eef0"/></linearGradient>
+          <linearGradient id="g-mer" x1="0" y1="0" x2="0" y2="1"><stop id="mer-loin" offset=".57" stop-color="#9adbd3"/><stop id="mer-pres" offset=".8" stop-color="#2fb5bd"/></linearGradient>
+        </defs>
+        <rect width="300" height="400" fill="url(#g-ciel)"/>
+        <!-- grands coups de pinceau dans le ciel -->
+        <g fill="#fff" opacity=".2" filter="url(#pinceau)"><path d="M-10 58 Q90 48 180 60 Q90 70 -10 66Z"/><path d="M110 118 Q210 106 312 120 Q220 130 110 126Z"/><path d="M-10 178 Q100 168 210 180 Q100 188 -10 184Z"/></g>
+        <g id="v-etoiles" fill="#fbf1df" opacity="0"><circle cx="30" cy="40" r="1.6"/><circle cx="120" cy="30" r="1.2"/><circle cx="170" cy="70" r="1.8"/><circle cx="250" cy="35" r="1.4"/><circle cx="270" cy="110" r="1.2"/><circle cx="60" cy="150" r="1.4"/><circle cx="196" cy="140" r="1.2"/><circle cx="140" cy="120" r="1.1"/><circle cx="20" cy="100" r="1.2"/><circle cx="292" cy="170" r="1"/>
+          <path class="scintille" d="M228 76 l1.6 5 l5 1.6 l-5 1.6 l-1.6 5 l-1.6 -5 l-5 -1.6 l5 -1.6z"/><path class="scintille" d="M150 40 l1.2 3.8 l3.8 1.2 l-3.8 1.2 l-1.2 3.8 l-1.2 -3.8 l-3.8 -1.2 l3.8 -1.2z"/></g>
+        <g id="v-lune" opacity="0" transform="translate(0 14)"><circle cx="78" cy="92" r="30" fill="#fbf1df" opacity=".12"/><path d="M86 76 A18 18 0 1 0 86 108 A20 20 0 0 1 86 76Z" fill="#fbf1df" filter="url(#pinceau-fin)"/></g>
+        <g id="v-soleil"><circle cx="210" cy="150" r="50" fill="#fff6c2" opacity=".3"/><circle cx="210" cy="150" r="30" fill="#f8e26b" filter="url(#pinceau-fin)"/><path d="M196 140 Q200 130 212 128" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5"/></g>
+        <g id="v-nuages" fill="#fff" filter="url(#pinceau-fin)">
+          <g class="nuage"><ellipse cx="62" cy="66" rx="34" ry="10"/><ellipse cx="80" cy="57" rx="20" ry="12"/><ellipse cx="50" cy="60" rx="13" ry="9"/><ellipse cx="66" cy="73" rx="30" ry="3.5" fill="#1f2a44" opacity=".1"/></g>
+          <g class="nuage"><ellipse cx="238" cy="50" rx="28" ry="8"/><ellipse cx="226" cy="43" rx="15" ry="9"/><ellipse cx="248" cy="44" rx="10" ry="7"/><ellipse cx="240" cy="56" rx="24" ry="3" fill="#1f2a44" opacity=".1"/></g>
+          <g class="nuage"><ellipse cx="150" cy="104" rx="18" ry="5"/><ellipse cx="156" cy="100" rx="9" ry="5"/></g>
         </g>
-        <g id="v-lumieres" fill="#f8e26b" opacity="0"><rect x="26" y="214" width="4" height="5"/><rect x="38" y="214" width="4" height="5"/><rect x="94" y="214" width="4" height="5"/><rect x="108" y="170" width="5" height="5"/><rect x="142" y="218" width="4" height="4"/><rect x="160" y="218" width="4" height="4"/><rect x="252" y="219" width="4" height="4"/><rect x="276" y="219" width="4" height="4"/></g>
-        <rect id="v-mer" y="226" width="300" height="174" fill="#37c4c9"/>
-        <g id="v-reflet" fill="#fbf1df"><rect class="reflet" x="196" y="236" width="28" height="3" rx="1.5"/><rect class="reflet" x="202" y="248" width="18" height="3" rx="1.5"/><rect class="reflet" x="192" y="262" width="34" height="3" rx="1.5"/><rect class="reflet" x="204" y="278" width="14" height="3" rx="1.5"/></g>
-        <g stroke="#fbf1df" stroke-width="3" stroke-linecap="round" fill="none"><path d="M30 270 q10 -6 20 0"/><path d="M180 300 q10 -6 20 0"/><path d="M90 340 q12 -7 24 0"/><path d="M220 365 q10 -6 20 0"/><path d="M40 380 q10 -6 20 0"/></g>
-        <g id="vaporetto"><g transform="translate(0 338)"><path d="M0 0H74L67 11H6Z" fill="#fbf1df"/><rect x="0" y="-3" width="74" height="4" fill="#ef6f55"/>
+        <g id="v-mouettes" fill="none" stroke="#1f2a44" stroke-width="2.5" stroke-linecap="round"><path d="M0 120 q6 -6 12 0 q6 -6 12 0"/><path d="M34 100 q5 -5 10 0 q5 -5 10 0"/></g>
+        <!-- l'île de San Giorgio Maggiore : façade à fronton, coupole, campanile ; la Giudecca au loin -->
+        <g id="v-ville" fill="#e9a0b4" filter="url(#pinceau-fin)">
+          <g id="v-ile">
+            <path d="M8 229 V214 H22 V210 H36 V216 H48 V229Z"/>
+            <path d="M56 177 A10 9 0 0 1 76 177Z"/><rect x="58" y="176" width="16" height="14"/><rect x="64.6" y="162" width="2.8" height="9"/><circle cx="66" cy="161" r="2.2"/>
+            <rect x="50" y="197" width="32" height="32"/><path d="M47 198 L66 185 L85 198Z"/>
+            <path d="M82 229 V212 H98 V229Z"/>
+            <rect x="105" y="162" width="11" height="67"/><rect x="104" y="150" width="13" height="12"/><path d="M103.5 150.5 L110.5 131 L117.5 150.5Z"/><rect x="110" y="126" width="1" height="6"/>
+            <path d="M116 229 V216 H132 V212 H150 V218 H176 V229Z"/>
+            <path d="M222 229 V220 H240 V217 H262 V220 Q270 210 278 220 H300 V229Z"/>
+          </g>
+        </g>
+        <g fill="#1f2a44" opacity=".2" filter="url(#pinceau-fin)"><rect x="74" y="197" width="8" height="32"/><path d="M66 177 A10 9 0 0 1 76 177Z"/><rect x="112" y="162" width="4" height="67"/><path d="M110.5 131 L117.5 150.5 L113 150.5Z"/><rect x="40" y="216" width="8" height="13"/><rect x="164" y="218" width="12" height="11"/>
+          <path d="M57 214 a3 3 0 0 1 6 0 v8 h-6z M69 214 a3 3 0 0 1 6 0 v8 h-6z M106.5 158 a2 2 0 0 1 4 0 v4 h-4z M111.5 158 a2 2 0 0 1 4 0 v4 h-4z"/></g>
+        <g id="v-lumieres" fill="#f8e26b" opacity="0"><rect x="12" y="219" width="3" height="4"/><rect x="26" y="215" width="3" height="4"/><rect x="40" y="220" width="3" height="4"/><rect x="88" y="217" width="3" height="4"/><rect x="108" y="170" width="4" height="4"/><rect x="122" y="220" width="3" height="4"/><rect x="138" y="216" width="3" height="4"/><rect x="156" y="221" width="3" height="3"/><rect x="230" y="223" width="3" height="3"/><rect x="250" y="221" width="3" height="3"/><rect x="286" y="223" width="3" height="3"/></g>
+        <path d="M-12 227 Q70 225 150 227.5 T312 226.5 V412 H-12Z" fill="url(#g-mer)" filter="url(#pinceau-fin)"/>
+        <!-- le reflet de l'île, écrasé et tremblant -->
+        <use id="v-ville-reflet" href="#v-ile" fill="#e9a0b4" opacity=".28" transform="translate(0 229) scale(1 -.55) translate(0 -229)" filter="url(#pinceau)"/>
+        <g id="v-reflet" fill="#fff6c2"><path class="reflet" d="M192 236 q18 -2 36 0 q-18 2.4 -36 0z"/><path class="reflet" d="M200 247 q11 -2 22 0 q-11 2.4 -22 0z"/><path class="reflet" d="M188 260 q22 -2.4 44 0 q-22 2.8 -44 0z"/><path class="reflet" d="M202 276 q8 -2 16 0 q-8 2.4 -16 0z"/><path class="reflet" d="M194 292 q16 -2.4 32 0 q-16 2.8 -32 0z"/></g>
+        <!-- vaguelettes peintes : plus petites au loin, plus larges devant -->
+        <g fill="#fbf1df" opacity=".55" filter="url(#pinceau-fin)"><path d="M20 240 q12 -1.6 24 0 q-12 1.8 -24 0z"/><path d="M120 244 q10 -1.4 20 0 q-10 1.6 -20 0z"/><path d="M260 238 q10 -1.4 20 0 q-10 1.6 -20 0z"/><path d="M60 262 q18 -2.2 36 0 q-18 2.6 -36 0z"/><path d="M240 268 q16 -2 32 0 q-16 2.4 -32 0z"/>
+          <path d="M14 300 q24 -3 48 0 q-24 3.4 -48 0z"/><path d="M168 312 q22 -3 44 0 q-22 3.4 -44 0z"/><path d="M90 362 q28 -3.4 56 0 q-28 4 -56 0z"/><path d="M210 384 q26 -3.4 52 0 q-26 4 -52 0z"/><path d="M-4 392 q24 -3 48 0 q-24 3.4 -48 0z"/></g>
+        <g fill="#1f2a44" opacity=".12" filter="url(#pinceau-fin)"><path d="M150 256 q20 -2 40 0 q-20 2.6 -40 0z"/><path d="M40 282 q26 -2.6 52 0 q-26 3 -52 0z"/><path d="M200 330 q34 -3.4 68 0 q-34 4 -68 0z"/><path d="M30 344 q30 -3.4 60 0 q-30 4 -60 0z"/><path d="M130 396 q36 -3.4 72 0 q-36 4 -72 0z"/></g>
+        <g id="vaporetto" filter="url(#pinceau-fin)"><g transform="translate(0 338)"><path d="M0 0H74L67 11H6Z" fill="#fbf1df"/><path d="M6 11H67L65 13H8Z" fill="#1f2a44" opacity=".25"/><rect x="0" y="-3" width="74" height="4" fill="#ef6f55"/>
           <rect x="10" y="-18" width="50" height="15" rx="3" fill="#f6c945"/><g fill="#2c4a9a"><rect x="14" y="-14" width="8" height="7" rx="1"/><rect x="26" y="-14" width="8" height="7" rx="1"/><rect x="38" y="-14" width="8" height="7" rx="1"/><rect x="50" y="-14" width="6" height="7" rx="1"/></g>
-          <rect x="27" y="-25" width="7" height="7" fill="#1f2a44"/></g></g>
-        <g id="voilier"><path d="M150 285 L150 222 L184 280Z" fill="#fbf1df"/><path d="M146 280 L146 236 L124 280Z" fill="#e8559a"/><path d="M118 286 L190 286 L180 298 L128 298Z" fill="#ef6f55"/></g>
+          <rect x="27" y="-25" width="7" height="7" fill="#1f2a44"/><path d="M-6 9 q8 -3 14 1 M68 9 q8 -3 14 1" stroke="#fbf1df" stroke-width="2" fill="none" stroke-linecap="round"/></g></g>
+        <g id="voilier" filter="url(#pinceau-fin)"><path d="M150 285 L150 220 L186 280Z" fill="#fbf1df"/><path d="M150 285 L150 220 L162 280Z" fill="#1f2a44" opacity=".08"/><path d="M146 280 L146 234 L122 280Z" fill="#e8559a"/><rect x="147" y="218" width="2.4" height="70" fill="#5a3324"/>
+          <path d="M116 286 L192 286 L181 299 L127 299Z" fill="#ef6f55"/><path d="M119 290 H189" stroke="#fbf1df" stroke-width="2"/><path d="M124 304 q30 -3 60 0" stroke="#1f2a44" stroke-width="2" opacity=".15" fill="none"/></g>
+        <!-- les paline : piquets d'amarrage rayés, tout devant -->
+        <g filter="url(#pinceau-fin)">
+          <g transform="translate(16 360)"><rect width="9" height="34" rx="2" fill="#fbf1df"/><path d="M0 8h9v7H0zM0 23h9v7H0z" fill="#2c4a9a"/><path d="M-1 0 Q4.5 -6 10 0Z" fill="#2c4a9a"/></g>
+          <g transform="translate(30 366)"><rect width="8" height="28" rx="2" fill="#fbf1df"/><path d="M0 7h8v6H0zM0 20h8v6H0z" fill="#2c4a9a"/><path d="M-1 0 Q4 -5 9 0Z" fill="#2c4a9a"/></g>
+          <g transform="translate(268 356)"><rect width="10" height="38" rx="2" fill="#fbf1df"/><path d="M0 9h10v7H0zM0 25h10v7H0z" fill="#e8559a"/><path d="M-1 0 Q5 -7 11 0Z" fill="#e8559a"/></g>
+          <g fill="none" stroke="#fbf1df" stroke-width="2" stroke-linecap="round" opacity=".7"><path d="M8 394 q12 -4 24 0 M26 394 q8 -3 18 0 M260 394 q14 -4 26 0"/></g>
+        </g>
+        <!-- voile du soir et de la nuit, posé sur la mer et les bateaux -->
+        <rect id="v-voile" y="226" width="300" height="174" fill="#0b1230" opacity="0"/>
       </svg>
       <span class="volet g"></span><span class="volet d"></span>
     </button>
@@ -728,9 +764,9 @@
       <button class="ecran" id="ecran" aria-label="Lancer le film">
         <video id="film" playsinline preload="none"></video>
         <span class="rideau g"></span><span class="rideau d"></span>
+        <svg class="tireur" id="tireur" viewBox="0 0 120 190" aria-hidden="true"></svg>
         <span class="lancer" id="lancer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#1f2a44"/></svg></span>
       </button>
-      <svg class="tireur" id="tireur" viewBox="0 0 120 190" aria-hidden="true"></svg>
       <svg class="sieges" viewBox="0 0 300 46" aria-hidden="true">
         <g fill="#5c1a2b"><rect x="6" y="18" width="34" height="28" rx="8"/><rect x="46" y="18" width="34" height="28" rx="8"/><rect x="86" y="18" width="34" height="28" rx="8"/>
           <rect x="180" y="18" width="34" height="28" rx="8"/><rect x="220" y="18" width="34" height="28" rx="8"/><rect x="260" y="18" width="34" height="28" rx="8"/>
@@ -949,13 +985,49 @@ if (CLE) (async () => {
 else $('#legende').textContent = 'Séance réservée à la détentrice du billet.';
 
 /* ================= CINÉMA ================= */
-// Mathis, debout à gauche de l'écran, tient la corde des rideaux
+// Mathis, debout sur la scène à gauche, tient de sa main côté coulisse la corde à pompon
 const tireur = $('#tireur');
-tireur.innerHTML = `<path id="corde" stroke="#e0a43c" stroke-width="3.5" stroke-linecap="round" fill="none"/><g filter="url(#pinceau-fin)">${mathisDebout('mc')}</g>`;
-const brasMC = $('#mc-bras-d');
-function corde() { const m = mainA(77.5, 64, brasMC._a || 0); $('#corde').setAttribute('d', `M${m.x} -620 L${m.x} ${m.y}`); }
-function tire(angle, duree) { const t = pivote(brasMC, 77.5, 64, angle, duree), f = t.vars.onUpdate; t.eventCallback('onUpdate', () => { f(); corde(); }); return t; }
-brasMC._a = -165; brasMC.setAttribute('transform', 'rotate(-165 77.5 64)'); corde();
+tireur.innerHTML = `<path id="corde" stroke="#e0a43c" stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  <g id="pompon" filter="url(#pinceau-fin)"><path d="M-4 3 L4 3 L6.5 15 L-6.5 15Z" fill="#e0a43c"/><path d="M-3 6v8M0 6v9M3 6v8" stroke="#c98f2e" stroke-width="1"/><circle r="3.6" fill="#c98f2e"/></g>
+  <g filter="url(#pinceau-fin)">${mathisDebout('mc')}</g>`;
+const brasMC = $('#mc-bras-g'), EPAULE = [42.5, 64], cordeEtat = { lache: 0, x: 0 };
+// la corde pend du haut de l'écran jusqu'au pompon sous la main ; une fois lâchée, elle remonte d'un coup
+function corde() {
+  const m = mainA(...EPAULE, brasMC._a || 0), x = cordeEtat.lache ? cordeEtat.x : m.x, y = m.y + 10 - cordeEtat.lache;
+  $('#corde').setAttribute('d', `M${x} -400 L${x} ${y}`);
+  $('#pompon').setAttribute('transform', `translate(${x} ${y})`);
+}
+function tire(angle, duree) { const t = pivote(brasMC, ...EPAULE, angle, duree), f = t.vars.onUpdate; t.eventCallback('onUpdate', () => { f(); corde(); }); return t; }
+brasMC._a = 165; brasMC.setAttribute('transform', `rotate(165 ${EPAULE})`); corde();
+let animTireur;
+// deux grandes tractions (il plie les genoux), les rideaux s'ouvrent, il lâche la corde, fait coucou, et sort de scène
+function tirerRideaux() {
+  if (animTireur) animTireur.kill();
+  const plie = { y: 7, scaleY: .96, transformOrigin: '50% 100%', duration: .32, ease: 'power2.in' }, deplie = { y: 0, scaleY: 1, duration: .24, ease: 'power2.out' };
+  animTireur = gsap.timeline()
+    .add(tire(150, .18))
+    .add(tire(40, .32)).to(tireur, plie, '<')
+    .add(tire(150, .26)).to(tireur, deplie, '<')
+    .add(tire(40, .32)).to(tireur, plie, '<')
+    .add(() => ecran.classList.add('ouvert'))
+    .add(() => { cordeEtat.x = mainA(...EPAULE, brasMC._a).x; })
+    .to(cordeEtat, { lache: 260, duration: .55, ease: 'power3.in', onUpdate: corde }, '+=.1')
+    .add(tire(4, .35), '<').to(tireur, deplie, '<')
+    .add(tire(140, .3), '+=.1').add(tire(165, .16)).add(tire(135, .16)).add(tire(165, .16)).add(tire(4, .3)) // petit coucou à Manon
+    .to(tireur, { xPercent: -130, duration: 1.1, ease: 'power1.in' }, '+=.05')
+    .to(tireur, { y: -5, duration: .14, ease: 'sine.inOut', yoyo: true, repeat: 7 }, '<');
+}
+// il revient pour une autre séance et rattrape la corde qui redescend
+function revientTireur(delai = 0) {
+  if (animTireur) animTireur.kill();
+  animTireur = gsap.timeline({ delay: delai })
+    .set(tireur, { y: 0, scaleY: 1 })
+    .to(tireur, { xPercent: 0, duration: 1, ease: 'power1.out' })
+    .to(tireur, { y: -5, duration: .125, ease: 'sine.inOut', yoyo: true, repeat: 7 }, '<')
+    .add(() => { cordeEtat.x = mainA(...EPAULE, 165).x; })
+    .add(tire(165, .3))
+    .to(cordeEtat, { lache: 0, duration: .6, ease: 'bounce.out', onUpdate: corde }, '<');
+}
 // fondu de la chanson : on la fait passer par un gain Web Audio (sur iPhone, audio.volume est bloqué à 1)
 let gainChanson = null;
 function brancherFondu() {
@@ -972,12 +1044,8 @@ function lancerFilm() {
   ecran.classList.remove('charge');
   if (!audio.paused) { fonduChanson(0, .9); musiqueCoupee = true; } // la chanson s'efface pendant le film
   film.currentTime = 0;
-  film.play().catch(() => { ecran.classList.remove('ouvert'); $('#legende').textContent = 'touche l\'écran pour lancer la séance'; });
-  // Mathis tire deux fois sur la corde, les rideaux s'ouvrent, puis il file s'asseoir
-  gsap.timeline()
-    .add(tire(-95, .25)).add(tire(-160, .2)).add(tire(-95, .25))
-    .add(() => ecran.classList.add('ouvert'), .25)
-    .to(tireur, { x: -40, opacity: 0, duration: .5, ease: 'power2.in' }, '+=.25');
+  film.play().catch(() => { ecran.classList.remove('ouvert'); revientTireur(); $('#legende').textContent = 'touche l\'écran pour lancer la séance'; });
+  tirerRideaux();
   $('#legende').textContent = 'Silence, ça tourne…';
   ecran.setAttribute('aria-label', 'Mettre le film en pause');
 }
@@ -988,7 +1056,7 @@ ecran.addEventListener('click', () => {
   film.paused ? film.play() : film.pause();
 });
 film.addEventListener('ended', () => {
-  gsap.to(tireur, { x: 0, opacity: 1, duration: .5, delay: .6 }); tire(-165, .3).delay(.6); // Mathis revient pour une autre séance
+  revientTireur(.6);
   ecran.classList.remove('ouvert'); ecran.setAttribute('aria-label', 'Revoir le film');
   $('#legende').innerHTML = 'Elle mangera <em>autant que nécessaire</em> :<br>pâtes et gelatos à volonté. C\'est noté, amore.';
   if (musiqueCoupee && voulu) { musiqueCoupee = false; fonduChanson(1, 2.2); } // et revient doucement
@@ -1179,9 +1247,9 @@ placerAvion();
 /* ================= VOLETS ================= */
 // 1er tap : les volets s'ouvrent ; ensuite chaque tap fait passer la journée (après-midi → coucher de soleil → nuit)
 const MOMENTS = [
-  { nom: 'Il pomeriggio', ciel: '#8fd3ee', mer: '#37c4c9', ville: '#e9a0b4', soleil: 150, nuit: 0, reflet: .9 },
-  { nom: 'Il tramonto', ciel: '#f4936c', mer: '#c4698f', ville: '#9c4a6b', soleil: 212, nuit: 0, reflet: 1 },
-  { nom: 'La notte', ciel: '#1f2a44', mer: '#25456b', ville: '#3a3f66', soleil: 300, nuit: 1, reflet: .25 }];
+  { nom: 'Il pomeriggio', haut: '#6fbde6', bas: '#d4eef0', loin: '#9adbd3', pres: '#2fb5bd', ville: '#e9a0b4', nuage: '#ffffff', soleil: 150, nuit: 0, voile: 0, reflet: .9 },
+  { nom: 'Il tramonto', haut: '#d9607a', bas: '#f9c46b', loin: '#f2a27a', pres: '#b05a86', ville: '#8e4766', nuage: '#ffd6ae', soleil: 214, nuit: 0, voile: .08, reflet: 1 },
+  { nom: 'La notte', haut: '#121a33', bas: '#34467a', loin: '#2f4f7a', pres: '#16304f', ville: '#353a62', nuage: '#c9d1e8', soleil: 300, nuit: 1, voile: .25, reflet: .25 }];
 let moment = 0;
 $('#fenetre').onclick = () => {
   const f = $('#fenetre');
@@ -1195,15 +1263,18 @@ $('#fenetre').onclick = () => {
     gsap.fromTo('#vaporetto', { x: -90 }, { x: 320, duration: 15, ease: 'none', repeat: -1 });
     gsap.fromTo('#v-mouettes', { x: -60, y: 20 }, { x: 330, y: -40, duration: 10, ease: 'none', repeat: -1 });
     gsap.to('.nuage', { x: '+=35', duration: 7, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: 2 });
+    gsap.to('.scintille', { scale: .3, transformOrigin: '50% 50%', duration: .9, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .5 });
     return;
   }
   const m = MOMENTS[moment = (moment + 1) % MOMENTS.length], d = calme ? 0 : 1.6;
-  gsap.to('#v-ciel', { attr: { fill: m.ciel }, duration: d });
-  gsap.to('#v-mer', { attr: { fill: m.mer }, duration: d });
-  gsap.to('#v-ville', { attr: { fill: m.ville }, duration: d });
-  gsap.to('#v-soleil', { attr: { cy: m.soleil }, duration: d, ease: 'power1.inOut' });
+  [['#ciel-haut', m.haut], ['#ciel-bas', m.bas], ['#mer-loin', m.loin], ['#mer-pres', m.pres]]
+    .forEach(([el, c]) => gsap.to(el, { attr: { 'stop-color': c }, duration: d }));
+  gsap.to('#v-ville, #v-ville-reflet', { attr: { fill: m.ville }, duration: d });
+  gsap.to('#v-nuages', { attr: { fill: m.nuage }, opacity: m.nuit ? .2 : 1, duration: d });
+  gsap.to('#v-soleil', { y: m.soleil - 150, duration: d, ease: 'power1.inOut' });
   gsap.to('#v-etoiles, #v-lune, #v-lumieres', { opacity: m.nuit, duration: d });
-  gsap.to('#v-nuages', { opacity: m.nuit ? .15 : 1, duration: d });
+  gsap.to('#v-voile', { opacity: m.voile, duration: d });
+  gsap.to('#v-mouettes', { opacity: 1 - m.nuit, duration: d });
   gsap.to('#v-reflet', { opacity: m.reflet, duration: d });
   $('#moment').textContent = m.nom;
 };
