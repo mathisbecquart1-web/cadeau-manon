@@ -236,7 +236,7 @@
   .scene-valise { display: flex; align-items: flex-end; justify-content: center; gap: 2px; margin-top: 56px; }
   .manon-valise { flex: none; width: 120px; height: auto; overflow: visible; transform-origin: 50% 100%; }
   .scene-valise .valise { width: min(56vw, 220px); margin: 0; }
-  .scene-valise .couvercle { height: 92px; }
+  .scene-valise .valise { display: block; height: auto; overflow: visible; perspective: none; }
   .scene-valise .corps { min-height: 92px; }
   .scene-valise .mini svg { width: 34px; height: 34px; }
   .vol-objet { position: fixed; z-index: 60; pointer-events: none; }
@@ -752,10 +752,30 @@
     <p class="bulle" id="valise-msg" aria-live="polite">Fais glisser un objet (ou touche-le).</p>
     <div class="scene-valise" id="scene-valise">
       <svg class="manon-valise" id="manon-valise" viewBox="0 0 120 190" aria-hidden="true"></svg>
-      <div class="valise" id="la-valise">
-        <div class="corps" id="corps-valise"></div>
-        <div class="couvercle" id="couvercle"><span class="poignee"></span></div>
-      </div>
+      <svg class="valise" id="la-valise" viewBox="0 0 220 200" aria-hidden="true">
+        <defs><pattern id="doublure" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#f6c6d8"/><rect width="5" height="10" fill="#fbe3ec"/></pattern></defs>
+        <g filter="url(#pinceau-fin)"><g id="couvercle">
+          <rect x="22" y="8" width="176" height="90" rx="14" fill="#b8452f"/><rect x="30" y="16" width="160" height="78" rx="9" fill="url(#doublure)"/>
+          <path d="M34 58 Q110 70 186 58 L186 90 L34 90Z" fill="#e8559a" opacity=".5"/>
+          <path d="M34 58 Q110 70 186 58" stroke="#fbf1df" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+        </g></g>
+        <g id="corps-valise"></g>
+        <g filter="url(#pinceau-fin)">
+          <rect x="14" y="92" width="192" height="98" rx="16" fill="#d9603f"/><rect x="14" y="92" width="192" height="13" rx="6" fill="#b8452f"/>
+          <path d="M14 166 Q14 190 38 190 L38 178 Q26 178 26 166Z M206 166 Q206 190 182 190 L182 178 Q194 178 194 166Z" fill="#f3e3c4"/>
+          <rect x="52" y="92" width="14" height="98" fill="#7a4a2a"/><rect x="154" y="92" width="14" height="98" fill="#7a4a2a"/>
+          <rect x="49" y="120" width="20" height="14" rx="2" fill="none" stroke="#e0a43c" stroke-width="3"/><rect x="151" y="120" width="20" height="14" rx="2" fill="none" stroke="#e0a43c" stroke-width="3"/>
+          <rect x="98" y="97" width="24" height="10" rx="3" fill="#e0a43c"/>
+          <circle cx="104" cy="152" r="18" fill="#e8559a"/><rect x="124" y="160" width="26" height="16" rx="2" fill="#2c4a9a" transform="rotate(8 137 168)"/>
+          <path d="M82 162 l3.5 7 7.5 1 -5.5 5 1.5 7.5 -7 -3.6 -7 3.6 1.5 -7.5 -5.5 -5 7.5 -1z" fill="#f6c945"/>
+        </g>
+        <text x="104" y="156" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="12" fill="#fbf1df" transform="rotate(-10 104 152)">Venezia</text>
+        <text x="137" y="171" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="6.5" fill="#fbf1df" transform="rotate(8 137 168)">PARIS</text>
+        <g id="valise-fermee" opacity="0" filter="url(#pinceau-fin)">
+          <path d="M80 72 Q110 54 140 72" stroke="#7a4a2a" stroke-width="8" fill="none" stroke-linecap="round"/>
+          <rect x="14" y="76" width="192" height="26" rx="12" fill="#b8452f"/><rect x="98" y="92" width="24" height="10" rx="3" fill="#e0a43c"/>
+        </g>
+      </svg>
     </div>
     <p class="compte-valise" id="compte-valise">0 / 5 dans la valise</p>
     <div class="objets" id="objets"></div>
@@ -846,8 +866,8 @@ function teteMathis(o = {}) { return `
 function buste(qui, o = {}) {
   const tete = o.tete ? `transform="rotate(${o.tete} 0 -4)"` : '';
   if (qui === 'manon') return `
-    <path d="M-13 -24 Q-14 -40 0 -40 Q14 -40 13 -24 L19 24 Q9 31 0 27 Q-9 31 -19 24Z" fill="${C.manon}"/>
-    <path d="M-18.2 14 L-19 24 Q-9 31 0 27 Q9 31 19 24 L18.2 14 Q9 19 0 16 Q-9 19 -18.2 14Z" fill="${C.pointes}"/>
+    <g ${tete}><path d="M-13 -24 Q-14 -40 0 -40 Q14 -40 13 -24 L19 24 Q9 31 0 27 Q-9 31 -19 24Z" fill="${C.manon}"/>
+    <path d="M-18.2 14 L-19 24 Q-9 31 0 27 Q9 31 19 24 L18.2 14 Q9 19 0 16 Q-9 19 -18.2 14Z" fill="${C.pointes}"/></g>
     <path d="M-21 7 Q-15 0 -5 0 L0 7 L5 0 Q15 0 21 7 L25 46 L-25 46Z" fill="${C.manteau}"/>
     <path d="M-5 0 L0 8 L5 0" stroke="#7d716a" stroke-width="1.6" fill="none"/>
     <g ${tete}>${teteManon(o)}</g>`;
@@ -1195,7 +1215,7 @@ function bouton(el, label, action) {
   el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); action(); } });
 }
 // Mathis dort sur l'oreiller de gauche ; Manon, assise à droite, soulève la cloche du petit-déjeuner
-$('#lit-mathis').innerHTML = `<g transform="translate(0 17)">${teteMathis({ dort: true })}</g>`;
+$('#lit-mathis').innerHTML = `<g transform="translate(0 27) scale(1.5)">${teteMathis({ dort: true })}</g>`;
 $('#lit-manon').innerHTML = buste('manon');
 if (!calme) gsap.timeline({ repeat: -1, repeatDelay: 2.2 })
   .fromTo('#zzz', { opacity: 0, y: 10 }, { opacity: .95, y: -6, duration: 1.4, ease: 'sine.out' })
@@ -1459,7 +1479,6 @@ const OBJETS = [ // [icône, nom, accepté ?, réponse de la valise]
   ['ordi', 'Ordi du boulot', false, 'Interdit. Ce sont des vacances.'],
   ['baskets', 'Baskets', true, 'On va marcher dans toutes les ruelles.']
 ];
-gsap.set('#couvercle', { rotationX: 18 });
 const A_RANGER = OBJETS.filter(o => o[2]).length, zone = $('#scene-valise');
 let ranges = 0, occupeValise = false;
 $('#objets').innerHTML = OBJETS.map(([ic, nom], i) =>
@@ -1573,7 +1592,7 @@ const ACTIONS = {
 };
 // l'objet quitte la main de Manon et vole jusque dans la valise
 function envoyerDansValise(ic, b) {
-  const depuis = TENU.getBoundingClientRect(), corps = $('#corps-valise').getBoundingClientRect();
+  const depuis = TENU.getBoundingClientRect(), m = $('#la-valise').getBoundingClientRect(), corps = { left: m.left + m.width * .32, top: m.top + m.height * .3, width: m.width * .36 };
   const vol = document.createElement('div'); vol.className = 'vol-objet'; vol.innerHTML = dessin(ic);
   Object.assign(vol.style, { left: depuis.left + 'px', top: depuis.top + 'px', width: Math.max(depuis.width, 26) + 'px', height: Math.max(depuis.height, 26) + 'px' });
   document.body.appendChild(vol); vider();
@@ -1582,14 +1601,17 @@ function envoyerDansValise(ic, b) {
 }
 function rangerDans(ic, b) {
   b.disabled = true; b.setAttribute('aria-disabled', 'true'); b.style.visibility = 'hidden';
-  const mini = document.createElement('span'); mini.className = 'mini'; mini.innerHTML = dessin(ic);
+  const n = $('#corps-valise').children.length, mini = document.createElementNS(NS, 'g');
+  mini.setAttribute('transform', `translate(${30 + n * 33} ${64 + (n % 2) * 6}) rotate(${n % 2 ? 9 : -9} 15 15)`);
+  mini.innerHTML = `<g transform="scale(.48)" filter="url(#pinceau-fin)">${ICONES[ic]}</g>`;
   $('#corps-valise').appendChild(mini);
-  gsap.from(mini, { y: -30, scale: 1.5, duration: .5, ease: 'bounce.out' });
+  gsap.from(mini, { y: -30, opacity: 0, duration: .5, ease: 'bounce.out' });
   ranges++;
   $('#compte-valise').textContent = `${ranges} / ${A_RANGER} dans la valise`;
   occupeValise = false;
   if (ranges === A_RANGER) setTimeout(() => {
-    gsap.to('#couvercle', { rotationX: -180, duration: .8, ease: 'power3.in' });
+    gsap.to(['#couvercle', '#corps-valise'], { scaleY: 0, transformOrigin: '50% 100%', duration: .5, ease: 'power2.in' }); // le couvercle se rabat
+    gsap.fromTo('#valise-fermee', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: .35, delay: .45, ease: 'back.out(2)' });
     gsap.fromTo($('#la-valise'), { y: 0 }, { y: -18, duration: .25, yoyo: true, repeat: 1, delay: .8, ease: 'power2.out' });
     gsap.to(MV, { y: -22, duration: .2, yoyo: true, repeat: 3, delay: .8, ease: 'power1.out' });
     dire('Valise bouclée. Andiamo !'); parle('andiamo !');
@@ -1637,9 +1659,39 @@ function sceneTrain() { return `
   <defs><clipPath id="vt-clip"><rect x="30" y="24" width="300" height="104" rx="18"/></clipPath></defs>
   <rect width="360" height="260" fill="#e6f2f3"/><rect x="20" y="14" width="320" height="124" rx="26" fill="#cfe3e6"/>
   <g clip-path="url(#vt-clip)">
-    <rect x="30" y="24" width="300" height="104" fill="#8fd3ee"/><circle cx="292" cy="50" r="12" fill="#f8e26b"/>
-    <g class="vt-loin">${deuxFois(o => `<path d="M${30 + o} 110 Q${90 + o} 84 ${150 + o} 104 T${270 + o} 98 T${330 + o} 104 V128 H${30 + o}Z" fill="#a9c97a"/><path d="M${30 + o} 118 Q${120 + o} 104 ${210 + o} 116 T${330 + o} 114 V128 H${30 + o}Z" fill="#7f9c46"/><rect x="${200 + o}" y="92" width="10" height="10" fill="#b5543a"/><path d="M${198 + o} 92 l7 -6 l7 6z" fill="#7a3324"/>`)}</g>
-    <g class="vt-pres">${deuxFois(o => `<rect x="${60 + o}" y="68" width="3" height="60" fill="#5a3324"/><circle cx="${150 + o}" cy="102" r="13" fill="#5f8a3a"/><rect x="${148 + o}" y="108" width="4" height="20" fill="#5a3324"/><rect x="${250 + o}" y="68" width="3" height="60" fill="#5a3324"/><path d="M${30 + o} 72 H${330 + o}" stroke="#1f2a44" stroke-width="1" opacity=".4"/>`)}</g>
+    <rect x="30" y="24" width="300" height="104" fill="#9fd8ee"/><rect x="30" y="70" width="300" height="34" fill="#d3edf2" opacity=".7"/>
+    <circle cx="288" cy="46" r="15" fill="#f8e26b" opacity=".35"/><circle cx="288" cy="46" r="10" fill="#f8e26b"/>
+    <!-- nuages, très lents -->
+    <g class="vt-ciel" filter="url(#pinceau-fin)">${deuxFois(o => `
+      <g transform="translate(${o} 0)"><ellipse cx="80" cy="44" rx="22" ry="7" fill="#fff"/><ellipse cx="94" cy="39" rx="13" ry="8" fill="#fff"/><ellipse cx="82" cy="47" rx="18" ry="3" fill="#e3eef3"/>
+      <ellipse cx="200" cy="36" rx="16" ry="5" fill="#fff"/><ellipse cx="210" cy="32" rx="9" ry="6" fill="#fff"/></g>`)}</g>
+    <!-- collines du fond, peupliers, clocher -->
+    <g class="vt-loin" filter="url(#pinceau)">${deuxFois(o => `
+      <g transform="translate(${o} 0)">
+        <path d="M30 96 Q70 80 110 90 Q160 74 210 88 Q260 78 330 92 V128 H30Z" fill="#b9d38f"/>
+        <g fill="#4f7a34"><ellipse cx="58" cy="84" rx="2.6" ry="9"/><ellipse cx="64" cy="85" rx="2.6" ry="8"/><ellipse cx="70" cy="86" rx="2.4" ry="7"/><ellipse cx="236" cy="82" rx="2.6" ry="9"/><ellipse cx="242" cy="83" rx="2.6" ry="8"/></g>
+        <rect x="150" y="72" width="6" height="16" fill="#b5543a"/><path d="M149 72 L153 60 L157 72Z" fill="#2c4a9a"/>
+        <rect x="140" y="80" width="12" height="8" fill="#c0644a"/><path d="M139 80 L146 75 L153 80Z" fill="#6b3a2a"/>
+      </g>`)}</g>
+    <!-- champs en patchwork, ferme, vaches, arbres -->
+    <g class="vt-milieu" filter="url(#pinceau-fin)">${deuxFois(o => `
+      <g transform="translate(${o} 0)">
+        <path d="M30 100 Q90 92 150 98 L150 128 H30Z" fill="#e2c46a"/><path d="M150 98 Q220 90 270 99 L270 128 H150Z" fill="#7fa54e"/><path d="M270 99 Q300 95 330 100 V128 H270Z" fill="#f2d24b"/>
+        <g stroke="#fbf1df" stroke-width="1" opacity=".55" fill="none"><path d="M36 108 Q90 101 146 106 M36 116 Q90 110 146 114"/><path d="M156 106 Q215 99 266 106 M156 115 Q215 108 266 114"/></g>
+        <g transform="translate(196 84)"><rect x="0" y="6" width="26" height="14" fill="#b5543a"/><path d="M-2 6 L13 -4 L28 6Z" fill="#6b3a2a"/><rect x="18" y="-6" width="3" height="7" fill="#6b3a2a"/><rect x="5" y="10" width="5" height="5" fill="#fbf1df"/><rect x="15" y="10" width="5" height="7" fill="#7a3324"/></g>
+        <g transform="translate(96 100)"><ellipse cx="0" cy="0" rx="7" ry="4" fill="#fbf1df"/><circle cx="7" cy="-2" r="2.6" fill="#fbf1df"/><ellipse cx="-2" cy="-1" rx="2.4" ry="1.6" fill="#1f2a44"/><path d="M-4 3v4M4 3v4" stroke="#fbf1df" stroke-width="1.6"/></g>
+        <g transform="translate(116 104)"><ellipse cx="0" cy="0" rx="6" ry="3.6" fill="#8a5a3a"/><circle cx="-6" cy="-2" r="2.4" fill="#8a5a3a"/><path d="M-3 3v4M3 3v4" stroke="#8a5a3a" stroke-width="1.6"/></g>
+        <g transform="translate(260 96)"><rect x="-1.5" y="0" width="3" height="10" fill="#5a3324"/><circle cx="-4" cy="-2" r="6" fill="#5f8a3a"/><circle cx="4" cy="-3" r="6.5" fill="#4f7a34"/><circle cx="0" cy="-8" r="6" fill="#7f9c46"/></g>
+        <g transform="translate(60 98)"><rect x="-1.5" y="0" width="3" height="9" fill="#5a3324"/><circle cx="-3" cy="-2" r="5" fill="#4f7a34"/><circle cx="3.5" cy="-3" r="5.5" fill="#7f9c46"/></g>
+      </g>`)}</g>
+    <!-- premier plan qui file : talus, poteaux et caténaire -->
+    <g class="vt-pres">${deuxFois(o => `
+      <g transform="translate(${o} 0)">
+        <path d="M30 120 Q60 114 90 119 Q130 113 170 118 Q220 112 260 118 Q300 113 330 118 V128 H30Z" fill="#5f8a3a"/>
+        <g fill="#4a7a2c"><path d="M50 120 l3 -7 l3 7z M120 118 l3 -8 l3 8z M210 117 l3 -7 l3 7z M290 118 l3 -8 l3 8z"/></g>
+        <g fill="#6b6258"><rect x="70" y="40" width="3.5" height="84"/><rect x="61" y="44" width="22" height="2.5"/><rect x="220" y="40" width="3.5" height="84"/><rect x="211" y="44" width="22" height="2.5"/></g>
+        <path d="M30 46 Q105 52 180 46 T330 46" stroke="#3a3340" stroke-width="1" fill="none"/>
+      </g>`)}</g>
   </g>
   <rect x="30" y="24" width="300" height="104" rx="18" fill="none" stroke="#fbf1df" stroke-width="5"/>
   <g filter="url(#pinceau-fin)">
@@ -1648,36 +1700,55 @@ function sceneTrain() { return `
   </g>
   <g transform="translate(240 214) scale(2.2)">${buste('mathis', { tete: -6 })}</g>
   <g transform="translate(178 236) scale(2.2)">${buste('manon', { dort: true, tete: 42 })}</g>
-  <g class="vt-zzz" font-family="Caveat" font-weight="700" fill="#1f2a44"><text x="170" y="160" font-size="18">z</text><text x="156" y="142" font-size="23">z</text><text x="140" y="122" font-size="28">z</text></g>
-  <path class="vt-coeur" d="M276 132 C268 125 269 118 273 118 C275 118 276 120 276 121 C276 120 277 118 279 118 C283 118 284 125 276 132Z" fill="#e8559a"/>`; }
+  <g class="vt-zzz" font-family="Caveat" font-weight="700" fill="#1f2a44"><text x="170" y="160" font-size="18">z</text><text x="156" y="142" font-size="23">z</text><text x="140" y="122" font-size="28">z</text></g>`; }
 
 function sceneAvion() { return `
   <defs><clipPath id="va-clip"><ellipse cx="180" cy="100" rx="58" ry="72"/></clipPath></defs>
   <rect width="360" height="260" fill="#f1ece2"/><path d="M0 0 H360 V40 Q180 10 0 40Z" fill="#e3dccd"/>
-  <ellipse cx="180" cy="100" rx="74" ry="88" fill="#e3dccd"/><ellipse cx="180" cy="100" rx="66" ry="80" fill="#d9dde6"/>
+  <ellipse cx="180" cy="100" rx="76" ry="90" fill="#e3dccd"/><ellipse cx="180" cy="100" rx="68" ry="82" fill="#d4d0c6"/><ellipse cx="180" cy="100" rx="63" ry="77" fill="#c9cdd6"/>
   <g clip-path="url(#va-clip)">
-    <rect x="100" y="20" width="160" height="170" fill="#8fd3ee"/><circle cx="214" cy="56" r="13" fill="#f8e26b"/>
-    <g class="va-alpes">${deuxFois(o => `<path d="M${90 + o} 180 L${130 + o} 122 L${160 + o} 152 L${200 + o} 102 L${240 + o} 152 L${270 + o} 130 L${330 + o} 180Z" fill="#7f9c46"/><path d="M${200 + o} 102 L${212 + o} 120 L${204 + o} 116 L${198 + o} 124 L${190 + o} 116Z M${130 + o} 122 L${139 + o} 136 L${132 + o} 133 L${126 + o} 138Z" fill="#fbf1df"/>`)}</g>
-    <g class="va-nuages" fill="#fff">${deuxFois(o => `<ellipse cx="${120 + o}" cy="146" rx="34" ry="11"/><ellipse cx="${140 + o}" cy="138" rx="20" ry="11"/><ellipse cx="${236 + o}" cy="84" rx="26" ry="8"/>`)}</g>
-    <path d="M262 148 L188 170 L262 182Z" fill="#ef6f55"/><path d="M262 154 L210 168" stroke="#fbf1df" stroke-width="2"/>
+    <rect x="110" y="20" width="140" height="60" fill="#6fb8e0"/><rect x="110" y="80" width="140" height="40" fill="#9fd8ee"/><rect x="110" y="118" width="140" height="60" fill="#d7eef2"/>
+    <circle cx="214" cy="54" r="22" fill="#f8e26b" opacity=".3"/><circle cx="214" cy="54" r="12" fill="#f8e26b"/>
+    <!-- les Alpes qui défilent lentement, neige et ombres bleutées -->
+    <g class="va-loin" filter="url(#pinceau)">${deuxFois(o => `
+      <g transform="translate(${o} 0)">
+        <path d="M100 150 L130 118 L150 132 L176 104 L200 128 L222 112 L250 136 L280 116 L310 140 L330 128 L340 180 L100 180Z" fill="#9fb3c8"/>
+        <path d="M100 166 L138 130 L160 146 L190 118 L218 148 L248 128 L290 156 L330 140 L340 180 L100 180Z" fill="#8a94a6"/>
+        <path d="M190 118 L203 134 L196 132 L190 140 L184 133 L178 136Z M138 130 L148 141 L142 140 L137 146 L131 139Z M248 128 L258 139 L252 138 L247 144 L241 137Z" fill="#f3f6fb"/>
+        <path d="M190 118 L178 136 L184 133 L190 140Z M138 130 L131 139 L137 146Z" fill="#c9d4e4"/>
+        <ellipse cx="220" cy="170" rx="18" ry="4" fill="#37c4c9"/>
+      </g>`)}</g>
+    <!-- nuages plus proches, qui filent -->
+    <g class="va-nuages" filter="url(#pinceau-fin)">${deuxFois(o => `
+      <g transform="translate(${o} 0)">
+        <g><ellipse cx="128" cy="150" rx="30" ry="9" fill="#fff"/><ellipse cx="146" cy="142" rx="18" ry="11" fill="#fff"/><ellipse cx="116" cy="145" rx="12" ry="8" fill="#fff"/><ellipse cx="132" cy="156" rx="26" ry="4" fill="#dfe8f0"/></g>
+        <g><ellipse cx="236" cy="86" rx="22" ry="6" fill="#fff"/><ellipse cx="248" cy="80" rx="12" ry="7" fill="#fff"/><ellipse cx="238" cy="90" rx="18" ry="2.6" fill="#dfe8f0"/></g>
+        <g><ellipse cx="300" cy="160" rx="26" ry="8" fill="#fff"/><ellipse cx="314" cy="152" rx="14" ry="9" fill="#fff"/></g>
+      </g>`)}</g>
+    <!-- l'aile, avec son winglet et sa bande corail -->
+    <g filter="url(#pinceau-fin)">
+      <path d="M260 138 L176 166 L182 172 L260 160Z" fill="#ece8e0"/><path d="M260 138 L178 165 L180 168 L260 145Z" fill="#ef6f55"/>
+      <path d="M198 165 L206 172 M214 160 L222 168 M230 155 L238 163" stroke="#c9c4ba" stroke-width="1.4"/>
+      <path d="M176 166 L170 150 L174 149 L182 168Z" fill="#e8559a"/>
+    </g>
   </g>
-  <ellipse cx="180" cy="100" rx="58" ry="72" fill="none" stroke="#fbf1df" stroke-width="4" opacity=".7"/>
+  <ellipse cx="180" cy="100" rx="58" ry="72" fill="none" stroke="#fbf1df" stroke-width="3" opacity=".6"/>
+  <path d="M138 52 Q150 40 166 36" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".45"/>
   <g filter="url(#pinceau-fin)"><rect x="78" y="180" width="100" height="100" rx="24" fill="#2c4a9a"/><rect x="182" y="180" width="100" height="100" rx="24" fill="#2c4a9a"/></g>
   <g transform="translate(152 238) scale(2.1) rotate(9 0 -4)">${dos('manon')}</g>
-  <g transform="translate(210 238) scale(2.1) rotate(-9 0 -4)">${dos('mathis')}</g>
-  <path class="va-coeur" d="M181 150 C173 143 174 136 178 136 C180 136 181 138 181 139 C181 138 182 136 184 136 C188 136 189 143 181 150Z" fill="#e8559a"/>`; }
+  <g transform="translate(210 238) scale(2.1) rotate(-9 0 -4)">${dos('mathis')}</g>`; }
 
 bouton($('#tgv'), 'Monter dans le train', () => ouvrirVignette('à bord du OUIGO', sceneTrain(),
   'Tourcoing → CDG : Manon s\'endort sur mon épaule avant même Lille.', () => [
-    gsap.fromTo(V('.vt-loin'), { x: 0 }, { x: -300, duration: 10, ease: 'none', repeat: -1 }),
-    gsap.fromTo(V('.vt-pres'), { x: 0 }, { x: -300, duration: 2.4, ease: 'none', repeat: -1 }),
-    gsap.fromTo(V('.vt-zzz text'), { opacity: 0, y: 6 }, { opacity: 1, y: -6, duration: 1.2, stagger: .4, repeat: -1, yoyo: true }),
-    gsap.to(V('.vt-coeur'), { y: -8, scale: 1.15, transformOrigin: '50% 50%', duration: .9, yoyo: true, repeat: -1, ease: 'sine.inOut' })]));
+    gsap.fromTo(V('.vt-ciel'), { x: 0 }, { x: -300, duration: 40, ease: 'none', repeat: -1 }),
+    gsap.fromTo(V('.vt-loin'), { x: 0 }, { x: -300, duration: 18, ease: 'none', repeat: -1 }),
+    gsap.fromTo(V('.vt-milieu'), { x: 0 }, { x: -300, duration: 7, ease: 'none', repeat: -1 }),
+    gsap.fromTo(V('.vt-pres'), { x: 0 }, { x: -300, duration: 1.8, ease: 'none', repeat: -1 }),
+    gsap.fromTo(V('.vt-zzz text'), { opacity: 0, y: 6 }, { opacity: 1, y: -6, duration: 1.2, stagger: .4, repeat: -1, yoyo: true })]));
 bouton($('#avion'), 'Monter dans l\'avion', () => ouvrirVignette('à bord, place hublot', sceneAvion(),
   'Au-dessus des Alpes, le nez collé au hublot.', () => [
-    gsap.fromTo(V('.va-alpes'), { x: 0 }, { x: -300, duration: 14, ease: 'none', repeat: -1 }),
-    gsap.fromTo(V('.va-nuages'), { x: 0 }, { x: -300, duration: 6, ease: 'none', repeat: -1 }),
-    gsap.to(V('.va-coeur'), { y: -14, scale: 1.2, transformOrigin: '50% 50%', duration: 1.1, yoyo: true, repeat: -1, ease: 'sine.inOut' })]));
+    gsap.fromTo(V('.va-loin'), { x: 0 }, { x: -300, duration: 22, ease: 'none', repeat: -1 }),
+    gsap.fromTo(V('.va-nuages'), { x: 0 }, { x: -300, duration: 7, ease: 'none', repeat: -1 })]));
 
 /* ================= titres qui arrivent ================= */
 gsap.utils.toArray('section:not(#hero) h2, section:not(#hero) .annot').forEach(el =>
