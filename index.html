@@ -1230,9 +1230,7 @@ function deverrouiller() {
   $('#tableau').classList.add('revele'); $('.ligne.dest .cases').setAttribute('aria-label', 'VENEZIA');
   $('#carte-vol').setAttribute('aria-label', 'Le vol de Paris-Charles-de-Gaulle à Venise, au-dessus des Alpes');
   // « Sarà perché ti amo » démarre avec l'affiche
-  musiqueAttend = false;
-  if (!voulu) return;
-  if (!CLE) return jouer();
+  if (!voulu || !CLE) { musiqueAttend = false; if (voulu) jouer(); return; }
   demarrerSurAffiche();
 }
 // départ propre : remise au début pendant qu'elle est arrêtée, volume à zéro, et le fondu ne commence
@@ -1242,7 +1240,10 @@ async function demarrerSurAffiche() {
   if (!audio.paused) audio.pause();
   audio.currentTime = 0;
   if (gainChanson) { const g = gainChanson.gain; g.cancelScheduledValues(0); g.value = 0; }
-  audio.addEventListener('playing', () => { if (gainChanson) fonduChanson(1, 2); }, { once: true });
+  audio.addEventListener('playing', () => { if (gainChanson) fonduChanson(1, 2.4); }, { once: true });
+  // seulement maintenant : sur téléphone, le doigt qui se lève en fin de défilement appelle jouer() ;
+  // avant, ça la lançait une 1re fois juste avant ce départ (pause, retour au début, relance : le petit accroc)
+  musiqueAttend = false;
   audio.play().catch(() => { /* bloqué : le prochain tap la relancera */ });
 }
 ScrollTrigger.create({ trigger: '#hero', start: 'top 55%', once: true, onEnter: () => { entreeAffiche(); deverrouiller(); } });
