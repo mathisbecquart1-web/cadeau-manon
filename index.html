@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Per Manon</title>
+<title>Pour Manon</title>
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#fbf1df">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -73,6 +73,8 @@
           color: var(--creme); font: 700 clamp(13px, 4.6vw, 22px) "Space Mono", monospace; }
   .case::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--encre); }
   .ligne.dest .case { color: var(--jaune); }
+  .ligne.dest .cases { filter: blur(6px); transition: filter 1.6s; }
+  .tableau.revele .ligne.dest .cases { filter: none; }
   .case.flip { animation: flip .07s linear; }
   @keyframes flip { 50% { transform: scaleY(.1) } }
 
@@ -276,8 +278,8 @@
 
 <!-- ===================== ENVELOPPE ===================== -->
 <div id="intro">
-  <p class="date-lettre">Parigi · 25 dicembre 2026</p>
-  <p class="pour">Una lettera per te</p>
+  <p class="date-lettre">Marquette-lez-Lille<br>25 décembre 2026</p>
+  <p class="pour">Une lettre pour toi</p>
   <!-- enveloppe « par avion » : liseré rayé rouge et bleu, timbre peint, adresse à la plume -->
   <svg id="enveloppe" viewBox="0 0 300 210" aria-hidden="false">
     <defs>
@@ -292,17 +294,17 @@
       <rect x="22" y="16" width="256" height="176" rx="2" fill="#fffaf0"/>
       <rect x="31" y="25" width="238" height="158" fill="none" stroke="#e8559a" stroke-width="1" opacity=".55"/>
       <g stroke="#8fd3ee" stroke-width=".8" opacity=".6"><path d="M44 112H256M44 128H256M44 144H256M44 160H256"/></g>
-      <text x="150" y="70" text-anchor="middle" font-family="Parisienne" font-size="38" fill="#e8559a">Buon Natale</text>
-      <text x="150" y="94" text-anchor="middle" font-family="Fraunces" font-style="italic" font-size="15" fill="#1f2a44">amore mio</text>
+      <text x="150" y="84" text-anchor="middle" font-family="Parisienne" font-size="38" fill="#e8559a">Joyeux Noël</text>
+      
       <g id="mot-lettre" opacity="0"><g font-family="Fraunces" font-style="italic" font-size="12.5" fill="#1f2a44" text-anchor="middle">
         <text x="150" y="124">Ton vrai cadeau ne tenait pas</text><text x="150" y="140">sous le sapin. Il t'attend juste ici…</text></g>
-      <text x="246" y="170" text-anchor="end" font-family="Parisienne" font-size="22" fill="#e8559a">con amore</text></g>
+      <text x="246" y="170" text-anchor="end" font-family="Parisienne" font-size="22" fill="#e8559a">je t'aime</text></g>
     </g>
     <path d="M0 210 L0 12 L150 122 L300 12 L300 210Z" fill="#fbf4e4"/>
     <path d="M4 206 L132 113 M296 206 L168 113" stroke="#eadbbd" stroke-width="1.5"/>
     <path d="M3.5 13.5V206.5H296.5V13.5" fill="none" stroke="url(#par-avion)" stroke-width="7"/>
     <!-- adresse -->
-    <text x="24" y="192" font-family="Parisienne" font-size="28" fill="#1f2a44">Per Manon</text>
+    <text x="24" y="192" font-family="Parisienne" font-size="28" fill="#1f2a44">Pour Manon</text>
     <path d="M24 198 q56 4 118 -2" stroke="#1f2a44" stroke-width="1" fill="none" opacity=".3"/>
     <!-- tampon de la poste -->
     <g fill="none" stroke="#1f2a44" opacity=".5"><circle cx="212" cy="156" r="17" stroke-width="1.3"/><circle cx="212" cy="156" r="12.5" stroke-width=".8"/></g>
@@ -321,7 +323,7 @@
     <g id="rabat">
       <path d="M7 17 L150 123 L293 17Z" fill="#f6ead2" stroke="#e6d3ae" stroke-width="1.5" stroke-linejoin="round"/>
       <rect x="40" y="17" width="84" height="13" rx="2.5" fill="#2c4a9a"/>
-      <text x="82" y="26" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="6" fill="#fbf1df" letter-spacing=".3">PAR AVION · VIA AEREA</text>
+      <text x="82" y="26" text-anchor="middle" font-family="Space Mono" font-weight="700" font-size="6" fill="#fbf1df" letter-spacing=".3">PAR AVION</text>
     </g>
     <g id="sceau" role="button" tabindex="0" aria-label="Tape trois fois pour briser le sceau">
       <circle id="anneau-fond" cx="150" cy="126" r="42" fill="none" stroke="#1f2a4422" stroke-width="5"/>
@@ -347,6 +349,160 @@
 </button>
 
 <main>
+<!-- ===================== TRAIN ===================== -->
+<section id="train">
+  <div class="col">
+    <span class="annot">1 · le train</span>
+    <h2>Tourcoing → <em>CDG</em></h2>
+    <svg id="carte-train" viewBox="0 0 400 330" aria-label="Trajet en TGV OUIGO de Tourcoing à l'aéroport Charles-de-Gaulle">
+      <!-- champs du Nord, peints -->
+      <g filter="url(#pinceau)">
+        <path d="M10 60 Q120 20 220 50 Q260 90 200 130 Q90 150 30 120Z" fill="#c8d98a"/>
+        <path d="M230 120 Q330 100 390 150 Q395 230 320 240 Q240 230 220 180Z" fill="#a9c97a"/>
+        <path d="M10 170 Q90 150 150 200 Q160 260 90 300 Q30 300 10 260Z" fill="#e2d58f"/>
+        <path d="M170 250 Q260 240 330 270 Q360 320 250 325 Q170 320 160 290Z" fill="#8fb565"/>
+        <g stroke="#ffffff66" stroke-width="2" fill="none"><path d="M40 80 Q120 60 200 80"/><path d="M40 100 Q120 82 190 100"/><path d="M250 150 Q320 140 370 170"/><path d="M245 175 Q320 165 365 195"/></g>
+      </g>
+      <!-- Tourcoing : maisons de brique et beffroi -->
+      <g filter="url(#pinceau)">
+        <rect x="262" y="40" width="22" height="26" fill="#b5543a"/><path d="M260 40l13-12 13 12z" fill="#7a3324"/>
+        <rect x="350" y="42" width="24" height="24" fill="#c0644a"/><path d="M348 42l14-12 14 12z" fill="#7a3324"/>
+        <rect x="306" y="10" width="16" height="56" fill="#b5543a"/><path d="M304 10l10-16 10 16z" fill="#2c4a9a"/><circle cx="314" cy="24" r="4" fill="#fbf1df"/>
+        <rect x="288" y="46" width="16" height="20" fill="#c0644a"/><rect x="326" y="48" width="20" height="18" fill="#b5543a"/>
+        <g fill="#fbf1df"><rect x="268" y="50" width="4" height="5"/><rect x="276" y="50" width="4" height="5"/><rect x="356" y="50" width="4" height="5"/><rect x="364" y="50" width="4" height="5"/></g>
+      </g>
+      <text x="166" y="54" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Tourcoing</text>
+      <!-- moulin et arbres -->
+      <g filter="url(#pinceau)">
+        <path d="M100 176 L106 140 L118 140 L124 176Z" fill="#fbf1df"/><path d="M104 140 L112 128 L120 140Z" fill="#c42f3a"/>
+        <g id="pales" fill="#5a3324"><rect x="110.5" y="104" width="3" height="24"/><rect x="110.5" y="132" width="3" height="24"/><rect x="88" y="128.5" width="24" height="3"/><rect x="112" y="128.5" width="24" height="3"/></g>
+        <g fill="#5f8a3a"><circle cx="246" cy="214" r="11"/><circle cx="262" cy="220" r="9"/><circle cx="54" cy="208" r="10"/><circle cx="210" cy="78" r="9"/><circle cx="350" cy="196" r="10"/></g>
+      </g>
+      <!-- Roissy : le terminal rond, la tour, un avion qui attend -->
+      <g filter="url(#pinceau)">
+        <ellipse cx="62" cy="300" rx="30" ry="11" fill="#e8e1d2"/><ellipse cx="62" cy="296" rx="18" ry="6" fill="#cfc6b3"/>
+        <rect x="124" y="262" width="6" height="40" fill="#e8e1d2"/><rect x="119" y="254" width="16" height="10" rx="2" fill="#2c4a9a"/>
+        <path d="M148 304 l26 0 l6 -3 l-6 -3 l-26 0z M158 298 l6 -9 l4 0 l-3 9z M158 304 l6 8 l4 0 l-3 -8z" fill="#fbf1df" stroke="#1f2a44" stroke-width=".8"/>
+      </g>
+      <text x="4" y="232" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Paris CDG</text>
+      <!-- la voie, posée en entier : le train roule dessus -->
+      <g>
+        <path d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#5a3324" stroke-width="11" stroke-dasharray="2.5 6" fill="none"/>
+        <path id="voie" d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#1f2a44" stroke-width="3" fill="none"/>
+      </g>
+      <!-- le TGV OUIGO (nez à gauche : il suit la voie avec un demi-tour) -->
+      <g id="tgv">
+        <g id="wagon2"><rect x="-24" y="-14" width="48" height="28" fill="transparent"/>
+          <rect x="-18" y="-7" width="36" height="14" rx="2" fill="#37c4c9" stroke="#1f2a44" stroke-width="1"/>
+          <rect x="-15" y="-5" width="30" height="3.4" rx="1" fill="#fbf1df"/><rect x="-18" y="4" width="36" height="2.6" fill="#e8559a"/>
+          <path d="M0 3 C-3 1 -2.6 -1 -1.2 -1 C-.5 -1 0 -.4 0 0 C0 -.4 .5 -1 1.2 -1 C2.6 -1 3 1 0 3Z" fill="#e8559a"/>
+        </g>
+        <g id="loco"><rect x="-34" y="-14" width="68" height="28" fill="transparent"/>
+          <path d="M-12 -7 C-22 -7 -27 -2 -29 5 L-29 7 L-12 7Z" fill="#e8559a" stroke="#1f2a44" stroke-width="1"/>
+          <rect x="-12" y="-7" width="41" height="14" rx="2" fill="#37c4c9" stroke="#1f2a44" stroke-width="1"/>
+          <path d="M-19 -5 C-23 -4 -25 -2 -26 0 L-19 0Z" fill="#1f2a44"/>
+          <rect x="-9" y="-5" width="34" height="3.4" rx="1" fill="#fbf1df"/><rect x="-29" y="4" width="58" height="2.6" fill="#e8559a"/>
+          <text x="-4" y="2.6" font-family="Space Mono" font-weight="700" font-size="4.6" fill="#fbf1df">OUIGO</text>
+          <path d="M4 -7 l4 -5 l6 0" stroke="#1f2a44" stroke-width="1.2" fill="none"/>
+        </g>
+      </g>
+    </svg>
+    <p class="indice-bord">touche le train pour monter à bord ↗</p>
+    <p class="txt">On commence en TGV OUIGO, de Tourcoing jusqu'à l'aéroport Charles-de-Gaulle. Là-bas, l'avion nous attend.</p>
+  </div>
+</section>
+
+<!-- ===================== DÉPART ===================== -->
+<section id="depart">
+  <div class="col">
+    <span class="annot">2 · à l'aéroport</span>
+    <h2>Le <em>départ</em></h2>
+    <div class="tableau ombre" id="tableau" role="table" aria-label="Tableau des départs"></div>
+  </div>
+</section>
+
+<!-- ===================== VOL ===================== -->
+<section id="vol">
+  <div class="col">
+    <span class="annot">3 · le vol</span>
+    <h2>Paris → <em>???</em></h2>
+    <svg id="carte-vol" viewBox="0 0 400 420" aria-label="Le vol depuis Paris-Charles-de-Gaulle, au-dessus des Alpes, vers une destination secrète">
+      <defs><mask id="masque-route"><path id="route-masque" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fff" stroke-width="12" fill="none"/></mask></defs>
+      <!-- soleil qui rayonne -->
+      <g class="rayons"><g stroke="#f8e26b" stroke-width="4" stroke-linecap="round" opacity=".8">
+        <path d="M340 22v-12M340 82v12M310 52h-12M370 52h12M319 31l-8-8M361 73l8 8M361 31l8-8M319 73l-8 8"/></g></g>
+      <circle cx="340" cy="52" r="20" fill="#f8e26b"/>
+      <!-- nuages lointains -->
+      <g fill="#fbf1df" opacity=".75">
+        <g class="derive" style="animation-duration:46s;animation-delay:-8s"><ellipse cx="60" cy="70" rx="34" ry="10"/><ellipse cx="80" cy="62" rx="20" ry="11"/></g>
+        <g class="derive" style="animation-duration:58s;animation-delay:-30s"><ellipse cx="40" cy="160" rx="28" ry="8"/><ellipse cx="56" cy="153" rx="16" ry="9"/></g>
+        <g class="derive" style="animation-duration:52s;animation-delay:-44s"><ellipse cx="90" cy="230" rx="30" ry="9"/><ellipse cx="108" cy="222" rx="18" ry="10"/></g>
+      </g>
+      <!-- les Alpes -->
+      <g filter="url(#pinceau)">
+        <path d="M110 372 L168 250 L206 312 L240 214 L292 312 L318 270 L356 372Z" fill="#7f9c46"/>
+        <path d="M150 372 L198 284 L232 372Z" fill="#5f8a3a"/><path d="M262 372 L300 300 L334 372Z" fill="#5f8a3a"/>
+        <path d="M240 214 L258 248 L246 242 L238 254 L228 244 L222 246Z" fill="#fbf1df"/>
+        <path d="M168 250 L182 278 L172 272 L164 282 L158 272Z" fill="#fbf1df"/><path d="M318 270 L328 290 L320 286 L313 294 L308 288Z" fill="#fbf1df"/>
+      </g>
+      <text x="196" y="402" font-family="Caveat" font-weight="700" font-size="20" fill="#1f2a44" opacity=".7">le Alpi</text>
+      <!-- Paris : la tour Eiffel, la piste de CDG -->
+      <g filter="url(#pinceau)">
+        <path d="M0 360 Q60 346 130 360 L130 420 L0 420Z" fill="#a9c97a"/>
+        <rect x="10" y="356" width="104" height="9" rx="3" fill="#8a8f9c"/><path d="M18 360.5h88" stroke="#fbf1df" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <path d="M44 344 L49 304 L54 344 M46 330h6 M45.5 338h7" stroke="#1f2a44" stroke-width="2" fill="none" stroke-linejoin="round"/>
+      </g>
+      <text x="6" y="398" font-family="Caveat" font-weight="700" font-size="24" fill="#1f2a44">Paris CDG</text>
+      <!-- la destination reste secrète : un rivage, une piste et un grand point d'interrogation peint -->
+      <g filter="url(#pinceau)">
+        <path d="M300 372 Q350 352 400 356 L400 420 L290 420Z" fill="#37c4c9"/>
+        <rect x="336" y="356" width="64" height="8" rx="3" fill="#8a8f9c"/><path d="M342 360h52" stroke="#fbf1df" stroke-width="1.5" stroke-dasharray="6 5"/>
+        <!-- campanile, coupole et gondole : cachés jusqu'à la révélation sur l'affiche -->
+        <g id="lieu-venise" style="opacity: 0; transition: opacity 1.2s">
+          <rect x="352" y="318" width="9" height="40" fill="#ef6f55"/><path d="M350 318 l6.5 -14 l6.5 14z" fill="#2c4a9a"/>
+          <path d="M368 358 a14 13 0 0 1 28 0z" fill="#e9a0b4"/><rect x="380" y="340" width="4" height="6" fill="#e9a0b4"/>
+          <path d="M318 392 q16 6 32 -2 q3 -2 4 -7 q1 6 -4 9 q-16 8 -32 2z" fill="#1f2a44"/>
+        </g>
+      </g>
+      <text id="mystere" style="transition: opacity .25s" x="368" y="340" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="900" font-size="34" fill="#e8559a" filter="url(#pinceau-fin)">?</text>
+      <text id="lieu-nom" x="300" y="412" font-family="Caveat" font-weight="700" font-size="24" fill="#1f2a44">surprise…</text>
+      <!-- traînée blanche derrière l'avion -->
+      <g mask="url(#masque-route)">
+        <path id="route" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fbf1df" stroke-width="5" stroke-linecap="round" fill="none" opacity=".9"/>
+        <path d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#1f2a44" stroke-width="1.5" stroke-dasharray="5 7" fill="none" opacity=".45"/>
+      </g>
+      <g id="avion"><rect x="-28" y="-26" width="56" height="52" fill="transparent"/><g filter="url(#pinceau-fin)">
+        <path d="M-5 -2 L-15 -23 L-8 -23 L9 -2Z M-5 2 L-15 23 L-8 23 L9 2Z" fill="#ef6f55"/>
+        <path d="M-4 -3 L-12 -19 M-4 3 L-12 19" stroke="#fbf1df" stroke-width="1.4" opacity=".75"/>
+        <ellipse cx="-2" cy="-11.5" rx="4.5" ry="2.2" fill="#37c4c9"/><ellipse cx="-2" cy="11.5" rx="4.5" ry="2.2" fill="#37c4c9"/>
+        <path d="M-17 -1.5 L-24 -10 L-20 -10 L-13 -1.5Z M-17 1.5 L-24 10 L-20 10 L-13 1.5Z" fill="#e8559a"/>
+        <path d="M-23 -3.8 Q-26 0 -23 3.8 L14 3.8 Q23 3 25 0 Q23 -3 14 -3.8Z" fill="#fbf1df"/>
+        <path d="M-21 0 H15" stroke="#37c4c9" stroke-width="1.8"/>
+        <path d="M16 -2.6 Q21 -2 22.5 0 Q21 2 16 2.6Z" fill="#2c4a9a"/>
+        <path d="M-22 -1.2 L-28 0 L-22 1.2Z" fill="#e8559a"/>
+      </g></g>
+      <!-- nuages au premier plan : l'avion passe derrière -->
+      <g fill="#ffffff" opacity=".88">
+        <g class="derive" style="animation-duration:30s;animation-delay:-6s"><ellipse cx="150" cy="150" rx="40" ry="13"/><ellipse cx="172" cy="140" rx="24" ry="14"/><ellipse cx="130" cy="144" rx="18" ry="10"/></g>
+        <g class="derive" style="animation-duration:36s;animation-delay:-22s"><ellipse cx="260" cy="120" rx="34" ry="11"/><ellipse cx="280" cy="112" rx="20" ry="12"/></g>
+      </g>
+      <g id="arrivee" opacity="0">
+        <path d="M366 312 C350 299 352 286 360 286 C364 286 366 291 366 292 C366 291 368 286 372 286 C380 286 382 299 366 312Z" fill="#e8559a"/>
+        <text x="366" y="278" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="22" fill="#1f2a44">Bienvenue !</text>
+      </g>
+    </svg>
+    <p class="indice-bord">touche l'avion pour monter à bord ↗</p>
+    <!-- tableau de bord qui suit le vol -->
+    <div class="cockpit ombre" aria-hidden="true">
+      <div><span>Altitude</span><b id="alt">0 m</b></div>
+      <div><span>Vitesse</span><b id="vit">0 km/h</b></div>
+      <div><span>Reste</span><b id="reste">845 km</b></div>
+      <div class="progression"><em>CDG</em><span class="piste"><i id="mini-avion"></i></span><em>???</em></div>
+    </div>
+    <p class="txt"><span id="vol-texte">Décollage de Charles-de-Gaulle, un peu moins de deux heures au-dessus des Alpes… Et on atterrit où&nbsp;? Continue de descendre.</span></p>
+  </div>
+</section>
+
 <!-- ===================== AFFICHE ===================== -->
 <section id="hero">
   <div class="col">
@@ -493,156 +649,6 @@
     </div>
     <p class="txt">Manon, ton cadeau de Noël&nbsp;: <strong>quatre jours à Venise</strong>, rien que nous deux.</p>
     <p class="defile">fais défiler ↓</p>
-  </div>
-</section>
-
-<!-- ===================== DÉPART ===================== -->
-<section id="depart">
-  <div class="col">
-    <span class="annot">1 · la partenza</span>
-    <h2>Le <em>départ</em></h2>
-    <div class="tableau ombre" id="tableau" role="table" aria-label="Tableau des départs"></div>
-  </div>
-</section>
-
-<!-- ===================== TRAIN ===================== -->
-<section id="train">
-  <div class="col">
-    <span class="annot">2 · il treno</span>
-    <h2>Tourcoing → <em>CDG</em></h2>
-    <svg id="carte-train" viewBox="0 0 400 330" aria-label="Trajet en TGV OUIGO de Tourcoing à l'aéroport Charles-de-Gaulle">
-      <!-- champs du Nord, peints -->
-      <g filter="url(#pinceau)">
-        <path d="M10 60 Q120 20 220 50 Q260 90 200 130 Q90 150 30 120Z" fill="#c8d98a"/>
-        <path d="M230 120 Q330 100 390 150 Q395 230 320 240 Q240 230 220 180Z" fill="#a9c97a"/>
-        <path d="M10 170 Q90 150 150 200 Q160 260 90 300 Q30 300 10 260Z" fill="#e2d58f"/>
-        <path d="M170 250 Q260 240 330 270 Q360 320 250 325 Q170 320 160 290Z" fill="#8fb565"/>
-        <g stroke="#ffffff66" stroke-width="2" fill="none"><path d="M40 80 Q120 60 200 80"/><path d="M40 100 Q120 82 190 100"/><path d="M250 150 Q320 140 370 170"/><path d="M245 175 Q320 165 365 195"/></g>
-      </g>
-      <!-- Tourcoing : maisons de brique et beffroi -->
-      <g filter="url(#pinceau)">
-        <rect x="262" y="40" width="22" height="26" fill="#b5543a"/><path d="M260 40l13-12 13 12z" fill="#7a3324"/>
-        <rect x="350" y="42" width="24" height="24" fill="#c0644a"/><path d="M348 42l14-12 14 12z" fill="#7a3324"/>
-        <rect x="306" y="10" width="16" height="56" fill="#b5543a"/><path d="M304 10l10-16 10 16z" fill="#2c4a9a"/><circle cx="314" cy="24" r="4" fill="#fbf1df"/>
-        <rect x="288" y="46" width="16" height="20" fill="#c0644a"/><rect x="326" y="48" width="20" height="18" fill="#b5543a"/>
-        <g fill="#fbf1df"><rect x="268" y="50" width="4" height="5"/><rect x="276" y="50" width="4" height="5"/><rect x="356" y="50" width="4" height="5"/><rect x="364" y="50" width="4" height="5"/></g>
-      </g>
-      <text x="166" y="54" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Tourcoing</text>
-      <!-- moulin et arbres -->
-      <g filter="url(#pinceau)">
-        <path d="M100 176 L106 140 L118 140 L124 176Z" fill="#fbf1df"/><path d="M104 140 L112 128 L120 140Z" fill="#c42f3a"/>
-        <g id="pales" fill="#5a3324"><rect x="110.5" y="104" width="3" height="24"/><rect x="110.5" y="132" width="3" height="24"/><rect x="88" y="128.5" width="24" height="3"/><rect x="112" y="128.5" width="24" height="3"/></g>
-        <g fill="#5f8a3a"><circle cx="246" cy="214" r="11"/><circle cx="262" cy="220" r="9"/><circle cx="54" cy="208" r="10"/><circle cx="210" cy="78" r="9"/><circle cx="350" cy="196" r="10"/></g>
-      </g>
-      <!-- Roissy : le terminal rond, la tour, un avion qui attend -->
-      <g filter="url(#pinceau)">
-        <ellipse cx="62" cy="300" rx="30" ry="11" fill="#e8e1d2"/><ellipse cx="62" cy="296" rx="18" ry="6" fill="#cfc6b3"/>
-        <rect x="124" y="262" width="6" height="40" fill="#e8e1d2"/><rect x="119" y="254" width="16" height="10" rx="2" fill="#2c4a9a"/>
-        <path d="M148 304 l26 0 l6 -3 l-6 -3 l-26 0z M158 298 l6 -9 l4 0 l-3 9z M158 304 l6 8 l4 0 l-3 -8z" fill="#fbf1df" stroke="#1f2a44" stroke-width=".8"/>
-      </g>
-      <text x="4" y="232" font-family="Caveat" font-weight="700" font-size="27" fill="#1f2a44">Paris CDG</text>
-      <!-- la voie, posée en entier : le train roule dessus -->
-      <g>
-        <path d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#5a3324" stroke-width="11" stroke-dasharray="2.5 6" fill="none"/>
-        <path id="voie" d="M318 78 C292 146 206 118 178 186 S112 258 86 276" stroke="#1f2a44" stroke-width="3" fill="none"/>
-      </g>
-      <!-- le TGV OUIGO (nez à gauche : il suit la voie avec un demi-tour) -->
-      <g id="tgv">
-        <g id="wagon2"><rect x="-24" y="-14" width="48" height="28" fill="transparent"/>
-          <rect x="-18" y="-7" width="36" height="14" rx="2" fill="#37c4c9" stroke="#1f2a44" stroke-width="1"/>
-          <rect x="-15" y="-5" width="30" height="3.4" rx="1" fill="#fbf1df"/><rect x="-18" y="4" width="36" height="2.6" fill="#e8559a"/>
-          <path d="M0 3 C-3 1 -2.6 -1 -1.2 -1 C-.5 -1 0 -.4 0 0 C0 -.4 .5 -1 1.2 -1 C2.6 -1 3 1 0 3Z" fill="#e8559a"/>
-        </g>
-        <g id="loco"><rect x="-34" y="-14" width="68" height="28" fill="transparent"/>
-          <path d="M-12 -7 C-22 -7 -27 -2 -29 5 L-29 7 L-12 7Z" fill="#e8559a" stroke="#1f2a44" stroke-width="1"/>
-          <rect x="-12" y="-7" width="41" height="14" rx="2" fill="#37c4c9" stroke="#1f2a44" stroke-width="1"/>
-          <path d="M-19 -5 C-23 -4 -25 -2 -26 0 L-19 0Z" fill="#1f2a44"/>
-          <rect x="-9" y="-5" width="34" height="3.4" rx="1" fill="#fbf1df"/><rect x="-29" y="4" width="58" height="2.6" fill="#e8559a"/>
-          <text x="-4" y="2.6" font-family="Space Mono" font-weight="700" font-size="4.6" fill="#fbf1df">OUIGO</text>
-          <path d="M4 -7 l4 -5 l6 0" stroke="#1f2a44" stroke-width="1.2" fill="none"/>
-        </g>
-      </g>
-    </svg>
-    <p class="indice-bord">touche le train pour monter à bord ↗</p>
-    <p class="txt">On commence en TGV OUIGO, de Tourcoing jusqu'à l'aéroport Charles-de-Gaulle. Là-bas, l'avion nous attend.</p>
-  </div>
-</section>
-
-<!-- ===================== VOL ===================== -->
-<section id="vol">
-  <div class="col">
-    <span class="annot">3 · il volo</span>
-    <h2>Paris → <em>Venise</em></h2>
-    <svg id="carte-vol" viewBox="0 0 400 420" aria-label="Le vol de Paris-Charles-de-Gaulle à Venise, au-dessus des Alpes">
-      <defs><mask id="masque-route"><path id="route-masque" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fff" stroke-width="12" fill="none"/></mask></defs>
-      <!-- soleil qui rayonne -->
-      <g class="rayons"><g stroke="#f8e26b" stroke-width="4" stroke-linecap="round" opacity=".8">
-        <path d="M340 22v-12M340 82v12M310 52h-12M370 52h12M319 31l-8-8M361 73l8 8M361 31l8-8M319 73l-8 8"/></g></g>
-      <circle cx="340" cy="52" r="20" fill="#f8e26b"/>
-      <!-- nuages lointains -->
-      <g fill="#fbf1df" opacity=".75">
-        <g class="derive" style="animation-duration:46s;animation-delay:-8s"><ellipse cx="60" cy="70" rx="34" ry="10"/><ellipse cx="80" cy="62" rx="20" ry="11"/></g>
-        <g class="derive" style="animation-duration:58s;animation-delay:-30s"><ellipse cx="40" cy="160" rx="28" ry="8"/><ellipse cx="56" cy="153" rx="16" ry="9"/></g>
-        <g class="derive" style="animation-duration:52s;animation-delay:-44s"><ellipse cx="90" cy="230" rx="30" ry="9"/><ellipse cx="108" cy="222" rx="18" ry="10"/></g>
-      </g>
-      <!-- les Alpes -->
-      <g filter="url(#pinceau)">
-        <path d="M110 372 L168 250 L206 312 L240 214 L292 312 L318 270 L356 372Z" fill="#7f9c46"/>
-        <path d="M150 372 L198 284 L232 372Z" fill="#5f8a3a"/><path d="M262 372 L300 300 L334 372Z" fill="#5f8a3a"/>
-        <path d="M240 214 L258 248 L246 242 L238 254 L228 244 L222 246Z" fill="#fbf1df"/>
-        <path d="M168 250 L182 278 L172 272 L164 282 L158 272Z" fill="#fbf1df"/><path d="M318 270 L328 290 L320 286 L313 294 L308 288Z" fill="#fbf1df"/>
-      </g>
-      <text x="196" y="402" font-family="Caveat" font-weight="700" font-size="20" fill="#1f2a44" opacity=".7">le Alpi</text>
-      <!-- Paris : la tour Eiffel, la piste de CDG -->
-      <g filter="url(#pinceau)">
-        <path d="M0 360 Q60 346 130 360 L130 420 L0 420Z" fill="#a9c97a"/>
-        <rect x="10" y="356" width="104" height="9" rx="3" fill="#8a8f9c"/><path d="M18 360.5h88" stroke="#fbf1df" stroke-width="1.5" stroke-dasharray="6 5"/>
-        <path d="M44 344 L49 304 L54 344 M46 330h6 M45.5 338h7" stroke="#1f2a44" stroke-width="2" fill="none" stroke-linejoin="round"/>
-      </g>
-      <text x="6" y="398" font-family="Caveat" font-weight="700" font-size="24" fill="#1f2a44">Paris CDG</text>
-      <!-- Venise : la lagune, le campanile, une gondole -->
-      <g filter="url(#pinceau)">
-        <path d="M300 372 Q350 352 400 356 L400 420 L290 420Z" fill="#37c4c9"/>
-        <rect x="336" y="356" width="64" height="8" rx="3" fill="#8a8f9c"/><path d="M342 360h52" stroke="#fbf1df" stroke-width="1.5" stroke-dasharray="6 5"/>
-        <rect x="352" y="318" width="9" height="40" fill="#ef6f55"/><path d="M350 318 l6.5 -14 l6.5 14z" fill="#2c4a9a"/>
-        <path d="M368 358 a14 13 0 0 1 28 0z" fill="#e9a0b4"/><rect x="380" y="340" width="4" height="6" fill="#e9a0b4"/>
-        <path d="M318 392 q16 6 32 -2 q3 -2 4 -7 q1 6 -4 9 q-16 8 -32 2z" fill="#1f2a44"/>
-      </g>
-      <text x="300" y="412" font-family="Caveat" font-weight="700" font-size="24" fill="#1f2a44">Venezia</text>
-      <!-- traînée blanche derrière l'avion -->
-      <g mask="url(#masque-route)">
-        <path id="route" d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#fbf1df" stroke-width="5" stroke-linecap="round" fill="none" opacity=".9"/>
-        <path d="M26 352 L92 352 C150 352 158 118 228 104 C298 92 342 262 366 352" stroke="#1f2a44" stroke-width="1.5" stroke-dasharray="5 7" fill="none" opacity=".45"/>
-      </g>
-      <g id="avion"><rect x="-28" y="-26" width="56" height="52" fill="transparent"/><g filter="url(#pinceau-fin)">
-        <path d="M-5 -2 L-15 -23 L-8 -23 L9 -2Z M-5 2 L-15 23 L-8 23 L9 2Z" fill="#ef6f55"/>
-        <path d="M-4 -3 L-12 -19 M-4 3 L-12 19" stroke="#fbf1df" stroke-width="1.4" opacity=".75"/>
-        <ellipse cx="-2" cy="-11.5" rx="4.5" ry="2.2" fill="#37c4c9"/><ellipse cx="-2" cy="11.5" rx="4.5" ry="2.2" fill="#37c4c9"/>
-        <path d="M-17 -1.5 L-24 -10 L-20 -10 L-13 -1.5Z M-17 1.5 L-24 10 L-20 10 L-13 1.5Z" fill="#e8559a"/>
-        <path d="M-23 -3.8 Q-26 0 -23 3.8 L14 3.8 Q23 3 25 0 Q23 -3 14 -3.8Z" fill="#fbf1df"/>
-        <path d="M-21 0 H15" stroke="#37c4c9" stroke-width="1.8"/>
-        <path d="M16 -2.6 Q21 -2 22.5 0 Q21 2 16 2.6Z" fill="#2c4a9a"/>
-        <path d="M-22 -1.2 L-28 0 L-22 1.2Z" fill="#e8559a"/>
-      </g></g>
-      <!-- nuages au premier plan : l'avion passe derrière -->
-      <g fill="#ffffff" opacity=".88">
-        <g class="derive" style="animation-duration:30s;animation-delay:-6s"><ellipse cx="150" cy="150" rx="40" ry="13"/><ellipse cx="172" cy="140" rx="24" ry="14"/><ellipse cx="130" cy="144" rx="18" ry="10"/></g>
-        <g class="derive" style="animation-duration:36s;animation-delay:-22s"><ellipse cx="260" cy="120" rx="34" ry="11"/><ellipse cx="280" cy="112" rx="20" ry="12"/></g>
-      </g>
-      <g id="arrivee" opacity="0">
-        <path d="M366 312 C350 299 352 286 360 286 C364 286 366 291 366 292 C366 291 368 286 372 286 C380 286 382 299 366 312Z" fill="#e8559a"/>
-        <text x="366" y="278" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="22" fill="#1f2a44">Benvenuti !</text>
-      </g>
-    </svg>
-    <p class="indice-bord">touche l'avion pour monter à bord ↗</p>
-    <!-- tableau de bord qui suit le vol -->
-    <div class="cockpit ombre" aria-hidden="true">
-      <div><span>Altitude</span><b id="alt">0 m</b></div>
-      <div><span>Vitesse</span><b id="vit">0 km/h</b></div>
-      <div><span>Reste</span><b id="reste">845 km</b></div>
-      <div class="progression"><em>CDG</em><span class="piste"><i id="mini-avion"></i></span><em>VCE</em></div>
-    </div>
-    <p class="txt">Décollage de Charles-de-Gaulle, un peu moins de deux heures au-dessus des Alpes, et on atterrit au bord de la lagune.</p>
   </div>
 </section>
 
@@ -853,7 +859,7 @@
       <p class="mot">Buon Natale, amore.<br>Je t'aime.</p>
       <p class="ps">PS : prends ton plus beau manteau, il fait frais sur la lagune.</p>
       <div class="souvenir">
-        <img id="souvenir-apercu" alt="Le souvenir de notre voyage à Venise">
+        <img id="souvenir-apercu" src="souvenir.jpg" loading="lazy" alt="L'affiche de notre voyage, de Tourcoing à Venise">
         <button class="bouton-souvenir" id="souvenir">Garder le souvenir ↓</button>
       </div>
     </div>
@@ -870,7 +876,7 @@
 </div>
 <div id="confettis" aria-hidden="true"></div>
 <!-- lecteur caché hors écran ; ne glisse dans le coin que si le navigateur bloque le son -->
-<div id="radio"><p>Radio Venezia · appuie sur ▶</p><div id="yt-lecteur"></div></div>
+<div id="radio"><p>Notre chanson · appuie sur ▶</p><div id="yt-lecteur"></div></div>
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -1088,11 +1094,17 @@ window.onYouTubeIframeAPIReady = () => {
     events: { onReady: () => { pret = true; jouer(); },
               onStateChange: e => { joue = e.data === YT.PlayerState.PLAYING; if (joue) $('#radio').classList.remove('visible'); } } });
 };
+let musiqueAttend = true;
 function jouer() {
   if (ac && ac.state === 'suspended') ac.resume();
   if (!pret || !voulu || joue) return;
   if (musiqueCoupee || (!film.paused && !film.ended)) return; // pas de chanson par-dessus le film (ni pendant une pause)
-  if (CLE) { audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return; }
+  if (CLE) {
+    if (musiqueAttend && gainChanson) gainChanson.gain.value = 0; // elle tourne, mais muette
+    else if (musiqueAttend) { if (!jouer.debloque) { jouer.debloque = true; audio.play().then(() => { if (musiqueAttend) audio.pause(); }).catch(() => { jouer.debloque = false; }); } return; }
+    audio.play().catch(() => { /* pas encore de geste : on retentera au prochain tap */ }); return;
+  }
+  if (musiqueAttend) return; // repli YouTube : il démarrera sur l'affiche
   lecteur.unMute(); lecteur.setVolume(85); lecteur.playVideo();
 }
 // sur mobile le son n'est autorisé qu'au moment où le doigt se relève : on retente à chaque geste
@@ -1116,7 +1128,7 @@ function clac() {
 }
 $('#son').onclick = () => {
   voulu = !voulu;
-  if (voulu && gainChanson && !musiqueCoupee) { clearTimeout(fonduChanson.fin); gainChanson.gain.cancelScheduledValues(0); gainChanson.gain.value = 1; } // après un fondu, repartir à plein volume
+  if (voulu && gainChanson && !musiqueCoupee && !musiqueAttend) { clearTimeout(fonduChanson.fin); gainChanson.gain.cancelScheduledValues(0); gainChanson.gain.value = 1; } // après un fondu, repartir à plein volume
   if (voulu) jouer(); else if (CLE) audio.pause(); else if (lecteur) lecteur.pauseVideo();
   $('#son').classList.remove('appel');
   $('#son').setAttribute('aria-pressed', String(voulu));
@@ -1166,7 +1178,6 @@ function ouvrir() {
     .to({}, { duration: 1.6 }) // le temps de lire la lettre
     // rideau : l'intro remonte d'un bloc, opaque, donc rien ne se superpose à l'affiche
     .to('#intro', { yPercent: -100, duration: .9, ease: 'power3.inOut' })
-    .add(entreeAffiche, '-=.5')
     .add(() => { $('#intro').remove(); document.body.classList.remove('ferme'); ScrollTrigger.refresh(); });
 }
 
@@ -1174,9 +1185,8 @@ function ouvrir() {
 const titre = $('.venezia');
 titre.innerHTML = [...titre.textContent].map(c => `<span aria-hidden="true">${c}</span>`).join('');
 gsap.set('.venezia span', { yPercent: 120, rotate: 12, opacity: 0 });
-function entreeAffiche() {
-  const d = calme ? 0 : 1;
-  gsap.timeline()
+const d = calme ? 0 : 1;
+const affiche = gsap.timeline({ paused: true }) // préparée cachée dès le chargement, jouée à l'arrivée sur l'affiche
     .from('#entree-g', { x: -220, duration: 1.1 * d, ease: 'power3.out' }, 0)
     .from('#entree-d', { x: 220, duration: 1.1 * d, ease: 'power3.out' }, 0)
     .from('#linge', { y: -140, duration: 1 * d, ease: 'bounce.out' }, .25)
@@ -1185,6 +1195,8 @@ function entreeAffiche() {
     .from('#gondole-x', { x: -320, duration: 1.6 * d, ease: 'power2.out' }, .3)
     .to('.venezia span', { yPercent: 0, rotate: 0, opacity: 1, stagger: .06, duration: .7 * d, ease: 'back.out(2.2)' }, .7)
     .from('.dates-aff, .secrets, #hero .txt, .defile', { y: 30, opacity: 0, stagger: .12, duration: .6 * d }, 1.1);
+function entreeAffiche() {
+  affiche.play();
   if (calme) return;
   gsap.to('#gondole-x', { x: 45, duration: 6, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 1.9 });
   gsap.to('#gondole', { y: '+=4', rotation: 1.5, svgOrigin: '200 590', duration: 1.4, ease: 'sine.inOut', yoyo: true, repeat: -1 });
@@ -1192,6 +1204,24 @@ function entreeAffiche() {
   gsap.to('#oiseaux path', { x: () => gsap.utils.random(-20, 20), y: () => gsap.utils.random(-12, 8), duration: 2.5, ease: 'sine.inOut', yoyo: true, repeat: -1, stagger: .4 });
   gsap.to('.defile', { y: 8, duration: .8, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 2 });
 }
+// une fois l'affiche atteinte, tout ce qui était caché plus haut se déverrouille : l'avion et le panneau disent « Venise »
+let destinationRevelee = false;
+function deverrouiller() {
+  destinationRevelee = true;
+  $('#vol h2 em').textContent = 'Venise';
+  $('#lieu-nom').textContent = 'Venezia'; $('#lieu-venise').style.opacity = 1; $('#mystere').style.opacity = 0;
+  document.querySelectorAll('.cockpit .progression em')[1].textContent = 'VCE';
+  $('#vol-texte').textContent = 'Décollage de Charles-de-Gaulle, un peu moins de deux heures au-dessus des Alpes, et on atterrit au bord de la lagune.';
+  $('#tableau').classList.add('revele'); $('.ligne.dest .cases').setAttribute('aria-label', 'VENEZIA');
+  $('#carte-vol').setAttribute('aria-label', 'Le vol de Paris-Charles-de-Gaulle à Venise, au-dessus des Alpes');
+  // « Sarà perché ti amo » démarre avec l'affiche
+  musiqueAttend = false;
+  if (!voulu) return;
+  if (!CLE) return jouer();
+  audio.currentTime = 0;
+  if (gainChanson) fonduChanson(1, 1.6); else audio.play().catch(() => {});
+}
+ScrollTrigger.create({ trigger: '#hero', start: 'top 55%', once: true, onEnter: () => { entreeAffiche(); deverrouiller(); } });
 if (!calme) {
   const par = { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true };
   gsap.to('#gauche', { x: -70, scrollTrigger: par });
@@ -1206,7 +1236,7 @@ const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const tableau = $('#tableau');
 tableau.innerHTML = LIGNES.map(([lab, val, cls]) =>
   `<div class="ligne ${cls || ''}" role="row"><p class="etiquette" role="rowheader">${lab}</p>
-   <div class="cases" role="cell" aria-label="${val}">${[...val.padEnd(11)].map(c => `<span class="case" aria-hidden="true" data-fin="${c}"> </span>`).join('')}</div></div>`).join('');
+   <div class="cases" role="cell" aria-label="${cls === 'dest' ? 'destination secrète' : val}">${[...val.padEnd(11)].map(c => `<span class="case" aria-hidden="true" data-fin="${c}"> </span>`).join('')}</div></div>`).join('');
 function retourner() {
   let dernier = 0;
   document.querySelectorAll('.case').forEach((c, i) => {
@@ -1238,7 +1268,7 @@ function placerTrain(p) {
 const trajet = { p: 0 };
 placerTrain(0);
 gsap.to(trajet, { p: 1, ease: 'none', onUpdate: () => placerTrain(trajet.p),
-  scrollTrigger: { trigger: '#carte-train', start: 'top 75%', end: 'bottom 45%', scrub: calme ? false : 1 } });
+  scrollTrigger: { trigger: '#carte-train', start: 0, end: 'bottom 15%', scrub: calme ? false : 1 } });
 if (!calme) gsap.to('#pales', { rotation: 360, svgOrigin: '112 130', duration: 6, ease: 'none', repeat: -1 });
 /* ================= VOL : décollage, croisière au-dessus des nuages, atterrissage à Venise ================= */
 const route = $('#route'), masqueRoute = $('#route-masque'), LR = route.getTotalLength();
@@ -1257,6 +1287,7 @@ function placerAvion() {
   $('#reste').textContent = Math.round(845 * (1 - p)) + ' km';
   $('#mini-avion').style.left = (p * 100) + '%';
   $('#arrivee').style.opacity = p > .97 ? 1 : 0;
+  $('#mystere').style.opacity = p > .84 || destinationRevelee ? 0 : 1;
 }
 gsap.to(vol, { p: 1, ease: 'none', scrollTrigger: { trigger: '#carte-vol', start: 'top 70%', end: 'bottom 35%', scrub: calme ? false : 1 } });
 gsap.ticker.add(placerAvion); // à chaque image : position + petit tangage
@@ -1422,136 +1453,11 @@ function dechirer() {
   souvenirPret = fabriquerSouvenir(); // préparée tout de suite : sur iPhone, le partage doit partir dans le même geste que le tap
 }
 
-/* ================= SOUVENIR : une image 1080 × 1920 qui résume tout, à garder dans ses photos =================
-   L'illustration (l'affiche + des taches de gouache) est un SVG dessiné dans un canvas, puis les textes en Fraunces / Caveat. */
+/* ================= SOUVENIR : l'affiche du voyage (souvenir.jpg), à garder dans ses photos ================= */
 let souvenirPret = null;
 async function fabriquerSouvenir() {
-  // Une affiche de voyage qui se lit de haut en bas : Tourcoing et les champs du Nord → le TGV jusqu'à CDG →
-  // l'avion au-dessus des Alpes → la lagune → Venise dans une fenêtre en arche (nous deux dans la gondole).
-  const L = 1080, H = 1920, ns = 'http://www.w3.org/2000/svg';
-  const RAIL = 'M330 230 C420 330 640 250 700 380 S760 500 800 540';
-  const ROUTE = 'M880 600 C640 620 330 600 210 720 C110 820 260 880 520 900 C780 920 960 960 930 1080';
-  // position + angle sur un tracé (calculés par le navigateur sur un SVG caché)
-  const tmp = document.createElementNS(ns, 'svg'); tmp.style.cssText = 'position:absolute;width:0;height:0'; document.body.append(tmp);
-  const sur = (d, f, recul = 0) => {
-    const p = document.createElementNS(ns, 'path'); p.setAttribute('d', d); tmp.append(p);
-    const l = Math.max(5, f * p.getTotalLength() - recul), a = p.getPointAtLength(l - 4), b = p.getPointAtLength(l + 4), m = p.getPointAtLength(l);
-    return `translate(${m.x.toFixed(1)} ${m.y.toFixed(1)}) rotate(${(Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI).toFixed(1)})`;
-  };
-  const loco = sur(RAIL, .55), wagon = sur(RAIL, .55, 49 * 3), avion = sur(ROUTE, .27);
-  tmp.remove();
-  const svg = `<svg xmlns="${ns}" xmlns:xlink="http://www.w3.org/1999/xlink" width="${L}" height="${H}" viewBox="0 0 ${L} ${H}">
-    <defs>
-      <filter id="grain-s"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .35  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .5 0"/></filter>
-      <filter id="tache" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="3" seed="9"/><feDisplacementMap in="SourceGraphic" scale="60"/></filter>
-      <filter id="pinceau-s" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".02" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="12"/></filter>
-      <clipPath id="arche-s"><path d="M240 1625 V1400 A300 300 0 0 1 840 1400 V1625Z"/></clipPath>
-    </defs>
-    <rect width="${L}" height="${H}" fill="#fbf1df"/>
-    <!-- le ciel, lavis bleu derrière l'avion -->
-    <ellipse cx="540" cy="820" rx="760" ry="330" fill="#bfe6f2" filter="url(#tache)"/>
-    <circle cx="960" cy="730" r="78" fill="#fff6c2" opacity=".55"/><circle cx="960" cy="730" r="50" fill="#f8e26b" filter="url(#pinceau-s)"/>
-
-    <!-- 1. le Nord : champs en patchwork, Tourcoing, le moulin -->
-    <g filter="url(#pinceau-s)">
-      <path d="M-20 150 Q300 100 560 150 Q630 260 520 330 Q220 360 -20 300Z" fill="#c8d98a"/>
-      <path d="M560 170 Q840 130 1100 200 L1100 430 Q860 460 600 410 Q510 320 560 170Z" fill="#a9c97a"/>
-      <path d="M-20 310 Q240 290 420 370 Q470 500 300 560 Q100 590 -20 550Z" fill="#e2d58f"/>
-      <path d="M440 420 Q700 400 1100 450 L1100 600 Q820 640 520 615 Q410 540 440 420Z" fill="#8fb565"/>
-      <g stroke="#ffffff70" stroke-width="5" fill="none"><path d="M40 200 Q260 160 480 200"/><path d="M40 245 Q260 205 470 245"/><path d="M640 250 Q860 220 1060 270"/><path d="M630 310 Q860 280 1060 330"/><path d="M40 420 Q200 400 360 440"/></g>
-    </g>
-    <g transform="translate(-480 40) scale(2.2)" filter="url(#pinceau-s)">
-      <rect x="262" y="40" width="22" height="26" fill="#b5543a"/><path d="M260 40l13-12 13 12z" fill="#7a3324"/>
-      <rect x="350" y="42" width="24" height="24" fill="#c0644a"/><path d="M348 42l14-12 14 12z" fill="#7a3324"/>
-      <rect x="306" y="10" width="16" height="56" fill="#b5543a"/><path d="M304 10l10-16 10 16z" fill="#2c4a9a"/><circle cx="314" cy="24" r="4" fill="#fbf1df"/>
-      <rect x="288" y="46" width="16" height="20" fill="#c0644a"/><rect x="326" y="48" width="20" height="18" fill="#b5543a"/>
-      <g fill="#fbf1df"><rect x="268" y="50" width="4" height="5"/><rect x="276" y="50" width="4" height="5"/><rect x="356" y="50" width="4" height="5"/><rect x="364" y="50" width="4" height="5"/></g>
-    </g>
-    <g transform="translate(-60 160) scale(2)" filter="url(#pinceau-s)">
-      <path d="M100 176 L106 140 L118 140 L124 176Z" fill="#fbf1df"/><path d="M104 140 L112 128 L120 140Z" fill="#c42f3a"/>
-      <g fill="#5a3324" transform="rotate(20 112 130)"><rect x="110.5" y="104" width="3" height="24"/><rect x="110.5" y="132" width="3" height="24"/><rect x="88" y="128.5" width="24" height="3"/><rect x="112" y="128.5" width="24" height="3"/></g>
-    </g>
-    <g fill="#5f8a3a" filter="url(#pinceau-s)"><circle cx="980" cy="330" r="26"/><circle cx="1015" cy="345" r="20"/><circle cx="470" cy="470" r="22"/><circle cx="90" cy="470" r="24"/><circle cx="640" cy="200" r="20"/></g>
-
-    <!-- 2. la voie et le TGV OUIGO jusqu'à Roissy -->
-    <path d="${RAIL}" stroke="#5a3324" stroke-width="24" stroke-dasharray="5 14" fill="none"/>
-    <path d="${RAIL}" stroke="#1f2a44" stroke-width="5" fill="none"/>
-    <g transform="${wagon} scale(-3 3)">${$('#wagon2').innerHTML}</g>
-    <g transform="${loco} scale(-3 3)">${$('#loco').innerHTML.replace(/<text[^]*?<\/text>/, '')}</g>
-    <g filter="url(#pinceau-s)">
-      <ellipse cx="810" cy="560" rx="78" ry="28" fill="#e8e1d2"/><ellipse cx="810" cy="550" rx="46" ry="15" fill="#cfc6b3"/>
-      <rect x="930" y="470" width="14" height="96" fill="#e8e1d2"/><rect x="918" y="452" width="38" height="24" rx="5" fill="#2c4a9a"/>
-    </g>
-
-    <!-- 3. l'avion décolle, passe au-dessus des Alpes et redescend vers la lagune -->
-    <g filter="url(#pinceau-s)">
-      <path d="M-20 1080 L110 940 L200 1010 L330 860 L450 990 L570 890 L700 1010 L810 910 L940 1000 L1100 920 L1100 1090 Z" fill="#9fb3c8"/>
-      <path d="M-20 1090 L170 975 L320 1090Z M380 1090 L560 960 L720 1090Z M760 1090 L920 990 L1100 1080 L1100 1095Z" fill="#7f9c46"/>
-      <path d="M330 860 L362 905 L344 900 L330 918 L314 902 L298 908Z M570 890 L598 930 L582 926 L570 942 L556 928 L542 932Z M810 910 L836 946 L822 942 L810 956 L798 944 L786 948Z" fill="#f3f6fb"/>
-    </g>
-    <g fill="#fff" filter="url(#pinceau-s)">
-      <g><ellipse cx="150" cy="640" rx="70" ry="20"/><ellipse cx="185" cy="622" rx="40" ry="24"/></g>
-      <g><ellipse cx="660" cy="770" rx="80" ry="22"/><ellipse cx="700" cy="752" rx="46" ry="26"/><ellipse cx="625" cy="760" rx="34" ry="18"/></g>
-      <g><ellipse cx="960" cy="860" rx="66" ry="18"/><ellipse cx="990" cy="845" rx="36" ry="20"/></g>
-    </g>
-    <path d="${ROUTE}" stroke="#fbf1df" stroke-width="12" stroke-linecap="round" fill="none" opacity=".95"/>
-    <path d="${ROUTE}" stroke="#1f2a44" stroke-width="3.5" stroke-dasharray="12 16" fill="none" opacity=".5"/>
-    <g transform="${avion} scale(3.4)">${$('#avion').innerHTML}</g>
-
-    <!-- 4. la lagune, jusqu'à la fenêtre : le vaporetto, une gondole et les paline rayées de la vue de l'hôtel -->
-    <path d="M-20 1080 Q270 1058 540 1074 T1100 1068 L1100 1640 Q540 1658 -20 1640Z" fill="#37c4c9" filter="url(#pinceau-s)"/>
-    <path d="M-20 1380 Q540 1360 1100 1384 L1100 1640 Q540 1658 -20 1640Z" fill="#2fb5bd" opacity=".7" filter="url(#pinceau-s)"/>
-    <g stroke="#fbf1df" stroke-width="5" stroke-linecap="round" fill="none" opacity=".8">
-      <path d="M60 1120 q22 -10 44 0"/><path d="M150 1150 q22 -10 44 0"/><path d="M880 1160 q22 -10 44 0"/><path d="M1000 1185 q18 -8 36 0"/>
-      <path d="M40 1420 q26 -10 52 0"/><path d="M120 1440 q22 -10 44 0"/><path d="M910 1460 q26 -10 52 0"/><path d="M990 1520 q22 -10 44 0"/><path d="M30 1610 q26 -10 52 0"/><path d="M960 1620 q26 -10 52 0"/></g>
-    <g transform="translate(26 1300) scale(2)" filter="url(#pinceau-s)"><path d="M0 0H74L67 11H6Z" fill="#fbf1df"/><rect x="0" y="-3" width="74" height="4" fill="#ef6f55"/>
-      <rect x="10" y="-18" width="50" height="15" rx="3" fill="#f6c945"/><g fill="#2c4a9a"><rect x="14" y="-14" width="8" height="7" rx="1"/><rect x="26" y="-14" width="8" height="7" rx="1"/><rect x="38" y="-14" width="8" height="7" rx="1"/><rect x="50" y="-14" width="6" height="7" rx="1"/></g>
-      <rect x="27" y="-25" width="7" height="7" fill="#1f2a44"/></g>
-    <g transform="translate(681 788) scale(1.8)" filter="url(#pinceau-s)"><path d="M150 285 L150 220 L186 280Z" fill="#fbf1df"/><path d="M146 280 L146 234 L122 280Z" fill="#e8559a"/><rect x="147" y="218" width="2.4" height="70" fill="#5a3324"/>
-      <path d="M116 286 L192 286 L181 299 L127 299Z" fill="#ef6f55"/><path d="M119 290 H189" stroke="#fbf1df" stroke-width="2"/></g>
-    <g filter="url(#pinceau-s)">
-      <g transform="translate(64 1470)"><rect width="20" height="140" rx="4" fill="#fbf1df"/><path d="M0 22h20v16H0zM0 62h20v16H0zM0 102h20v16H0z" fill="#2c4a9a"/><path d="M-2 0 Q10 -14 22 0Z" fill="#2c4a9a"/></g>
-      <g transform="translate(104 1500)"><rect width="18" height="110" rx="4" fill="#fbf1df"/><path d="M0 18h18v14H0zM0 52h18v14H0zM0 86h18v14H0z" fill="#2c4a9a"/><path d="M-2 0 Q9 -12 20 0Z" fill="#2c4a9a"/></g>
-      <g transform="translate(950 1420)"><rect width="22" height="190" rx="4" fill="#fbf1df"/><path d="M0 26h22v18H0zM0 76h22v18H0zM0 126h22v18H0z" fill="#e8559a"/><path d="M-2 0 Q11 -15 24 0Z" fill="#e8559a"/></g>
-    </g>
-    <g fill="#e8559a" transform="translate(1000 1110) scale(2.2)"><path d="M0 10 C-14 0 -12 -10 -6 -10 C-3 -10 0 -7 0 -5 C0 -7 3 -10 6 -10 C12 -10 14 0 0 10Z"/></g>
-
-    <!-- 5. Venise, dans une fenêtre en arche : notre gondole -->
-    <path d="M234 1654 V1414 A320 320 0 0 1 874 1414 V1654Z" fill="#1f2a44"/>
-    <path d="M220 1640 V1400 A320 320 0 0 1 860 1400 V1640Z" fill="#fbf1df"/>
-    <g clip-path="url(#arche-s)">
-      <svg x="240" y="1100" width="600" height="525" viewBox="0 0 400 640" preserveAspectRatio="xMidYMax slice">${$('#scene').innerHTML}</svg>
-    </g>
-
-    <rect width="${L}" height="${H}" filter="url(#grain-s)" opacity=".35" style="mix-blend-mode:multiply"/>
-  </svg>`;
-  const img = new Image();
-  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-  await Promise.all([img.decode(), ...['italic 900 200px Fraunces', '700 50px Caveat', '700 34px "Space Mono"'].map(f => document.fonts.load(f))]);
-  const cv = document.createElement('canvas'); cv.width = L; cv.height = H;
-  const c = cv.getContext('2d');
-  c.drawImage(img, 0, 0);
-  c.textBaseline = 'alphabetic';
-  const texte = (t, x, y, police, couleur, { ombre = 0, angle = 0, align = 'center' } = {}) => {
-    c.save(); c.translate(x, y); c.rotate(angle); c.font = police; c.textAlign = align;
-    if (ombre) { // façon autocollant : ombre épaisse, liseré crème, puis la couleur
-      c.lineJoin = 'round';
-      c.fillStyle = c.strokeStyle = '#1f2a44'; c.lineWidth = 12; c.strokeText(t, ombre, ombre); c.fillText(t, ombre, ombre);
-      c.strokeStyle = '#fbf1df'; c.lineWidth = 12; c.strokeText(t, 0, 0);
-    }
-    c.fillStyle = couleur; c.fillText(t, 0, 0); c.restore();
-  };
-  // peu de texte : les lieux à la main, comme sur une carte, puis le titre
-  texte('Manon + Mathis', 540, 84, '700 58px Caveat', '#1f2a44', { angle: -.03 });
-  texte('Tourcoing', 380, 196, '700 50px Caveat', '#1f2a44', { angle: -.05, align: 'left' });
-  texte('Paris CDG', 760, 690, '700 50px Caveat', '#1f2a44', { angle: -.04, align: 'right' });
-  texte('le Alpi', 140, 1150, '700 44px Caveat', '#fbf1df', { angle: -.04, align: 'left' });
-  texte('Venezia', 540, 1826, 'italic 900 200px Fraunces', '#e8559a', { ombre: 9 });
-  if ('letterSpacing' in c) c.letterSpacing = '8px';
-  texte('22 — 25 · 02 · 2027', 540, 1892, '700 34px "Space Mono"', '#1f2a44');
-  const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
-  $('#souvenir-apercu').src = URL.createObjectURL(blob);
-  return new File([blob], 'venezia-manon-mathis.png', { type: 'image/png' });
+  const blob = await (await fetch('souvenir.jpg')).blob();
+  return new File([blob], 'venezia-manon-mathis.jpg', { type: 'image/jpeg' });
 }
 $('#souvenir').onclick = async () => {
   const fichier = await (souvenirPret || (souvenirPret = fabriquerSouvenir()));
